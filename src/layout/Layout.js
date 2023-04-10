@@ -1,13 +1,41 @@
 import PropTypes from "prop-types";
-import { StyleSheet, Dimensions, ImageBackground } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Dimensions,
+  ImageBackground,
+  ActivityIndicator,
+} from "react-native";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 export default function Layout({ background, children }) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const time = setTimeout(() => {
+      setIsLoading(false);
+    }, 250);
+
+    return () => {
+      clearTimeout(time);
+    };
+  }, []);
+
   return (
-    <ImageBackground source={background} style={styles.container}>
-      {children}
-    </ImageBackground>
+    <>
+      {isLoading ? (
+        <ActivityIndicator
+          style={styles.container}
+          size="large"
+          color="#3C3C43"
+        />
+      ) : (
+        <ImageBackground source={background} style={styles.container}>
+          {children}
+        </ImageBackground>
+      )}
+    </>
   );
 }
 
