@@ -1,16 +1,17 @@
 import PropTypes from "prop-types";
+import React from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
 
 import { HEADER } from "../constants/color";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
-const appHeaderHeight = screenHeight / 12;
+const appFooterHeight = screenHeight / 12;
 
-export default function AppHeader({ children }) {
+export default function AppFooter({ children }) {
   return <View style={styles.container}>{children}</View>;
 }
 
-AppHeader.propTypes = {
+AppFooter.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]),
 };
 
@@ -19,12 +20,14 @@ const styles = StyleSheet.create({
     zIndex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "top",
     width: screenWidth,
-    height: appHeaderHeight + appHeaderHeight * 0.65,
-    paddingTop: appHeaderHeight,
-    paddingHorizontal: 10,
+    height: appFooterHeight + appFooterHeight * 0.25,
+    paddingHorizontal: screenWidth * 0.2,
+    paddingTop: appFooterHeight * 0.1,
     backgroundColor: HEADER,
-    borderBottomWidth: 0.2,
+    borderTopWidth: 0.2,
+    position: "absolute",
+    bottom: 0,
   },
 });

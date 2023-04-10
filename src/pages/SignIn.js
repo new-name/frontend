@@ -21,7 +21,7 @@ const backgroundImage = require("../../assets/background.png");
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
-export default function Home({ navigation }) {
+export default function SignIn({ navigation }) {
   const { navigate } = navigation;
   const [user, setUser] = useState({
     email: "",
@@ -102,12 +102,18 @@ export default function Home({ navigation }) {
   );
 }
 
+SignIn.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
 const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
   logoContainer: {
-    flex: 3,
+    flex: 4,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -167,9 +173,3 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
 });
-
-Home.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-  }).isRequired,
-};

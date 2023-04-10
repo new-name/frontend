@@ -5,9 +5,11 @@ import {
   Dimensions,
   ImageBackground,
   ActivityIndicator,
+  StatusBar,
 } from "react-native";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
+const statusBarHeight = StatusBar.currentHeight;
 
 export default function Layout({ background, children }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -49,6 +51,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: statusBarHeight,
     width: screenWidth,
     heiht: screenHeight,
     backgroundColor: "white",
