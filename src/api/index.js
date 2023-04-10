@@ -23,7 +23,7 @@ async function postSignIn(email, password) {
     const error = err.response.status;
 
     if (error === 400) {
-      Alert.alert("Faild login");
+      Alert.alert("Failed login");
     }
 
     if (error === 500) {

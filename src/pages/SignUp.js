@@ -113,7 +113,7 @@ export default function SignUp({ navigation }) {
             onChangeText={(value) => handleInput("passwordConfirm", value)}
             returnKeyType="done"
           />
-          <View style={{ flex: 1.25 }}>
+          <View style={{ flex: 1.25, marginTop: screenHeight * 0.05 }}>
             <TouchableOpacity
               style={styles.registerButton}
               onPress={handleSignUpPress}
@@ -162,8 +162,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     width: screenWidth * 0.9,
-    height: screenHeight * 0.075,
-    marginTop: screenHeight * 0.02,
+    height: screenHeight * 0.06,
+    marginTop: screenHeight * 0.025,
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 5,
