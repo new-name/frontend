@@ -10,8 +10,7 @@ export default function AppNavigator() {
     <NavigationContainer>
       <Navigator initialRouteName="Home">
         <Screen name="Home" component={Home} />
-        <Screen name="SignIn" component={SignIn} />
-        <Screen name="SignUp" component={SignUp} />
+        {/* <Screen name="SignUp" component={SignUp} /> */}
       </Navigator>
     </NavigationContainer>
   );
