@@ -142,9 +142,10 @@ SignUp.propTypes = {
 
 const styles = StyleSheet.create({
   logoContainer: {
-    flex: 1,
+    flex: 1.75,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "red",
   },
   input: {
     width: screenWidth * 0.9,
