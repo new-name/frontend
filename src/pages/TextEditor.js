@@ -1,5 +1,4 @@
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
-import { StatusBar } from "expo-status-bar";
 import PropTypes from "prop-types";
 import { useState, useRef } from "react";
 import {
@@ -27,6 +26,9 @@ export default function TextEditor({
   const [scrollPosition, setScrollPosition] = useState(screenHeight * 0.15);
   const customScrollbarRef = useRef(null);
 
+  const minTextSize = 12;
+  const maxTextSize = 100;
+
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
@@ -35,9 +37,6 @@ export default function TextEditor({
       },
     }),
   ).current;
-
-  const minTextSize = 0;
-  const maxTextSize = 100;
 
   const handleTouch = async (y) => {
     if (!customScrollbarRef.current) return;
@@ -104,7 +103,6 @@ export default function TextEditor({
           <Text style={styles.iconText}>{item.text}</Text>
         </TouchableOpacity>
       ))}
-      <StatusBar style="auto" />
     </View>
   );
 }

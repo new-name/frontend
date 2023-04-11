@@ -1,4 +1,5 @@
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
 import { useState, useEffect } from "react";
 import {
   View,
@@ -6,9 +7,12 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 
+import GifEditor from "./GifEditor";
 import TextEditor from "./TextEditor";
+import api from "../api/index";
 import { CONTENT } from "../constants/color";
 import { editorFooter } from "../constants/footerItems";
 import AppFooter from "../layout/AppFooter";
@@ -20,18 +24,37 @@ const appFooterHeight = screenHeight / 12;
 
 export default function Editor() {
   const [isTextEditable, setIsTextEditalbe] = useState(false);
+  const [isGifGettable, setIsGifGettable] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState("");
   const [selectedTextSize, setSelectedTextSize] = useState(0);
   const [selectedElement, setSelectedElement] = useState(null);
+  const [gifURLs, setGifURLs] = useState([]);
   const [textElements, setTextElements] = useState([
-    { text: "User", size: 16 },
-    { text: "User영", size: 16 },
-    { text: "User빈", size: 16 },
+    { text: "GIF", size: 16 },
+    { text: "ASSETS", size: 16 },
+    { text: "IMAGES", size: 16 },
   ]);
 
   const handleEditor = (name) => {
     if (name === "Text") {
       setIsTextEditalbe(!isTextEditable);
+    }
+
+    if (name === "Gif") {
+      getGifs();
+    }
+  };
+
+  const getGifs = async () => {
+    try {
+      const response = await api.getGifs();
+
+      if (response.status === 200) {
+        setGifURLs(response.data.gifURLs);
+        setIsGifGettable(!isGifGettable);
+      }
+    } catch {
+      Alert.alert("Cannot get Gifs from server");
     }
   };
 
@@ -99,12 +122,17 @@ export default function Editor() {
         </View>
       </ContentBox>
       {isTextEditable && (
-        <View style={styles.textEditorContainer}>
+        <View style={styles.editorContainer}>
           <TextEditor
             setSelectedTextSize={setSelectedTextSize}
             setSelectedProperty={setSelectedProperty}
             selectedProperty={selectedProperty}
           />
+        </View>
+      )}
+      {isGifGettable && (
+        <View style={styles.gifEditorContainer}>
+          <GifEditor gifURLs={gifURLs} />
         </View>
       )}
       <AppFooter>
@@ -121,6 +149,7 @@ export default function Editor() {
           ))}
         </View>
       </AppFooter>
+      <StatusBar style="auto" />
     </View>
   );
 }
@@ -153,11 +182,17 @@ const styles = StyleSheet.create({
     height: "95%",
     borderWidth: 1,
   },
-  textEditorContainer: {
+  editorContainer: {
+    position: "absolute",
+    zIndex: 2,
+    height: screenHeight,
+    bottom: appFooterHeight + appFooterHeight * 0.35,
+  },
+  gifEditorContainer: {
     position: "absolute",
     zIndex: 2,
     height: appFooterHeight,
-    bottom: appFooterHeight + appFooterHeight * 0.35,
+    top: appFooterHeight + appFooterHeight * 0.65 + screenHeight / 12,
   },
   footer: {
     flexDirection: "row",
