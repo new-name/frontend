@@ -1,15 +1,32 @@
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 
+import TextEditor from "./TextEditor";
 import { CONTENT } from "../constants/color";
 import { editorFooter } from "../constants/footerItems";
 import AppFooter from "../layout/AppFooter";
 import AppHeader from "../layout/AppHeader";
 import ContentBox from "../layout/ContentBox";
 
-const { width: screenWidth } = Dimensions.get("window");
+const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
+const appFooterHeight = screenHeight / 12;
 
 export default function Editor() {
+  const [isTextEditable, setIsTextEditalbe] = useState(false);
+
+  const handleEditor = (name) => {
+    if (name === "Text") {
+      setIsTextEditalbe(!isTextEditable);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <AppHeader>
@@ -29,13 +46,22 @@ export default function Editor() {
       <ContentBox>
         <View style={styles.contentContainer} />
       </ContentBox>
+      {isTextEditable && (
+        <View style={styles.textEditorContainer}>
+          <TextEditor />
+        </View>
+      )}
       <AppFooter>
         <View style={styles.footer}>
           {editorFooter.map((item) => (
-            <View key={item.iconName} style={styles.iconWithText}>
+            <TouchableOpacity
+              onPress={() => handleEditor(item.text)}
+              key={item.iconName}
+              style={styles.iconWithText}
+            >
               <Ionicons name={item.iconName} size={30} color="gray" />
               <Text style={styles.iconText}>{item.text}</Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       </AppFooter>
@@ -70,6 +96,12 @@ const styles = StyleSheet.create({
     width: screenWidth * 0.9,
     height: "95%",
     borderWidth: 1,
+  },
+  textEditorContainer: {
+    position: "absolute",
+    zIndex: 2,
+    height: appFooterHeight,
+    bottom: appFooterHeight + appFooterHeight * 0.35,
   },
   footer: {
     flexDirection: "row",

@@ -11,3 +11,11 @@ export const editorFooter = [
   { iconName: "ios-play-sharp", text: "Gif" },
   { iconName: "ellipsis-horizontal-sharp", text: "More" },
 ];
+
+export const textEditor = [
+  { icon: "FontAwesome", iconName: "text-height", text: "Size" },
+  { icon: "FontAwesome", iconName: "rotate-left", text: "Left Rotate" },
+  { icon: "FontAwesome", iconName: "rotate-right", text: "Right Rotate" },
+  { icon: "FontAwesome", iconName: "font", text: "Font Style" },
+  { icon: "MaterialIcons", iconName: "align-horizontal-center", text: "Align" },
+];
