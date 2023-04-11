@@ -1,4 +1,5 @@
 import { Feather, Ionicons } from "@expo/vector-icons";
+import PropTypes from "prop-types";
 import { useState } from "react";
 import {
   View,
@@ -20,9 +21,14 @@ import ContentBox from "../layout/ContentBox";
 const exampleImage = require("../../assets/example.png");
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
-export default function Home() {
+export default function Home({ navigation }) {
+  const { navigate } = navigation;
   const [isNavBarVisible, setIsNavBarVisible] = useState(false);
   const [projects, setProjects] = useState([]);
+
+  const handleMakeNewProjectPress = () => {
+    navigate("Editor");
+  };
 
   return (
     <View style={styles.container}>
@@ -36,57 +42,67 @@ export default function Home() {
         <Logo fontSize={16} />
       </AppHeader>
       <ContentBox>
-        <View style={styles.header}>
-          <View style={styles.headerText}>
-            <Text style={{ fontSize: 20 }}>내가 만든 명함</Text>
-            <Ionicons name="ios-add-outline" size={25} color="gray" />
+        <View style={styles.contentContainer}>
+          <View style={styles.header}>
+            <View style={styles.headerText}>
+              <Text style={{ fontSize: 20 }}>내가 만든 명함</Text>
+              <Ionicons name="ios-add-outline" size={25} color="gray" />
+            </View>
           </View>
-        </View>
-        <View style={styles.contents}>
-          {!projects.length ? (
-            <>
-              <TouchableOpacity>
-                <Ionicons
-                  name="ios-add-circle-outline"
-                  size={120}
-                  color="gray"
-                />
-              </TouchableOpacity>
-              <Text style={{ fontSize: 20 }}>새로운 명함 만들기</Text>
-            </>
-          ) : (
-            <FlatList
-              data={projects}
-              renderItem={({ item }) => (
-                <View style={styles.projectItem}>
-                  <Image
-                    source={item.imageUri}
-                    style={{ width: "100%", height: "100%" }}
-                    resizeMode="cover"
+          <View style={styles.contents}>
+            {!projects.length ? (
+              <>
+                <TouchableOpacity onPress={handleMakeNewProjectPress}>
+                  <Ionicons
+                    name="ios-add-circle-outline"
+                    size={120}
+                    color="gray"
                   />
-                </View>
-              )}
-              keyExtractor={(item, index) => index.toString()}
-              numColumns={2}
-              columnWrapperStyle={styles.projectList}
-              contentContainerStyle={{ paddingBottom: 20 }}
-              showsVerticalScrollIndicator={false}
-              pagingEnabled
-            />
-          )}
+                </TouchableOpacity>
+                <Text style={{ fontSize: 20 }}>새로운 명함 만들기</Text>
+              </>
+            ) : (
+              <FlatList
+                data={projects}
+                renderItem={({ item }) => (
+                  <View style={styles.projectItem}>
+                    <Image
+                      source={item.imageUri}
+                      style={{ width: "100%", height: "100%" }}
+                      resizeMode="cover"
+                    />
+                  </View>
+                )}
+                keyExtractor={(item, index) => index.toString()}
+                numColumns={2}
+                columnWrapperStyle={styles.projectList}
+                contentContainer={{ paddingBottom: 20 }}
+                showsVerticalScrollIndicator={false}
+                pagingEnabled
+              />
+            )}
+          </View>
         </View>
       </ContentBox>
       <AppFooter>
-        {homeFooter.map((item, index) => (
-          <View key={item + index} style={styles.iconWithText}>
-            <Ionicons name={item.iconName} size={30} color="gray" />
-            <Text style={styles.iconText}>{item.text}</Text>
-          </View>
-        ))}
+        <View style={styles.footer}>
+          {homeFooter.map((item, index) => (
+            <View key={item.iconName} style={styles.iconWithText}>
+              <Ionicons name={item.iconName} size={30} color="gray" />
+              <Text style={styles.iconText}>{item.text}</Text>
+            </View>
+          ))}
+        </View>
       </AppFooter>
     </View>
   );
 }
+
+Home.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -109,6 +125,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-end",
+  },
+  contentContainer: {
+    width: screenWidth * 0.8,
+    height: "100%",
   },
   contents: {
     flex: 9,
@@ -134,6 +154,11 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3,
+  },
+  footer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: screenWidth,
   },
   iconWithText: {
     alignItems: "center",

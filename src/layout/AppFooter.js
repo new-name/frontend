@@ -23,11 +23,9 @@ const styles = StyleSheet.create({
     alignItems: "top",
     width: screenWidth,
     height: appFooterHeight + appFooterHeight * 0.25,
-    paddingHorizontal: screenWidth * 0.2,
     paddingTop: appFooterHeight * 0.1,
     backgroundColor: HEADER,
     borderTopWidth: 0.2,
-    position: "absolute",
     bottom: 0,
   },
 });
