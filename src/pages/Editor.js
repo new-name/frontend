@@ -1,5 +1,5 @@
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -20,12 +20,49 @@ const appFooterHeight = screenHeight / 12;
 
 export default function Editor() {
   const [isTextEditable, setIsTextEditalbe] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState("");
+  const [selectedTextSize, setSelectedTextSize] = useState(0);
+  const [selectedElement, setSelectedElement] = useState(null);
+  const [textElements, setTextElements] = useState([
+    { text: "User", size: 16 },
+    { text: "User영", size: 16 },
+    { text: "User빈", size: 16 },
+  ]);
 
   const handleEditor = (name) => {
     if (name === "Text") {
       setIsTextEditalbe(!isTextEditable);
     }
   };
+
+  const handleSelectText = (index) => {
+    setSelectedElement(index);
+  };
+
+  const addTextElement = (text) => {
+    setTextElements([...textElements, { text, size: 16 }]);
+  };
+
+  const removeTextElement = (index) => {
+    setTextElements(textElements.filter((_, i) => i !== index));
+  };
+
+  useEffect(() => {
+    if (
+      selectedProperty === "Size" &&
+      selectedElement !== null &&
+      selectedTextSize !== 0
+    ) {
+      const updatedTextElements = textElements.map((element, index) => {
+        if (index === selectedElement) {
+          return { ...element, size: selectedTextSize };
+        }
+        return element;
+      });
+
+      setTextElements(updatedTextElements);
+    }
+  }, [selectedElement, selectedTextSize]);
 
   return (
     <View style={styles.container}>
@@ -44,11 +81,30 @@ export default function Editor() {
         </View>
       </AppHeader>
       <ContentBox>
-        <View style={styles.contentContainer} />
+        <View style={styles.contentContainer}>
+          {textElements.map((element, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => handleSelectText(index)}
+            >
+              <Text
+                style={{
+                  fontSize: element.size,
+                }}
+              >
+                {element.text}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </ContentBox>
       {isTextEditable && (
         <View style={styles.textEditorContainer}>
-          <TextEditor />
+          <TextEditor
+            setSelectedTextSize={setSelectedTextSize}
+            setSelectedProperty={setSelectedProperty}
+            selectedProperty={selectedProperty}
+          />
         </View>
       )}
       <AppFooter>
