@@ -6,16 +6,23 @@ import {
   View,
   Text,
   StyleSheet,
-  Dimensions,
   ScrollView,
   TouchableOpacity,
 } from "react-native";
 
-import { ACTIVE_COLOR, EDITOR_COLOR } from "../constants/color";
+import {
+  ACTIVE_COLOR,
+  CONTENT_COLOR,
+  EDITOR_COLOR,
+  SHADOW_COLOR,
+  UNACTIVE_COLOR,
+} from "../constants/color";
 import { gifEditor } from "../constants/footerItems";
-
-const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
-const appFooterHeight = screenHeight / 12;
+import {
+  APP_FOOTER_HEIGHT,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+} from "../constants/size";
 
 export default function GifEditor({ gifURLs }) {
   const [animationData, setAnimationData] = useState([]);
@@ -134,10 +141,10 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "space-around",
     alignItems: "center",
-    width: screenWidth,
-    height: (screenHeight * 2) / 3,
+    width: SCREEN_WIDTH,
+    height: (SCREEN_HEIGHT * 2) / 3,
     backgroundColor: EDITOR_COLOR,
-    shadowColor: "#000",
+    shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,
       height: -4,
@@ -151,10 +158,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    width: screenWidth,
-    height: appFooterHeight,
+    width: SCREEN_WIDTH,
+    height: APP_FOOTER_HEIGHT,
     backgroundColor: EDITOR_COLOR,
-    shadowColor: "#000",
+    shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,
       height: -2,
@@ -169,7 +176,7 @@ const styles = StyleSheet.create({
   iconText: {
     marginTop: 5,
     fontSize: 12,
-    color: "gray",
+    color: UNACTIVE_COLOR,
   },
   scrollViewContainer: {
     paddingHorizontal: 20,
@@ -186,11 +193,11 @@ const styles = StyleSheet.create({
   },
   animationContainer: {
     zIndex: 10,
-    backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
-    width: screenWidth * 0.4,
+    width: SCREEN_WIDTH * 0.4,
     borderWidth: 0.2,
     borderRadius: 10,
+    backgroundColor: CONTENT_COLOR,
   },
 });

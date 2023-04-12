@@ -22,7 +22,7 @@ import { imageEditor } from "../constants/footerItems";
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 const appFooterHeight = screenHeight / 12;
 
-export default function ImageEditor() {
+export default function ShapeEditor() {
   const [selectedProperty, setSelectedProperty] = useState("");
   const [imageDimensions, setImageDimensions] = useState([]);
   const [photos, setPhotos] = useState([]);

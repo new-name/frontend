@@ -2,34 +2,34 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 
-import GifEditor from "./GifEditor";
-import ImageEditor from "./ImageEditor";
-import TextEditor from "./TextEditor";
-import api from "../api/index";
-import { ACTIVE_COLOR, CONTENT } from "../constants/color";
+import api from "../api";
+import GifEditor from "../components/GifEditor";
+import ImageEditor from "../components/ImageEditor";
+import TextEditor from "../components/TextEditor";
+import {
+  ACTIVE_COLOR,
+  CONTENT_COLOR,
+  UNACTIVE_COLOR,
+} from "../constants/color";
 import { editorFooter } from "../constants/footerItems";
+import {
+  APP_FOOTER_HEIGHT,
+  CONTAINER_WIDTH,
+  SCREEN_WIDTH,
+} from "../constants/size";
 import AppFooter from "../layout/AppFooter";
 import AppHeader from "../layout/AppHeader";
 import ContentBox from "../layout/ContentBox";
-
-const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
-const appFooterHeight = screenHeight / 12;
 
 export default function Editor({ navigation }) {
   const { navigate } = navigation;
   const [selectedController, setSelectedController] = useState("");
   const [isTextEditable, setIsTextEditalbe] = useState(false);
   const [isGifGettable, setIsGifGettable] = useState(false);
-  const [isImageEditable, setisImageEditable] = useState(false);
+  const [isImageEditable, setIsImageEditable] = useState(false);
+  const [isShapeEditable, setIsShapeEditable] = useState(false);
 
   const [selectedTextProperty, setSelectedTextProperty] = useState("");
   const [selectedTextSize, setSelectedTextSize] = useState(0);
@@ -50,22 +50,29 @@ export default function Editor({ navigation }) {
       setSelectedController("");
     }
 
-    if (name === "Text") {
+    if (name === "Shape") {
       setIsGifGettable(false);
-      setisImageEditable(false);
-      setIsTextEditalbe(!isTextEditable);
+      setIsTextEditalbe(false);
+      setIsImageEditable(false);
+      setIsShapeEditable(!isShapeEditable);
     }
 
-    if (name === "Gif") {
-      setIsTextEditalbe(false);
-      setisImageEditable(false);
-      getGifs();
+    if (name === "Text") {
+      setIsGifGettable(false);
+      setIsImageEditable(false);
+      setIsTextEditalbe(!isTextEditable);
     }
 
     if (name === "Image") {
       setIsGifGettable(false);
       setIsTextEditalbe(false);
-      setisImageEditable(!isImageEditable);
+      setIsImageEditable(!isImageEditable);
+    }
+
+    if (name === "Gif") {
+      setIsTextEditalbe(false);
+      setIsImageEditable(false);
+      getGifs();
     }
   };
 
@@ -115,18 +122,34 @@ export default function Editor({ navigation }) {
     <View style={styles.container}>
       <AppHeader>
         <View style={styles.header}>
-          <Ionicons name="ios-chevron-back-sharp" size={25} color="gray" />
+          <Ionicons
+            name="ios-chevron-back-sharp"
+            size={25}
+            color={UNACTIVE_COLOR}
+          />
           <TouchableOpacity onPress={() => navigate("Home")}>
             <Text>뒤로 가기</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.undo}>
-          <MaterialCommunityIcons name="undo" size={30} color="gray" />
-          <MaterialCommunityIcons name="redo" size={30} color="gray" />
+          <MaterialCommunityIcons
+            name="undo"
+            size={30}
+            color={UNACTIVE_COLOR}
+          />
+          <MaterialCommunityIcons
+            name="redo"
+            size={30}
+            color={UNACTIVE_COLOR}
+          />
         </View>
         <View style={styles.download}>
-          <Ionicons name="ios-download-outline" size={30} color="gray" />
-          <Ionicons name="ios-share-outline" size={30} color="gray" />
+          <Ionicons
+            name="ios-download-outline"
+            size={30}
+            color={UNACTIVE_COLOR}
+          />
+          <Ionicons name="ios-share-outline" size={30} color={UNACTIVE_COLOR} />
         </View>
       </AppHeader>
       <ContentBox>
@@ -147,6 +170,11 @@ export default function Editor({ navigation }) {
           ))}
         </View>
       </ContentBox>
+      {isShapeEditable && (
+        <View style={styles.gifEditorContainer}>
+          <ImageEditor />
+        </View>
+      )}
       {isTextEditable && (
         <View style={styles.editorContainer}>
           <TextEditor
@@ -177,13 +205,19 @@ export default function Editor({ navigation }) {
               <Ionicons
                 name={item.iconName}
                 size={30}
-                color={selectedController === item.text ? ACTIVE_COLOR : "gray"}
+                color={
+                  selectedController === item.text
+                    ? ACTIVE_COLOR
+                    : UNACTIVE_COLOR
+                }
               />
               <Text
                 style={{
                   ...styles.iconText,
                   color:
-                    selectedController === item.text ? ACTIVE_COLOR : "gray",
+                    selectedController === item.text
+                      ? ACTIVE_COLOR
+                      : UNACTIVE_COLOR,
                 }}
               >
                 {item.text}
@@ -207,7 +241,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: CONTENT,
+    backgroundColor: CONTENT_COLOR,
   },
   header: {
     flex: 1,
@@ -227,25 +261,25 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   contentContainer: {
-    width: screenWidth * 0.9,
+    width: CONTAINER_WIDTH,
     height: "95%",
     borderWidth: 1,
   },
   editorContainer: {
     position: "absolute",
     zIndex: 2,
-    height: appFooterHeight,
-    bottom: appFooterHeight + appFooterHeight * 0.35,
+    height: APP_FOOTER_HEIGHT,
+    bottom: APP_FOOTER_HEIGHT + APP_FOOTER_HEIGHT * 0.35,
   },
   gifEditorContainer: {
     position: "absolute",
     zIndex: 2,
-    bottom: appFooterHeight + appFooterHeight * 0.35,
+    bottom: APP_FOOTER_HEIGHT + APP_FOOTER_HEIGHT * 0.35,
   },
   footer: {
     flexDirection: "row",
     justifyContent: "space-evenly",
-    width: screenWidth,
+    width: SCREEN_WIDTH,
   },
   iconWithText: {
     flex: 1,
@@ -254,6 +288,6 @@ const styles = StyleSheet.create({
   iconText: {
     marginTop: 5,
     fontSize: 12,
-    color: "gray",
+    color: UNACTIVE_COLOR,
   },
 });
