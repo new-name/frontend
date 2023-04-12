@@ -5,28 +5,34 @@ import {
   View,
   Text,
   StyleSheet,
-  Dimensions,
   TouchableOpacity,
   PanResponder,
 } from "react-native";
 
-import { ACTIVE_COLOR, EDITOR_COLOR } from "../constants/color";
+import {
+  ACTIVE_COLOR,
+  EDITOR_COLOR,
+  SCROLLBAR_COLOR,
+  SHADOW_COLOR,
+  UNACTIVE_COLOR,
+} from "../constants/color";
 import { textEditor } from "../constants/footerItems";
-
-const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
-const appFooterHeight = screenHeight / 12;
-const scrollHandleHeight = 20;
+import {
+  APP_FOOTER_HEIGHT,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+  SCROLL_HANDLE_HEIGHT,
+  MIN_TEXT_SIZE,
+  MAX_TEXT_SIZE,
+} from "../constants/size";
 
 export default function TextEditor({
   setSelectedTextSize,
   selectedProperty,
   setSelectedProperty,
 }) {
-  const [scrollPosition, setScrollPosition] = useState(screenHeight * 0.15);
+  const [scrollPosition, setScrollPosition] = useState(SCREEN_HEIGHT * 0.15);
   const customScrollbarRef = useRef(null);
-
-  const minTextSize = 10;
-  const maxTextSize = 100;
 
   const panResponder = useRef(
     PanResponder.create({
@@ -43,16 +49,20 @@ export default function TextEditor({
     customScrollbarRef.current.measure((fx, fy, width, height, px, py) => {
       y = Math.max(
         0,
-        Math.min(y - py - scrollHandleHeight / 2, height - scrollHandleHeight),
+        Math.min(
+          y - py - SCROLL_HANDLE_HEIGHT / 2,
+          height - SCROLL_HANDLE_HEIGHT,
+        ),
       );
 
       if (isNaN(y)) return;
       setScrollPosition(y);
 
       const textSize =
-        minTextSize +
-        ((height - scrollHandleHeight - y) / (height - scrollHandleHeight)) *
-          (maxTextSize - minTextSize);
+        MIN_TEXT_SIZE +
+        ((height - SCROLL_HANDLE_HEIGHT - y) /
+          (height - SCROLL_HANDLE_HEIGHT)) *
+          (MAX_TEXT_SIZE - MIN_TEXT_SIZE);
       setSelectedTextSize(textSize);
     });
   };
@@ -95,20 +105,25 @@ export default function TextEditor({
             <FontAwesome
               name={item.iconName}
               size={30}
-              color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
+              color={
+                selectedProperty === item.text ? ACTIVE_COLOR : UNACTIVE_COLOR
+              }
             />
           )}
           {item.icon === "MaterialIcons" && (
             <MaterialIcons
               name={item.iconName}
               size={30}
-              color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
+              color={
+                selectedProperty === item.text ? ACTIVE_COLOR : UNACTIVE_COLOR
+              }
             />
           )}
           <Text
             style={{
               ...styles.iconText,
-              color: selectedProperty === item.text ? ACTIVE_COLOR : "gray",
+              color:
+                selectedProperty === item.text ? ACTIVE_COLOR : UNACTIVE_COLOR,
             }}
           >
             {item.text}
@@ -130,10 +145,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    width: screenWidth,
-    height: appFooterHeight,
+    width: SCREEN_WIDTH,
+    height: APP_FOOTER_HEIGHT,
     backgroundColor: EDITOR_COLOR,
-    shadowColor: "#000",
+    shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,
       height: -2,
@@ -148,28 +163,28 @@ const styles = StyleSheet.create({
   iconText: {
     marginTop: 5,
     fontSize: 12,
-    color: "gray",
+    color: UNACTIVE_COLOR,
   },
   size: {
     position: "absolute",
-    bottom: screenHeight * 0.55,
+    bottom: SCREEN_HEIGHT * 0.55,
     left: 20,
   },
   customScrollbar: {
     position: "absolute",
-    height: screenHeight * 0.3,
-    width: 30,
-    backgroundColor: "#eee",
-    borderRadius: 15,
     justifyContent: "center",
     alignItems: "center",
+    width: 30,
+    height: SCREEN_HEIGHT * 0.3,
+    borderRadius: 15,
+    backgroundColor: SCROLLBAR_COLOR,
     left: 20,
   },
   scrollHandle: {
     position: "absolute",
-    height: scrollHandleHeight,
     width: 20,
-    backgroundColor: "gray",
+    height: SCROLL_HANDLE_HEIGHT,
     borderRadius: 10,
+    backgroundColor: UNACTIVE_COLOR,
   },
 });

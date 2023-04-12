@@ -8,7 +8,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Dimensions,
   ScrollView,
   TouchableOpacity,
   Image,
@@ -16,11 +15,19 @@ import {
 } from "react-native";
 
 import api from "../api";
-import { ACTIVE_COLOR, EDITOR_COLOR } from "../constants/color";
+import {
+  ACTIVE_COLOR,
+  EDITOR_COLOR,
+  UNACTIVE_COLOR,
+  SHADOW_COLOR,
+} from "../constants/color";
 import { imageEditor } from "../constants/footerItems";
-
-const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
-const appFooterHeight = screenHeight / 12;
+import {
+  APP_FOOTER_HEIGHT,
+  IMAGE_WIDTH,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+} from "../constants/size";
 
 export default function ImageEditor() {
   const [selectedProperty, setSelectedProperty] = useState("");
@@ -123,8 +130,8 @@ export default function ImageEditor() {
                     <Image
                       style={{
                         ...styles.image,
-                        width: screenWidth * 0.8,
-                        height: (screenWidth * 0.8 * item.height) / item.width,
+                        width: IMAGE_WIDTH,
+                        height: (IMAGE_WIDTH * item.height) / item.width,
                       }}
                       source={{ uri: item.uri }}
                     />
@@ -146,27 +153,36 @@ export default function ImageEditor() {
               <FontAwesome
                 name={item.iconName}
                 size={30}
-                color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
+                color={
+                  selectedProperty === item.text ? ACTIVE_COLOR : UNACTIVE_COLOR
+                }
               />
             )}
             {item.icon === "MaterialCommunityIcons" && (
               <MaterialCommunityIcons
                 name={item.iconName}
                 size={30}
-                color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
+                color={
+                  selectedProperty === item.text ? ACTIVE_COLOR : UNACTIVE_COLOR
+                }
               />
             )}
             {item.icon === "Ionicons" && (
               <Ionicons
                 name={item.iconName}
                 size={30}
-                color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
+                color={
+                  selectedProperty === item.text ? ACTIVE_COLOR : UNACTIVE_COLOR
+                }
               />
             )}
             <Text
               style={{
                 ...styles.iconText,
-                color: selectedProperty === item.text ? ACTIVE_COLOR : "gray",
+                color:
+                  selectedProperty === item.text
+                    ? ACTIVE_COLOR
+                    : UNACTIVE_COLOR,
               }}
             >
               {item.text}
@@ -182,10 +198,10 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "space-around",
     alignItems: "center",
-    width: screenWidth,
-    height: (screenHeight * 2) / 3,
+    width: SCREEN_WIDTH,
+    height: (SCREEN_HEIGHT * 2) / 3,
     backgroundColor: EDITOR_COLOR,
-    shadowColor: "#000",
+    shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,
       height: -4,
@@ -200,8 +216,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   searchBar: {
-    width: screenWidth * 0.8,
-    height: screenHeight * 0.05,
+    width: IMAGE_WIDTH,
+    height: SCREEN_HEIGHT * 0.05,
     backgroundColor: EDITOR_COLOR,
     paddingHorizontal: 10,
     borderWidth: 2,
@@ -217,9 +233,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   gridItem: {
-    width: screenWidth * 0.8,
+    width: IMAGE_WIDTH,
     marginBottom: 20,
-    backgroundColor: "gray",
+    backgroundColor: UNACTIVE_COLOR,
   },
   image: {
     width: "100%",
@@ -229,10 +245,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    width: screenWidth,
-    height: appFooterHeight,
+    width: SCREEN_WIDTH,
+    height: APP_FOOTER_HEIGHT,
     backgroundColor: EDITOR_COLOR,
-    shadowColor: "#000",
+    shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,
       height: -2,
@@ -247,6 +263,6 @@ const styles = StyleSheet.create({
   iconText: {
     marginTop: 5,
     fontSize: 12,
-    color: "gray",
+    color: UNACTIVE_COLOR,
   },
 });

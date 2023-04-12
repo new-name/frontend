@@ -12,6 +12,26 @@ export const editorFooter = [
   { iconName: "ellipsis-horizontal-sharp", text: "More" },
 ];
 
+export const shapeEditor = [
+  {
+    icon: "MaterialCommunityIcons",
+    iconName: "shape-rectangle-plus",
+    text: "Rectangle",
+  },
+  {
+    icon: "MaterialCommunityIcons",
+    iconName: "shape-circle-plus",
+    text: "Circle",
+  },
+  { icon: "Entypo", iconName: "flow-line", text: "line" },
+  { icon: "MaterialCommunityIcons", iconName: "google", text: "Icons" },
+  {
+    icon: "MaterialIcons",
+    iconName: "align-horizontal-center",
+    text: "Align",
+  },
+];
+
 export const textEditor = [
   { icon: "FontAwesome", iconName: "text-height", text: "Size" },
   { icon: "FontAwesome", iconName: "rotate-left", text: "Left Rotate" },
