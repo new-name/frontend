@@ -46,7 +46,18 @@ async function postSignUp(name, email, password) {
   }
 }
 
+async function getGifs() {
+  try {
+    const response = await axiosInstance.get("/api/assets/gifs");
+
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export default {
   postSignUp,
   postSignIn,
+  getGifs,
 };

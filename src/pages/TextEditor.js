@@ -1,5 +1,4 @@
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
-import { StatusBar } from "expo-status-bar";
 import PropTypes from "prop-types";
 import { useState, useRef } from "react";
 import {
@@ -11,7 +10,7 @@ import {
   PanResponder,
 } from "react-native";
 
-import { EDITOR_COLOR } from "../constants/color";
+import { ACTIVE_COLOR, EDITOR_COLOR } from "../constants/color";
 import { textEditor } from "../constants/footerItems";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
@@ -23,9 +22,11 @@ export default function TextEditor({
   selectedProperty,
   setSelectedProperty,
 }) {
-  const [isEditable, setIsEditable] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(screenHeight * 0.15);
   const customScrollbarRef = useRef(null);
+
+  const minTextSize = 10;
+  const maxTextSize = 100;
 
   const panResponder = useRef(
     PanResponder.create({
@@ -35,9 +36,6 @@ export default function TextEditor({
       },
     }),
   ).current;
-
-  const minTextSize = 0;
-  const maxTextSize = 100;
 
   const handleTouch = async (y) => {
     if (!customScrollbarRef.current) return;
@@ -59,9 +57,7 @@ export default function TextEditor({
     });
   };
 
-  const handleEditor = (name) => {
-    setIsEditable(!isEditable);
-
+  const handleSelectedProperty = (name) => {
     if (selectedProperty === name) {
       setSelectedProperty("");
     }
@@ -91,20 +87,34 @@ export default function TextEditor({
       )}
       {textEditor.map((item) => (
         <TouchableOpacity
-          onPress={() => handleEditor(item.text)}
+          onPress={() => handleSelectedProperty(item.text)}
           key={item.iconName}
           style={styles.iconWithText}
         >
           {item.icon === "FontAwesome" && (
-            <FontAwesome name={item.iconName} size={30} color="gray" />
+            <FontAwesome
+              name={item.iconName}
+              size={30}
+              color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
+            />
           )}
           {item.icon === "MaterialIcons" && (
-            <MaterialIcons name={item.iconName} size={30} color="gray" />
+            <MaterialIcons
+              name={item.iconName}
+              size={30}
+              color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
+            />
           )}
-          <Text style={styles.iconText}>{item.text}</Text>
+          <Text
+            style={{
+              ...styles.iconText,
+              color: selectedProperty === item.text ? ACTIVE_COLOR : "gray",
+            }}
+          >
+            {item.text}
+          </Text>
         </TouchableOpacity>
       ))}
-      <StatusBar style="auto" />
     </View>
   );
 }

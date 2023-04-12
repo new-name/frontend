@@ -19,3 +19,15 @@ export const textEditor = [
   { icon: "FontAwesome", iconName: "font", text: "Font Style" },
   { icon: "MaterialIcons", iconName: "align-horizontal-center", text: "Align" },
 ];
+
+export const gifEditor = [
+  { icon: "Ionicons", iconName: "md-play-sharp", text: "GIF" },
+  { icon: "Ionicons", iconName: "ios-shapes", text: "Size" },
+  { icon: "FontAwesome", iconName: "rotate-left", text: "Left Rotate" },
+  { icon: "FontAwesome", iconName: "rotate-right", text: "Right Rotate" },
+  {
+    icon: "Ionicons",
+    iconName: "ellipsis-horizontal-sharp",
+    text: "More",
+  },
+];

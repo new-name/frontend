@@ -1,4 +1,6 @@
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
+import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import {
   View,
@@ -6,10 +8,13 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 
+import GifEditor from "./GifEditor";
 import TextEditor from "./TextEditor";
-import { CONTENT } from "../constants/color";
+import api from "../api/index";
+import { ACTIVE_COLOR, CONTENT } from "../constants/color";
 import { editorFooter } from "../constants/footerItems";
 import AppFooter from "../layout/AppFooter";
 import AppHeader from "../layout/AppHeader";
@@ -18,25 +23,56 @@ import ContentBox from "../layout/ContentBox";
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 const appFooterHeight = screenHeight / 12;
 
-export default function Editor() {
+export default function Editor({ navigation }) {
+  const { navigate } = navigation;
+  const [selectedController, setSelectedController] = useState("");
   const [isTextEditable, setIsTextEditalbe] = useState(false);
-  const [selectedProperty, setSelectedProperty] = useState("");
+  const [isGifGettable, setIsGifGettable] = useState(false);
+  const [selectedTextProperty, setSelectedTextProperty] = useState("");
   const [selectedTextSize, setSelectedTextSize] = useState(0);
-  const [selectedElement, setSelectedElement] = useState(null);
+  const [selectedTextElement, setSelectedTextElement] = useState(null);
+  const [gifURLs, setGifURLs] = useState([]);
   const [textElements, setTextElements] = useState([
-    { text: "User", size: 16 },
-    { text: "User영", size: 16 },
-    { text: "User빈", size: 16 },
+    { text: "GIF", size: 16 },
+    { text: "ASSETS", size: 16 },
+    { text: "IMAGES", size: 16 },
   ]);
 
-  const handleEditor = (name) => {
+  const handleSelectedProperty = (name) => {
+    if (selectedController !== name) {
+      setSelectedController(name);
+    }
+
+    if (selectedController === name) {
+      setSelectedController("");
+    }
+
     if (name === "Text") {
+      setIsGifGettable(false);
       setIsTextEditalbe(!isTextEditable);
+    }
+
+    if (name === "Gif") {
+      setIsTextEditalbe(false);
+      getGifs();
+    }
+  };
+
+  const getGifs = async () => {
+    try {
+      const response = await api.getGifs();
+
+      if (response.status === 200) {
+        setGifURLs(response.data.gifURLs);
+        setIsGifGettable(!isGifGettable);
+      }
+    } catch {
+      Alert.alert("Cannot get Gifs from server");
     }
   };
 
   const handleSelectText = (index) => {
-    setSelectedElement(index);
+    setSelectedTextElement(index);
   };
 
   const addTextElement = (text) => {
@@ -49,12 +85,12 @@ export default function Editor() {
 
   useEffect(() => {
     if (
-      selectedProperty === "Size" &&
-      selectedElement !== null &&
+      selectedTextProperty === "Size" &&
+      selectedTextElement !== null &&
       selectedTextSize !== 0
     ) {
       const updatedTextElements = textElements.map((element, index) => {
-        if (index === selectedElement) {
+        if (index === selectedTextElement) {
           return { ...element, size: selectedTextSize };
         }
         return element;
@@ -62,14 +98,16 @@ export default function Editor() {
 
       setTextElements(updatedTextElements);
     }
-  }, [selectedElement, selectedTextSize]);
+  }, [selectedTextElement, selectedTextSize]);
 
   return (
     <View style={styles.container}>
       <AppHeader>
         <View style={styles.header}>
           <Ionicons name="ios-chevron-back-sharp" size={25} color="gray" />
-          <Text>뒤로 가기</Text>
+          <TouchableOpacity onPress={() => navigate("Home")}>
+            <Text>뒤로 가기</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.undo}>
           <MaterialCommunityIcons name="undo" size={30} color="gray" />
@@ -99,31 +137,55 @@ export default function Editor() {
         </View>
       </ContentBox>
       {isTextEditable && (
-        <View style={styles.textEditorContainer}>
+        <View style={styles.editorContainer}>
           <TextEditor
             setSelectedTextSize={setSelectedTextSize}
-            setSelectedProperty={setSelectedProperty}
-            selectedProperty={selectedProperty}
+            setSelectedProperty={setSelectedTextProperty}
+            selectedProperty={selectedTextProperty}
           />
+        </View>
+      )}
+      {isGifGettable && (
+        <View style={styles.gifEditorContainer}>
+          <GifEditor gifURLs={gifURLs} />
         </View>
       )}
       <AppFooter>
         <View style={styles.footer}>
           {editorFooter.map((item) => (
             <TouchableOpacity
-              onPress={() => handleEditor(item.text)}
+              onPress={() => handleSelectedProperty(item.text)}
               key={item.iconName}
               style={styles.iconWithText}
             >
-              <Ionicons name={item.iconName} size={30} color="gray" />
-              <Text style={styles.iconText}>{item.text}</Text>
+              <Ionicons
+                name={item.iconName}
+                size={30}
+                color={selectedController === item.text ? ACTIVE_COLOR : "gray"}
+              />
+              <Text
+                style={{
+                  ...styles.iconText,
+                  color:
+                    selectedController === item.text ? ACTIVE_COLOR : "gray",
+                }}
+              >
+                {item.text}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
       </AppFooter>
+      <StatusBar style="auto" />
     </View>
   );
 }
+
+Editor.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -153,10 +215,15 @@ const styles = StyleSheet.create({
     height: "95%",
     borderWidth: 1,
   },
-  textEditorContainer: {
+  editorContainer: {
     position: "absolute",
     zIndex: 2,
     height: appFooterHeight,
+    bottom: appFooterHeight + appFooterHeight * 0.35,
+  },
+  gifEditorContainer: {
+    position: "absolute",
+    zIndex: 2,
     bottom: appFooterHeight + appFooterHeight * 0.35,
   },
   footer: {
