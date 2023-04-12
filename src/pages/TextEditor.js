@@ -22,11 +22,10 @@ export default function TextEditor({
   selectedProperty,
   setSelectedProperty,
 }) {
-  const [isEditable, setIsEditable] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(screenHeight * 0.15);
   const customScrollbarRef = useRef(null);
 
-  const minTextSize = 12;
+  const minTextSize = 0;
   const maxTextSize = 100;
 
   const panResponder = useRef(
@@ -59,8 +58,6 @@ export default function TextEditor({
   };
 
   const handleEditor = (name) => {
-    setIsEditable(!isEditable);
-
     if (selectedProperty === name) {
       setSelectedProperty("");
     }

@@ -1,5 +1,6 @@
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
+import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import {
   View,
@@ -22,7 +23,8 @@ import ContentBox from "../layout/ContentBox";
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 const appFooterHeight = screenHeight / 12;
 
-export default function Editor() {
+export default function Editor({ navigation }) {
+  const { navigate } = navigation;
   const [isTextEditable, setIsTextEditalbe] = useState(false);
   const [isGifGettable, setIsGifGettable] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState("");
@@ -92,7 +94,9 @@ export default function Editor() {
       <AppHeader>
         <View style={styles.header}>
           <Ionicons name="ios-chevron-back-sharp" size={25} color="gray" />
-          <Text>뒤로 가기</Text>
+          <TouchableOpacity onPress={() => navigate("Home")}>
+            <Text>뒤로 가기</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.undo}>
           <MaterialCommunityIcons name="undo" size={30} color="gray" />
@@ -154,6 +158,12 @@ export default function Editor() {
   );
 }
 
+Editor.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -185,13 +195,12 @@ const styles = StyleSheet.create({
   editorContainer: {
     position: "absolute",
     zIndex: 2,
-    height: screenHeight,
+    height: appFooterHeight,
     bottom: appFooterHeight + appFooterHeight * 0.35,
   },
   gifEditorContainer: {
     position: "absolute",
     zIndex: 2,
-    height: appFooterHeight,
     top: appFooterHeight + appFooterHeight * 0.65 + screenHeight / 12,
   },
   footer: {
