@@ -25,6 +25,5 @@ const styles = StyleSheet.create({
     paddingTop: appHeaderHeight,
     paddingHorizontal: 10,
     backgroundColor: HEADER,
-    borderBottomWidth: 0.2,
   },
 });

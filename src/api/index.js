@@ -1,4 +1,4 @@
-import { SERVER_URL } from "@env";
+import { SERVER_URL, UNSPLASH_ACCESS_KEY } from "@env";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import { Alert } from "react-native";
@@ -6,6 +6,37 @@ import { Alert } from "react-native";
 const axiosInstance = axios.create({
   baseURL: SERVER_URL,
 });
+
+const unsplashInstance = axios.create({
+  baseURL: "https://api.unsplash.com/",
+  headers: {
+    Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`,
+  },
+});
+
+async function getImages() {
+  try {
+    const response = await unsplashInstance.get("/photos", {
+      params: { per_page: 30 },
+    });
+
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function searchImages(query, page = 1, perPage = 30) {
+  try {
+    const response = await unsplashInstance.get("/search/photos", {
+      params: { query, page, perPage },
+    });
+
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 async function postSignIn(email, password) {
   try {
@@ -60,4 +91,6 @@ export default {
   postSignUp,
   postSignIn,
   getGifs,
+  getImages,
+  searchImages,
 };
