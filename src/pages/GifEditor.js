@@ -7,7 +7,6 @@ import {
   Text,
   StyleSheet,
   Dimensions,
-  ActivityIndicator,
   ScrollView,
   TouchableOpacity,
 } from "react-native";
@@ -19,18 +18,17 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 const appFooterHeight = screenHeight / 12;
 
 export default function GifEditor({ gifURLs }) {
-  const [isLoading, setIsLoading] = useState(true);
   const [animationData, setAnimationData] = useState([]);
   const [selectedProperty, setSelectedProperty] = useState("");
 
   const animationRefs = useRef([]);
 
-  const handleEditor = (name) => {
+  const handleSelectedProperty = (name) => {
     if (selectedProperty === name) {
       setSelectedProperty("");
     }
 
-    if (!selectedProperty) {
+    if (selectedProperty !== name) {
       setSelectedProperty(name);
     }
   };
@@ -41,11 +39,12 @@ export default function GifEditor({ gifURLs }) {
         const allData = await Promise.all(
           urls.map(async (url) => {
             const response = await fetch(url);
+
             return await response.json();
           }),
         );
+
         setAnimationData(allData);
-        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching Lottie JSON data:", error);
       }
@@ -87,7 +86,7 @@ export default function GifEditor({ gifURLs }) {
       <View style={styles.controllerContainer}>
         {gifEditor.map((item) => (
           <TouchableOpacity
-            onPress={() => handleEditor(item.text)}
+            onPress={() => handleSelectedProperty(item.text)}
             key={item.iconName}
             style={styles.iconWithText}
           >

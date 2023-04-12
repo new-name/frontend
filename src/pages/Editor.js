@@ -38,7 +38,7 @@ export default function Editor({ navigation }) {
     { text: "IMAGES", size: 16 },
   ]);
 
-  const handleEditor = (name) => {
+  const handleSelectedProperty = (name) => {
     if (selectedController !== name) {
       setSelectedController(name);
     }
@@ -154,7 +154,7 @@ export default function Editor({ navigation }) {
         <View style={styles.footer}>
           {editorFooter.map((item) => (
             <TouchableOpacity
-              onPress={() => handleEditor(item.text)}
+              onPress={() => handleSelectedProperty(item.text)}
               key={item.iconName}
               style={styles.iconWithText}
             >

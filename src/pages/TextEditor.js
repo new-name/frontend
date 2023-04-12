@@ -25,7 +25,7 @@ export default function TextEditor({
   const [scrollPosition, setScrollPosition] = useState(screenHeight * 0.15);
   const customScrollbarRef = useRef(null);
 
-  const minTextSize = 0;
+  const minTextSize = 10;
   const maxTextSize = 100;
 
   const panResponder = useRef(
@@ -57,7 +57,7 @@ export default function TextEditor({
     });
   };
 
-  const handleEditor = (name) => {
+  const handleSelectedProperty = (name) => {
     if (selectedProperty === name) {
       setSelectedProperty("");
     }
@@ -87,7 +87,7 @@ export default function TextEditor({
       )}
       {textEditor.map((item) => (
         <TouchableOpacity
-          onPress={() => handleEditor(item.text)}
+          onPress={() => handleSelectedProperty(item.text)}
           key={item.iconName}
           style={styles.iconWithText}
         >
