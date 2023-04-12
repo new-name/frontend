@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import { EDITOR_COLOR } from "../constants/color";
+import { ACTIVE_COLOR, EDITOR_COLOR } from "../constants/color";
 import { gifEditor } from "../constants/footerItems";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
@@ -59,15 +59,9 @@ export default function GifEditor({ gifURLs }) {
   }, [gifURLs]);
 
   return (
-    <View style={styles.container}>
-      {isLoading ? (
-        <ActivityIndicator
-          style={styles.container}
-          size="large"
-          color="#3C3C43"
-        />
-      ) : (
-        <>
+    <View>
+      {selectedProperty === "GIF" && (
+        <View style={styles.container}>
           <ScrollView
             pagingEnabled
             contentContainerStyle={styles.scrollViewContainer}
@@ -88,28 +82,47 @@ export default function GifEditor({ gifURLs }) {
               ))}
             </View>
           </ScrollView>
-          <View style={styles.iconContainer}>
-            {gifEditor.map((item) => (
-              <TouchableOpacity
-                onPress={() => handleEditor(item.text)}
-                key={item.iconName}
-                style={styles.iconWithText}
-              >
-                {item.icon === "FontAwesome" && (
-                  <FontAwesome name={item.iconName} size={30} color="gray" />
-                )}
-                {item.icon === "MaterialIcons" && (
-                  <MaterialIcons name={item.iconName} size={30} color="gray" />
-                )}
-                {item.icon === "Ionicons" && (
-                  <Ionicons name={item.iconName} size={30} color="gray" />
-                )}
-                <Text style={styles.iconText}>{item.text}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </>
+        </View>
       )}
+      <View style={styles.controllerContainer}>
+        {gifEditor.map((item) => (
+          <TouchableOpacity
+            onPress={() => handleEditor(item.text)}
+            key={item.iconName}
+            style={styles.iconWithText}
+          >
+            {item.icon === "FontAwesome" && (
+              <FontAwesome
+                name={item.iconName}
+                size={30}
+                color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
+              />
+            )}
+            {item.icon === "MaterialIcons" && (
+              <MaterialIcons
+                name={item.iconName}
+                size={30}
+                color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
+              />
+            )}
+            {item.icon === "Ionicons" && (
+              <Ionicons
+                name={item.iconName}
+                size={30}
+                color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
+              />
+            )}
+            <Text
+              style={{
+                ...styles.iconText,
+                color: selectedProperty === item.text ? ACTIVE_COLOR : "gray",
+              }}
+            >
+              {item.text}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 }
@@ -131,15 +144,24 @@ const styles = StyleSheet.create({
       height: -4,
     },
     shadowOpacity: 0.15,
-    shadowRadius: 2,
+    shadowRadius: 3,
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
   },
-  iconContainer: {
+  controllerContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
     width: screenWidth,
     height: appFooterHeight,
     backgroundColor: EDITOR_COLOR,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3,
   },
   iconWithText: {
     flex: 1,
@@ -152,7 +174,7 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 30,
   },
   gridContainer: {
     flexDirection: "row",

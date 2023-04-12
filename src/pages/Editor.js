@@ -14,7 +14,7 @@ import {
 import GifEditor from "./GifEditor";
 import TextEditor from "./TextEditor";
 import api from "../api/index";
-import { CONTENT } from "../constants/color";
+import { ACTIVE_COLOR, CONTENT } from "../constants/color";
 import { editorFooter } from "../constants/footerItems";
 import AppFooter from "../layout/AppFooter";
 import AppHeader from "../layout/AppHeader";
@@ -25,11 +25,12 @@ const appFooterHeight = screenHeight / 12;
 
 export default function Editor({ navigation }) {
   const { navigate } = navigation;
+  const [selectedController, setSelectedController] = useState("");
   const [isTextEditable, setIsTextEditalbe] = useState(false);
   const [isGifGettable, setIsGifGettable] = useState(false);
-  const [selectedProperty, setSelectedProperty] = useState("");
+  const [selectedTextProperty, setSelectedTextProperty] = useState("");
   const [selectedTextSize, setSelectedTextSize] = useState(0);
-  const [selectedElement, setSelectedElement] = useState(null);
+  const [selectedTextElement, setSelectedTextElement] = useState(null);
   const [gifURLs, setGifURLs] = useState([]);
   const [textElements, setTextElements] = useState([
     { text: "GIF", size: 16 },
@@ -38,11 +39,21 @@ export default function Editor({ navigation }) {
   ]);
 
   const handleEditor = (name) => {
+    if (selectedController !== name) {
+      setSelectedController(name);
+    }
+
+    if (selectedController === name) {
+      setSelectedController("");
+    }
+
     if (name === "Text") {
+      setIsGifGettable(false);
       setIsTextEditalbe(!isTextEditable);
     }
 
     if (name === "Gif") {
+      setIsTextEditalbe(false);
       getGifs();
     }
   };
@@ -61,7 +72,7 @@ export default function Editor({ navigation }) {
   };
 
   const handleSelectText = (index) => {
-    setSelectedElement(index);
+    setSelectedTextElement(index);
   };
 
   const addTextElement = (text) => {
@@ -74,12 +85,12 @@ export default function Editor({ navigation }) {
 
   useEffect(() => {
     if (
-      selectedProperty === "Size" &&
-      selectedElement !== null &&
+      selectedTextProperty === "Size" &&
+      selectedTextElement !== null &&
       selectedTextSize !== 0
     ) {
       const updatedTextElements = textElements.map((element, index) => {
-        if (index === selectedElement) {
+        if (index === selectedTextElement) {
           return { ...element, size: selectedTextSize };
         }
         return element;
@@ -87,7 +98,7 @@ export default function Editor({ navigation }) {
 
       setTextElements(updatedTextElements);
     }
-  }, [selectedElement, selectedTextSize]);
+  }, [selectedTextElement, selectedTextSize]);
 
   return (
     <View style={styles.container}>
@@ -129,8 +140,8 @@ export default function Editor({ navigation }) {
         <View style={styles.editorContainer}>
           <TextEditor
             setSelectedTextSize={setSelectedTextSize}
-            setSelectedProperty={setSelectedProperty}
-            selectedProperty={selectedProperty}
+            setSelectedProperty={setSelectedTextProperty}
+            selectedProperty={selectedTextProperty}
           />
         </View>
       )}
@@ -147,8 +158,20 @@ export default function Editor({ navigation }) {
               key={item.iconName}
               style={styles.iconWithText}
             >
-              <Ionicons name={item.iconName} size={30} color="gray" />
-              <Text style={styles.iconText}>{item.text}</Text>
+              <Ionicons
+                name={item.iconName}
+                size={30}
+                color={selectedController === item.text ? ACTIVE_COLOR : "gray"}
+              />
+              <Text
+                style={{
+                  ...styles.iconText,
+                  color:
+                    selectedController === item.text ? ACTIVE_COLOR : "gray",
+                }}
+              >
+                {item.text}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -201,7 +224,7 @@ const styles = StyleSheet.create({
   gifEditorContainer: {
     position: "absolute",
     zIndex: 2,
-    top: appFooterHeight + appFooterHeight * 0.65 + screenHeight / 12,
+    bottom: appFooterHeight + appFooterHeight * 0.35,
   },
   footer: {
     flexDirection: "row",

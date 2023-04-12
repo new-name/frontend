@@ -10,7 +10,7 @@ import {
   PanResponder,
 } from "react-native";
 
-import { EDITOR_COLOR } from "../constants/color";
+import { ACTIVE_COLOR, EDITOR_COLOR } from "../constants/color";
 import { textEditor } from "../constants/footerItems";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
@@ -92,12 +92,27 @@ export default function TextEditor({
           style={styles.iconWithText}
         >
           {item.icon === "FontAwesome" && (
-            <FontAwesome name={item.iconName} size={30} color="gray" />
+            <FontAwesome
+              name={item.iconName}
+              size={30}
+              color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
+            />
           )}
           {item.icon === "MaterialIcons" && (
-            <MaterialIcons name={item.iconName} size={30} color="gray" />
+            <MaterialIcons
+              name={item.iconName}
+              size={30}
+              color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
+            />
           )}
-          <Text style={styles.iconText}>{item.text}</Text>
+          <Text
+            style={{
+              ...styles.iconText,
+              color: selectedProperty === item.text ? ACTIVE_COLOR : "gray",
+            }}
+          >
+            {item.text}
+          </Text>
         </TouchableOpacity>
       ))}
     </View>
