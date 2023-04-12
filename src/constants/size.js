@@ -9,6 +9,7 @@ export const SCREEN_HEIGHT = screenHeight;
 
 export const CONTAINER_WIDTH = screenWidth * 0.9;
 export const IMAGE_WIDTH = screenWidth * 0.8;
+export const EDIT_WIDTH = screenWidth * 0.8;
 
 export const MIN_TEXT_SIZE = 10;
 export const MAX_TEXT_SIZE = 100;

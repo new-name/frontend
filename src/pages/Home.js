@@ -8,18 +8,21 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
-  Dimensions,
 } from "react-native";
 
 import Logo from "../components/Logo";
-import { CONTENT } from "../constants/color";
+import {
+  CONTENT_COLOR,
+  SHADOW_COLOR,
+  UNACTIVE_COLOR,
+} from "../constants/color";
 import { homeFooter } from "../constants/footerItems";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/size";
 import AppFooter from "../layout/AppFooter";
 import AppHeader from "../layout/AppHeader";
 import ContentBox from "../layout/ContentBox";
 
 const exampleImage = require("../../assets/example.png");
-const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 export default function Home({ navigation }) {
   const { navigate } = navigation;
@@ -36,7 +39,7 @@ export default function Home({ navigation }) {
         <Feather
           name="menu"
           size={30}
-          color="gray"
+          color={UNACTIVE_COLOR}
           onPress={() => setIsNavBarVisible(true)}
         />
         <Logo fontSize={16} />
@@ -46,7 +49,11 @@ export default function Home({ navigation }) {
           <View style={styles.header}>
             <View style={styles.headerText}>
               <Text style={{ fontSize: 20 }}>내가 만든 명함</Text>
-              <Ionicons name="ios-add-outline" size={25} color="gray" />
+              <Ionicons
+                name="ios-add-outline"
+                size={25}
+                color={UNACTIVE_COLOR}
+              />
             </View>
           </View>
           <View style={styles.contents}>
@@ -56,7 +63,7 @@ export default function Home({ navigation }) {
                   <Ionicons
                     name="ios-add-circle-outline"
                     size={120}
-                    color="gray"
+                    color={UNACTIVE_COLOR}
                   />
                 </TouchableOpacity>
                 <Text style={{ fontSize: 20 }}>새로운 명함 만들기</Text>
@@ -88,7 +95,7 @@ export default function Home({ navigation }) {
         <View style={styles.footer}>
           {homeFooter.map((item, index) => (
             <View key={item.iconName} style={styles.iconWithText}>
-              <Ionicons name={item.iconName} size={30} color="gray" />
+              <Ionicons name={item.iconName} size={30} color={UNACTIVE_COLOR} />
               <Text style={styles.iconText}>{item.text}</Text>
             </View>
           ))}
@@ -108,7 +115,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: CONTENT,
+    backgroundColor: CONTENT_COLOR,
   },
   header: {
     flex: 1,
@@ -118,7 +125,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingHorizontal: 10,
     borderBottomWidth: 2,
-    borderColor: "gray",
+    borderColor: UNACTIVE_COLOR,
   },
   headerText: {
     flex: 1,
@@ -127,7 +134,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   contentContainer: {
-    width: screenWidth * 0.8,
+    width: SCREEN_WIDTH * 0.8,
     height: "100%",
   },
   contents: {
@@ -137,17 +144,17 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   projectList: {
-    justifyContent: "flex-start",
     flexDirection: "row",
+    justifyContent: "flex-start",
     gap: 10,
     marginTop: 10,
   },
   projectItem: {
-    width: screenWidth * 0.35,
-    height: screenHeight * 0.29,
+    width: SCREEN_WIDTH * 0.35,
+    height: SCREEN_HEIGHT * 0.29,
     margin: 5,
-    backgroundColor: "white",
-    shadowColor: "#000",
+    backgroundColor: CONTENT_COLOR,
+    shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -158,7 +165,7 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    width: screenWidth,
+    width: SCREEN_WIDTH,
   },
   iconWithText: {
     alignItems: "center",
@@ -166,6 +173,6 @@ const styles = StyleSheet.create({
   iconText: {
     marginTop: 5,
     fontSize: 12,
-    color: "gray",
+    color: UNACTIVE_COLOR,
   },
 });

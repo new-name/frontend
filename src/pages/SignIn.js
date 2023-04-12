@@ -6,20 +6,28 @@ import {
   Text,
   View,
   TextInput,
-  Dimensions,
   KeyboardAvoidingView,
   Platform,
   Alert,
 } from "react-native";
 
-import api from "../api/index";
+import api from "../api";
 import Logo from "../components/Logo";
+import {
+  CONTENT_COLOR,
+  LOGIN_BUTTON_COLOR,
+  SUB_GRAY_COLOR,
+  UNACTIVE_COLOR,
+} from "../constants/color";
+import {
+  CONTAINER_WIDTH,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+} from "../constants/size";
 import Layout from "../layout/Layout";
 import validate from "../utils/signInValidation";
 
 const backgroundImage = require("../../assets/background.png");
-
-const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 export default function SignIn({ navigation }) {
   const { navigate } = navigation;
@@ -85,7 +93,7 @@ export default function SignIn({ navigation }) {
             style={styles.loginButton}
             onPress={handleSignInPress}
           >
-            <Text style={{ fontSize: 20, color: "white" }}>로그인</Text>
+            <Text style={{ fontSize: 20, color: CONTENT_COLOR }}>로그인</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.bottomContainer}>
@@ -93,7 +101,9 @@ export default function SignIn({ navigation }) {
             style={styles.bottomButton}
             onPress={handleSignUpPress}
           >
-            <Text style={{ fontSize: 20, color: "#3C3C43" }}>가입하기</Text>
+            <Text style={{ fontSize: 20, color: SUB_GRAY_COLOR }}>
+              가입하기
+            </Text>
           </TouchableOpacity>
           <Text style={styles.bottomLogo}>NAME</Text>
         </View>
@@ -122,44 +132,44 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   input: {
-    width: screenWidth * 0.9,
-    height: screenHeight * 0.08,
-    marginTop: screenHeight * 0.02,
+    width: CONTAINER_WIDTH,
+    height: SCREEN_HEIGHT * 0.08,
+    marginTop: SCREEN_HEIGHT * 0.02,
     padding: 10,
     fontSize: 20,
     borderWidth: 1,
-    borderColor: "gray",
+    borderColor: UNACTIVE_COLOR,
     borderRadius: 5,
-    backgroundColor: "white",
+    backgroundColor: CONTENT_COLOR,
   },
   loginButton: {
     justifyContent: "center",
     alignItems: "center",
-    width: screenWidth * 0.9,
-    height: screenHeight * 0.06,
-    marginTop: screenHeight * 0.02,
+    width: CONTAINER_WIDTH,
+    height: SCREEN_HEIGHT * 0.06,
+    marginTop: SCREEN_HEIGHT * 0.02,
     fontSize: 20,
     borderRadius: 10,
-    backgroundColor: "#2962D8",
+    backgroundColor: LOGIN_BUTTON_COLOR,
   },
   bottomContainer: {
     flex: 1.5,
-    width: screenWidth,
     justifyContent: "flex-start",
     alignItems: "center",
+    width: SCREEN_WIDTH,
   },
   bottomButton: {
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
-    width: screenWidth * 0.9,
-    height: screenHeight * 0.05,
+    width: CONTAINER_WIDTH,
+    height: SCREEN_HEIGHT * 0.05,
     margin: -20,
     fontSize: 20,
     borderWidth: 1,
-    borderColor: "#3C3C43",
+    borderColor: SUB_GRAY_COLOR,
     borderRadius: 10,
-    backgroundColor: "white",
+    backgroundColor: CONTENT_COLOR,
   },
   bottomLogo: {
     margin: 40,
@@ -168,8 +178,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     letterSpacing: 2,
     borderWidth: 1,
-    borderColor: "#3C3C43",
+    borderColor: SUB_GRAY_COLOR,
     borderRadius: 5,
-    backgroundColor: "white",
+    backgroundColor: CONTENT_COLOR,
   },
 });

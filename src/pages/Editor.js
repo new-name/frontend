@@ -7,6 +7,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import api from "../api";
 import GifEditor from "../components/GifEditor";
 import ImageEditor from "../components/ImageEditor";
+import ShapeEditor from "../components/ShapeEditor";
 import TextEditor from "../components/TextEditor";
 import {
   ACTIVE_COLOR,
@@ -172,7 +173,7 @@ export default function Editor({ navigation }) {
       </ContentBox>
       {isShapeEditable && (
         <View style={styles.gifEditorContainer}>
-          <ImageEditor />
+          <ShapeEditor />
         </View>
       )}
       {isTextEditable && (

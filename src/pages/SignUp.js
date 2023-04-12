@@ -7,17 +7,16 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  Dimensions,
   TouchableOpacity,
   Alert,
 } from "react-native";
 
-import api from "../api/index";
+import api from "../api";
 import Logo from "../components/Logo";
+import { CONTENT_COLOR, UNACTIVE_COLOR } from "../constants/color";
+import { CONTAINER_WIDTH, SCREEN_HEIGHT } from "../constants/size";
 import Layout from "../layout/Layout";
 import signUpValidation from "../utils/signUpValidation";
-
-const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 export default function SignUp({ navigation }) {
   const { navigate, goBack } = navigation;
@@ -113,18 +112,20 @@ export default function SignUp({ navigation }) {
             onChangeText={(value) => handleInput("passwordConfirm", value)}
             returnKeyType="done"
           />
-          <View style={{ flex: 1.25, marginTop: screenHeight * 0.05 }}>
+          <View style={{ flex: 1.25, marginTop: SCREEN_HEIGHT * 0.05 }}>
             <TouchableOpacity
               style={styles.registerButton}
               onPress={handleSignUpPress}
             >
-              <Text style={{ fontSize: 20, color: "black" }}>가입하기</Text>
+              <Text style={{ fontSize: 20 }}>가입하기</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.registerButton}
               onPress={handleBackPress}
             >
-              <Text style={{ fontSize: 20, color: "gray" }}>돌아가기</Text>
+              <Text style={{ fontSize: 20, color: UNACTIVE_COLOR }}>
+                돌아가기
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -145,28 +146,27 @@ const styles = StyleSheet.create({
     flex: 1.75,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "red",
   },
   input: {
-    width: screenWidth * 0.9,
-    height: screenHeight * 0.08,
-    marginTop: screenHeight * 0.02,
+    width: CONTAINER_WIDTH,
+    height: SCREEN_HEIGHT * 0.08,
+    marginTop: SCREEN_HEIGHT * 0.02,
     padding: 10,
     fontSize: 20,
     borderWidth: 1,
-    borderColor: "gray",
+    borderColor: UNACTIVE_COLOR,
     borderRadius: 5,
-    backgroundColor: "white",
+    backgroundColor: CONTENT_COLOR,
   },
   registerButton: {
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
-    width: screenWidth * 0.9,
-    height: screenHeight * 0.06,
-    marginTop: screenHeight * 0.025,
+    width: CONTAINER_WIDTH,
+    height: SCREEN_HEIGHT * 0.06,
+    marginTop: SCREEN_HEIGHT * 0.025,
     borderWidth: 1,
-    borderColor: "gray",
+    borderColor: UNACTIVE_COLOR,
     borderRadius: 5,
   },
 });
