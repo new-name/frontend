@@ -67,7 +67,7 @@ export default function GifEditor({ gifURLs }) {
           >
             <View style={styles.gridContainer}>
               {animationData.map((data, index) => (
-                <View style={styles.gridItem} key={index}>
+                <TouchableOpacity style={styles.gridItem} key={index}>
                   <Lottie
                     key={data + index + 1}
                     ref={(element) => (animationRefs.current[index] = element)}
@@ -77,7 +77,7 @@ export default function GifEditor({ gifURLs }) {
                     autoPlay
                     loop
                   />
-                </View>
+                </TouchableOpacity>
               ))}
             </View>
           </ScrollView>

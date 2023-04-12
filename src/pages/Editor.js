@@ -12,6 +12,7 @@ import {
 } from "react-native";
 
 import GifEditor from "./GifEditor";
+import ImageEditor from "./ImageEditor";
 import TextEditor from "./TextEditor";
 import api from "../api/index";
 import { ACTIVE_COLOR, CONTENT } from "../constants/color";
@@ -28,6 +29,8 @@ export default function Editor({ navigation }) {
   const [selectedController, setSelectedController] = useState("");
   const [isTextEditable, setIsTextEditalbe] = useState(false);
   const [isGifGettable, setIsGifGettable] = useState(false);
+  const [isImageEditable, setisImageEditable] = useState(false);
+
   const [selectedTextProperty, setSelectedTextProperty] = useState("");
   const [selectedTextSize, setSelectedTextSize] = useState(0);
   const [selectedTextElement, setSelectedTextElement] = useState(null);
@@ -49,12 +52,20 @@ export default function Editor({ navigation }) {
 
     if (name === "Text") {
       setIsGifGettable(false);
+      setisImageEditable(false);
       setIsTextEditalbe(!isTextEditable);
     }
 
     if (name === "Gif") {
       setIsTextEditalbe(false);
+      setisImageEditable(false);
       getGifs();
+    }
+
+    if (name === "Image") {
+      setIsGifGettable(false);
+      setIsTextEditalbe(false);
+      setisImageEditable(!isImageEditable);
     }
   };
 
@@ -148,6 +159,11 @@ export default function Editor({ navigation }) {
       {isGifGettable && (
         <View style={styles.gifEditorContainer}>
           <GifEditor gifURLs={gifURLs} />
+        </View>
+      )}
+      {isImageEditable && (
+        <View style={styles.gifEditorContainer}>
+          <ImageEditor />
         </View>
       )}
       <AppFooter>

@@ -31,3 +31,23 @@ export const gifEditor = [
     text: "More",
   },
 ];
+
+export const imageEditor = [
+  {
+    icon: "MaterialCommunityIcons",
+    iconName: "folder-image",
+    text: "Unsplash",
+  },
+  {
+    icon: "MaterialCommunityIcons",
+    iconName: "image-size-select-large",
+    text: "Size",
+  },
+  { icon: "FontAwesome", iconName: "rotate-left", text: "Left Rotate" },
+  { icon: "FontAwesome", iconName: "rotate-right", text: "Right Rotate" },
+  {
+    icon: "Ionicons",
+    iconName: "ellipsis-horizontal-sharp",
+    text: "More",
+  },
+];
