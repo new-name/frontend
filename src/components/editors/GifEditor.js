@@ -20,15 +20,15 @@ import {
   EDITOR_COLOR,
   SHADOW_COLOR,
   UNACTIVE_COLOR,
-} from "../constants/color";
-import { gifEditor } from "../constants/footerItems";
-import { ICON_FONT, ICON_IOS, ICON_MATERIAL_C } from "../constants/icon";
-import { GIF_LIBRARY } from "../constants/property";
+} from "../../constants/color";
+import { gifEditor } from "../../constants/footerItems";
+import { ICON_FONT, ICON_IOS, ICON_MATERIAL_C } from "../../constants/icon";
+import { GIF_LIBRARY } from "../../constants/property";
 import {
   APP_FOOTER_HEIGHT,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
-} from "../constants/size";
+} from "../../constants/size";
 
 export default function GifEditor() {
   const [animationData, setAnimationData] = useState([]);

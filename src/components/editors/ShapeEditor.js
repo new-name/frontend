@@ -11,10 +11,14 @@ import {
   EDITOR_COLOR,
   SHADOW_COLOR,
   UNACTIVE_COLOR,
-} from "../constants/color";
-import { shapeEditor } from "../constants/footerItems";
-import { ICON_ENTYPO, ICON_MATERIAL, ICON_MATERIAL_C } from "../constants/icon";
-import { APP_FOOTER_HEIGHT, SCREEN_WIDTH } from "../constants/size";
+} from "../../constants/color";
+import { shapeEditor } from "../../constants/footerItems";
+import {
+  ICON_ENTYPO,
+  ICON_MATERIAL,
+  ICON_MATERIAL_C,
+} from "../../constants/icon";
+import { APP_FOOTER_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 
 export default function ShapeEditor() {
   const [selectedProperty, setSelectedProperty] = useState("");

@@ -3,6 +3,7 @@ export const MORE = "More";
 
 export const TEXT = "Text";
 export const TEXT_SIZE = "Size";
+export const TEXT_MOVE = "Move";
 
 export const IMAGE = "Image";
 export const IMG_UNSPLASH = "Unsplash";

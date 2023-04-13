@@ -19,17 +19,17 @@ import {
   EDITOR_COLOR,
   UNACTIVE_COLOR,
   SHADOW_COLOR,
-} from "../constants/color";
-import { imageEditor } from "../constants/footerItems";
-import { ICON_FONT, ICON_IOS, ICON_MATERIAL_C } from "../constants/icon";
-import { IMG_UNSPLASH } from "../constants/property";
+} from "../../constants/color";
+import { imageEditor } from "../../constants/footerItems";
+import { ICON_FONT, ICON_IOS, ICON_MATERIAL_C } from "../../constants/icon";
+import { IMG_UNSPLASH } from "../../constants/property";
 import {
   APP_FOOTER_HEIGHT,
   IMAGE_WIDTH,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
-} from "../constants/size";
-import api from "../features/api";
+} from "../../constants/size";
+import api from "../../features/api";
 
 export default function ImageEditor() {
   const [selectedProperty, setSelectedProperty] = useState("");
