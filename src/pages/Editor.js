@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 
-import api from "../api";
 import GifEditor from "../components/GifEditor";
 import ImageEditor from "../components/ImageEditor";
 import ShapeEditor from "../components/ShapeEditor";
@@ -20,6 +19,7 @@ import {
   CONTAINER_WIDTH,
   SCREEN_WIDTH,
 } from "../constants/size";
+import api from "../features/api";
 import AppFooter from "../layout/AppFooter";
 import AppHeader from "../layout/AppHeader";
 import ContentBox from "../layout/ContentBox";
@@ -103,11 +103,7 @@ export default function Editor({ navigation }) {
   };
 
   useEffect(() => {
-    if (
-      selectedTextProperty === "Size" &&
-      selectedTextElement !== null &&
-      selectedTextSize !== 0
-    ) {
+    if (selectedTextProperty === "Size" && selectedTextElement !== null) {
       const updatedTextElements = textElements.map((element, index) => {
         if (index === selectedTextElement) {
           return { ...element, size: selectedTextSize };
@@ -157,7 +153,7 @@ export default function Editor({ navigation }) {
         <View style={styles.contentContainer}>
           {textElements.map((element, index) => (
             <TouchableOpacity
-              key={index}
+              key={element + index}
               onPress={() => handleSelectText(index)}
             >
               <Text

@@ -11,10 +11,10 @@ import {
   Alert,
 } from "react-native";
 
-import api from "../api";
 import Logo from "../components/Logo";
 import { CONTENT_COLOR, UNACTIVE_COLOR } from "../constants/color";
 import { CONTAINER_WIDTH, SCREEN_HEIGHT } from "../constants/size";
+import api from "../features/api";
 import Layout from "../layout/Layout";
 import signUpValidation from "../utils/signUpValidation";
 

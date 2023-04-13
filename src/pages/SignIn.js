@@ -11,7 +11,6 @@ import {
   Alert,
 } from "react-native";
 
-import api from "../api";
 import Logo from "../components/Logo";
 import {
   CONTENT_COLOR,
@@ -24,6 +23,7 @@ import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from "../constants/size";
+import api from "../features/api";
 import Layout from "../layout/Layout";
 import validate from "../utils/signInValidation";
 

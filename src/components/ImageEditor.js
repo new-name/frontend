@@ -14,7 +14,6 @@ import {
   TextInput,
 } from "react-native";
 
-import api from "../api";
 import {
   ACTIVE_COLOR,
   EDITOR_COLOR,
@@ -28,6 +27,7 @@ import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from "../constants/size";
+import api from "../features/api";
 
 export default function ImageEditor() {
   const [selectedProperty, setSelectedProperty] = useState("");
