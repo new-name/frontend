@@ -3,8 +3,8 @@ import { StatusBar } from "expo-status-bar";
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
-import api from "../api";
 import GifEditor from "../components/GifEditor";
 import ImageEditor from "../components/ImageEditor";
 import ShapeEditor from "../components/ShapeEditor";
@@ -15,99 +15,69 @@ import {
   UNACTIVE_COLOR,
 } from "../constants/color";
 import { editorFooter } from "../constants/footerItems";
+import { GIF, IMAGE, SHAPE, TEXT, TEXT_SIZE } from "../constants/property";
 import {
   APP_FOOTER_HEIGHT,
   CONTAINER_WIDTH,
   SCREEN_WIDTH,
 } from "../constants/size";
+import api from "../features/api";
+import { getGifURL } from "../features/reducers/gifSlice";
+import {
+  changeTextElements,
+  selectTextIndex,
+} from "../features/reducers/textSlice";
 import AppFooter from "../layout/AppFooter";
 import AppHeader from "../layout/AppHeader";
 import ContentBox from "../layout/ContentBox";
 
 export default function Editor({ navigation }) {
   const { navigate } = navigation;
-  const [selectedController, setSelectedController] = useState("");
-  const [isTextEditable, setIsTextEditalbe] = useState(false);
-  const [isGifGettable, setIsGifGettable] = useState(false);
-  const [isImageEditable, setIsImageEditable] = useState(false);
-  const [isShapeEditable, setIsShapeEditable] = useState(false);
-
-  const [selectedTextProperty, setSelectedTextProperty] = useState("");
-  const [selectedTextSize, setSelectedTextSize] = useState(0);
-  const [selectedTextElement, setSelectedTextElement] = useState(null);
-  const [gifURLs, setGifURLs] = useState([]);
-  const [textElements, setTextElements] = useState([
-    { text: "GIF", size: 16 },
-    { text: "ASSETS", size: 16 },
-    { text: "IMAGES", size: 16 },
-  ]);
+  const dispatch = useDispatch();
+  const [activeEditor, setActiveEditor] = useState("");
+  const selectedTextProperty = useSelector(
+    (state) => state.textReducer.textProperties.selectedProperty,
+  );
+  const selectedTextElement = useSelector(
+    (state) => state.textReducer.textProperties.selectedIndex,
+  );
+  const selectedTextSize = useSelector(
+    (state) => state.textReducer.textProperties.selectedSize,
+  );
+  const textElements = useSelector((state) => state.textReducer.elements);
 
   const handleSelectedProperty = (name) => {
-    if (selectedController !== name) {
-      setSelectedController(name);
-    }
+    setActiveEditor((prevState) => (prevState === name ? "" : name));
 
-    if (selectedController === name) {
-      setSelectedController("");
-    }
-
-    if (name === "Shape") {
-      setIsGifGettable(false);
-      setIsTextEditalbe(false);
-      setIsImageEditable(false);
-      setIsShapeEditable(!isShapeEditable);
-    }
-
-    if (name === "Text") {
-      setIsGifGettable(false);
-      setIsImageEditable(false);
-      setIsTextEditalbe(!isTextEditable);
-    }
-
-    if (name === "Image") {
-      setIsGifGettable(false);
-      setIsTextEditalbe(false);
-      setIsImageEditable(!isImageEditable);
-    }
-
-    if (name === "Gif") {
-      setIsTextEditalbe(false);
-      setIsImageEditable(false);
+    if (name === GIF) {
       getGifs();
     }
   };
 
   const getGifs = async () => {
     try {
-      const response = await api.getGifs();
+      const gifURLs = await api.getGifs();
 
-      if (response.status === 200) {
-        setGifURLs(response.data.gifURLs);
-        setIsGifGettable(!isGifGettable);
-      }
+      dispatch(getGifURL(gifURLs));
     } catch {
       Alert.alert("Cannot get Gifs from server");
     }
   };
 
   const handleSelectText = (index) => {
-    setSelectedTextElement(index);
+    dispatch(selectTextIndex(index));
   };
 
   const addTextElement = (text) => {
-    setTextElements([...textElements, { text, size: 16 }]);
+    changeTextElements([...textElements, { text, size: 16 }]);
   };
 
   const removeTextElement = (index) => {
-    setTextElements(textElements.filter((_, i) => i !== index));
+    changeTextElements(textElements.filter((_, i) => i !== index));
   };
 
   useEffect(() => {
-    if (
-      selectedTextProperty === "Size" &&
-      selectedTextElement !== null &&
-      selectedTextSize !== 0
-    ) {
+    if (selectedTextProperty === TEXT_SIZE && selectedTextElement !== null) {
       const updatedTextElements = textElements.map((element, index) => {
         if (index === selectedTextElement) {
           return { ...element, size: selectedTextSize };
@@ -115,7 +85,7 @@ export default function Editor({ navigation }) {
         return element;
       });
 
-      setTextElements(updatedTextElements);
+      dispatch(changeTextElements(updatedTextElements));
     }
   }, [selectedTextElement, selectedTextSize]);
 
@@ -157,7 +127,7 @@ export default function Editor({ navigation }) {
         <View style={styles.contentContainer}>
           {textElements.map((element, index) => (
             <TouchableOpacity
-              key={index}
+              key={element + index}
               onPress={() => handleSelectText(index)}
             >
               <Text
@@ -171,26 +141,22 @@ export default function Editor({ navigation }) {
           ))}
         </View>
       </ContentBox>
-      {isShapeEditable && (
+      {activeEditor === SHAPE && (
         <View style={styles.gifEditorContainer}>
           <ShapeEditor />
         </View>
       )}
-      {isTextEditable && (
+      {activeEditor === TEXT && (
         <View style={styles.editorContainer}>
-          <TextEditor
-            setSelectedTextSize={setSelectedTextSize}
-            setSelectedProperty={setSelectedTextProperty}
-            selectedProperty={selectedTextProperty}
-          />
+          <TextEditor />
         </View>
       )}
-      {isGifGettable && (
+      {activeEditor === GIF && (
         <View style={styles.gifEditorContainer}>
-          <GifEditor gifURLs={gifURLs} />
+          <GifEditor />
         </View>
       )}
-      {isImageEditable && (
+      {activeEditor === IMAGE && (
         <View style={styles.gifEditorContainer}>
           <ImageEditor />
         </View>
@@ -207,18 +173,14 @@ export default function Editor({ navigation }) {
                 name={item.iconName}
                 size={30}
                 color={
-                  selectedController === item.text
-                    ? ACTIVE_COLOR
-                    : UNACTIVE_COLOR
+                  activeEditor === item.text ? ACTIVE_COLOR : UNACTIVE_COLOR
                 }
               />
               <Text
                 style={{
                   ...styles.iconText,
                   color:
-                    selectedController === item.text
-                      ? ACTIVE_COLOR
-                      : UNACTIVE_COLOR,
+                    activeEditor === item.text ? ACTIVE_COLOR : UNACTIVE_COLOR,
                 }}
               >
                 {item.text}

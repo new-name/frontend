@@ -14,7 +14,6 @@ import {
   TextInput,
 } from "react-native";
 
-import api from "../api";
 import {
   ACTIVE_COLOR,
   EDITOR_COLOR,
@@ -22,12 +21,15 @@ import {
   SHADOW_COLOR,
 } from "../constants/color";
 import { imageEditor } from "../constants/footerItems";
+import { ICON_FONT, ICON_IOS, ICON_MATERIAL_C } from "../constants/icon";
+import { IMG_UNSPLASH } from "../constants/property";
 import {
   APP_FOOTER_HEIGHT,
   IMAGE_WIDTH,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from "../constants/size";
+import api from "../features/api";
 
 export default function ImageEditor() {
   const [selectedProperty, setSelectedProperty] = useState("");
@@ -36,13 +38,7 @@ export default function ImageEditor() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSelectedProperty = (name) => {
-    if (selectedProperty === name) {
-      setSelectedProperty("");
-    }
-
-    if (selectedProperty !== name) {
-      setSelectedProperty(name);
-    }
+    setSelectedProperty((prevState) => (prevState === name ? "" : name));
   };
 
   const getImageSize = (uri) => {
@@ -107,7 +103,7 @@ export default function ImageEditor() {
 
   return (
     <View>
-      {selectedProperty === "Unsplash" && photos.length > 0 && (
+      {selectedProperty === IMG_UNSPLASH && photos.length > 0 && (
         <View style={styles.container}>
           <View style={styles.paddingContainer}>
             <TextInput
@@ -149,7 +145,7 @@ export default function ImageEditor() {
             key={item.iconName}
             style={styles.iconWithText}
           >
-            {item.icon === "FontAwesome" && (
+            {item.icon === ICON_FONT && (
               <FontAwesome
                 name={item.iconName}
                 size={30}
@@ -158,7 +154,7 @@ export default function ImageEditor() {
                 }
               />
             )}
-            {item.icon === "MaterialCommunityIcons" && (
+            {item.icon === ICON_MATERIAL_C && (
               <MaterialCommunityIcons
                 name={item.iconName}
                 size={30}
@@ -167,7 +163,7 @@ export default function ImageEditor() {
                 }
               />
             )}
-            {item.icon === "Ionicons" && (
+            {item.icon === ICON_IOS && (
               <Ionicons
                 name={item.iconName}
                 size={30}

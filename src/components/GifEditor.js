@@ -1,6 +1,9 @@
-import { FontAwesome, MaterialIcons, Ionicons } from "@expo/vector-icons";
+import {
+  FontAwesome,
+  MaterialCommunityIcons,
+  Ionicons,
+} from "@expo/vector-icons";
 import Lottie from "lottie-react-native";
-import PropTypes from "prop-types";
 import { useState, useEffect, useRef } from "react";
 import {
   View,
@@ -9,6 +12,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import { useSelector } from "react-redux";
 
 import {
   ACTIVE_COLOR,
@@ -18,26 +22,25 @@ import {
   UNACTIVE_COLOR,
 } from "../constants/color";
 import { gifEditor } from "../constants/footerItems";
+import { ICON_FONT, ICON_IOS, ICON_MATERIAL_C } from "../constants/icon";
+import { GIF_LIBRARY } from "../constants/property";
 import {
   APP_FOOTER_HEIGHT,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from "../constants/size";
 
-export default function GifEditor({ gifURLs }) {
+export default function GifEditor() {
   const [animationData, setAnimationData] = useState([]);
   const [selectedProperty, setSelectedProperty] = useState("");
+  const gifURLs = useSelector(
+    (state) => state.gifReducer.gifProperties.gifURLArrays,
+  );
 
   const animationRefs = useRef([]);
 
   const handleSelectedProperty = (name) => {
-    if (selectedProperty === name) {
-      setSelectedProperty("");
-    }
-
-    if (selectedProperty !== name) {
-      setSelectedProperty(name);
-    }
+    setSelectedProperty((prevState) => (prevState === name ? "" : name));
   };
 
   useEffect(() => {
@@ -66,7 +69,7 @@ export default function GifEditor({ gifURLs }) {
 
   return (
     <View>
-      {selectedProperty === "GIF" && (
+      {selectedProperty === GIF_LIBRARY && (
         <View style={styles.container}>
           <ScrollView
             pagingEnabled
@@ -97,21 +100,21 @@ export default function GifEditor({ gifURLs }) {
             key={item.iconName}
             style={styles.iconWithText}
           >
-            {item.icon === "FontAwesome" && (
+            {item.icon === ICON_FONT && (
               <FontAwesome
                 name={item.iconName}
                 size={30}
                 color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
               />
             )}
-            {item.icon === "MaterialIcons" && (
-              <MaterialIcons
+            {item.icon === ICON_MATERIAL_C && (
+              <MaterialCommunityIcons
                 name={item.iconName}
                 size={30}
                 color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
               />
             )}
-            {item.icon === "Ionicons" && (
+            {item.icon === ICON_IOS && (
               <Ionicons
                 name={item.iconName}
                 size={30}
@@ -132,10 +135,6 @@ export default function GifEditor({ gifURLs }) {
     </View>
   );
 }
-
-GifEditor.propTypes = {
-  gifURLs: PropTypes.array.isRequired,
-};
 
 const styles = StyleSheet.create({
   container: {

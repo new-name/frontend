@@ -13,19 +13,14 @@ import {
   UNACTIVE_COLOR,
 } from "../constants/color";
 import { shapeEditor } from "../constants/footerItems";
+import { ICON_ENTYPO, ICON_MATERIAL, ICON_MATERIAL_C } from "../constants/icon";
 import { APP_FOOTER_HEIGHT, SCREEN_WIDTH } from "../constants/size";
 
 export default function ShapeEditor() {
   const [selectedProperty, setSelectedProperty] = useState("");
 
   const handleSelectedProperty = (name) => {
-    if (selectedProperty === name) {
-      setSelectedProperty("");
-    }
-
-    if (selectedProperty !== name) {
-      setSelectedProperty(name);
-    }
+    setSelectedProperty((prevState) => (prevState === name ? "" : name));
   };
 
   return (
@@ -36,7 +31,7 @@ export default function ShapeEditor() {
           key={item.iconName}
           style={styles.iconWithText}
         >
-          {item.icon === "MaterialIcons" && (
+          {item.icon === ICON_MATERIAL && (
             <MaterialIcons
               name={item.iconName}
               size={30}
@@ -45,7 +40,7 @@ export default function ShapeEditor() {
               }
             />
           )}
-          {item.icon === "MaterialCommunityIcons" && (
+          {item.icon === ICON_MATERIAL_C && (
             <MaterialCommunityIcons
               name={item.iconName}
               size={30}
@@ -54,7 +49,7 @@ export default function ShapeEditor() {
               }
             />
           )}
-          {item.icon === "Entypo" && (
+          {item.icon === ICON_ENTYPO && (
             <Entypo
               name={item.iconName}
               size={30}

@@ -1,5 +1,4 @@
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
-import PropTypes from "prop-types";
 import { useState, useRef } from "react";
 import {
   View,
@@ -8,6 +7,7 @@ import {
   TouchableOpacity,
   PanResponder,
 } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 
 import {
   ACTIVE_COLOR,
@@ -17,6 +17,8 @@ import {
   UNACTIVE_COLOR,
 } from "../constants/color";
 import { textEditor } from "../constants/footerItems";
+import { ICON_FONT, ICON_MATERIAL } from "../constants/icon";
+import { TEXT_SIZE } from "../constants/property";
 import {
   APP_FOOTER_HEIGHT,
   SCREEN_HEIGHT,
@@ -25,15 +27,15 @@ import {
   MIN_TEXT_SIZE,
   MAX_TEXT_SIZE,
 } from "../constants/size";
+import { changeTextSize, selectText } from "../features/reducers/textSlice";
 
-export default function TextEditor({
-  setSelectedTextSize,
-  selectedProperty,
-  setSelectedProperty,
-}) {
+export default function TextEditor() {
+  const dispatch = useDispatch();
   const [scrollPosition, setScrollPosition] = useState(SCREEN_HEIGHT * 0.15);
+  const selectedProperty = useSelector(
+    (state) => state.textReducer.textProperties.selectedProperty,
+  );
   const customScrollbarRef = useRef(null);
-
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
@@ -63,23 +65,19 @@ export default function TextEditor({
         ((height - SCROLL_HANDLE_HEIGHT - y) /
           (height - SCROLL_HANDLE_HEIGHT)) *
           (MAX_TEXT_SIZE - MIN_TEXT_SIZE);
-      setSelectedTextSize(textSize);
+
+      dispatch(changeTextSize(textSize));
     });
   };
 
-  const handleSelectedProperty = (name) => {
-    if (selectedProperty === name) {
-      setSelectedProperty("");
-    }
-
-    if (!selectedProperty) {
-      setSelectedProperty(name);
-    }
+  const handleSelectedTextProperty = (name) => {
+    const newSelectedProperty = selectedProperty === name ? "" : name;
+    dispatch(selectText(newSelectedProperty));
   };
 
   return (
     <View style={styles.container}>
-      {selectedProperty === "Size" && (
+      {selectedProperty === TEXT_SIZE && (
         <View style={styles.size}>
           <View
             ref={customScrollbarRef}
@@ -97,11 +95,11 @@ export default function TextEditor({
       )}
       {textEditor.map((item) => (
         <TouchableOpacity
-          onPress={() => handleSelectedProperty(item.text)}
+          onPress={() => handleSelectedTextProperty(item.text)}
           key={item.iconName}
           style={styles.iconWithText}
         >
-          {item.icon === "FontAwesome" && (
+          {item.icon === ICON_FONT && (
             <FontAwesome
               name={item.iconName}
               size={30}
@@ -110,7 +108,7 @@ export default function TextEditor({
               }
             />
           )}
-          {item.icon === "MaterialIcons" && (
+          {item.icon === ICON_MATERIAL && (
             <MaterialIcons
               name={item.iconName}
               size={30}
@@ -133,12 +131,6 @@ export default function TextEditor({
     </View>
   );
 }
-
-TextEditor.propTypes = {
-  setSelectedTextSize: PropTypes.func.isRequired,
-  selectedProperty: PropTypes.string.isRequired,
-  setSelectedProperty: PropTypes.func.isRequired,
-};
 
 const styles = StyleSheet.create({
   container: {
