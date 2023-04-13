@@ -23,7 +23,10 @@ import {
 } from "../constants/size";
 import api from "../features/api";
 import { getGifURL } from "../features/reducers/gifSlice";
-import { selectTextIndex } from "../features/reducers/textSlice";
+import {
+  changeTextElements,
+  selectTextIndex,
+} from "../features/reducers/textSlice";
 import AppFooter from "../layout/AppFooter";
 import AppHeader from "../layout/AppHeader";
 import ContentBox from "../layout/ContentBox";
@@ -41,12 +44,7 @@ export default function Editor({ navigation }) {
   const selectedTextSize = useSelector(
     (state) => state.textReducer.textProperties.selectedSize,
   );
-
-  const [textElements, setTextElements] = useState([
-    { text: "GIF", size: 16 },
-    { text: "ASSETS", size: 16 },
-    { text: "IMAGES", size: 16 },
-  ]);
+  const textElements = useSelector((state) => state.textReducer.elements);
 
   const handleSelectedProperty = (name) => {
     setActiveEditor((prevState) => (prevState === name ? "" : name));
@@ -71,11 +69,11 @@ export default function Editor({ navigation }) {
   };
 
   const addTextElement = (text) => {
-    setTextElements([...textElements, { text, size: 16 }]);
+    changeTextElements([...textElements, { text, size: 16 }]);
   };
 
   const removeTextElement = (index) => {
-    setTextElements(textElements.filter((_, i) => i !== index));
+    changeTextElements(textElements.filter((_, i) => i !== index));
   };
 
   useEffect(() => {
@@ -87,7 +85,7 @@ export default function Editor({ navigation }) {
         return element;
       });
 
-      setTextElements(updatedTextElements);
+      dispatch(changeTextElements(updatedTextElements));
     }
   }, [selectedTextElement, selectedTextSize]);
 

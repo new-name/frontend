@@ -1,4 +1,8 @@
-import { FontAwesome, MaterialIcons, Ionicons } from "@expo/vector-icons";
+import {
+  FontAwesome,
+  MaterialCommunityIcons,
+  Ionicons,
+} from "@expo/vector-icons";
 import Lottie from "lottie-react-native";
 import { useState, useEffect, useRef } from "react";
 import {
@@ -18,8 +22,8 @@ import {
   UNACTIVE_COLOR,
 } from "../constants/color";
 import { gifEditor } from "../constants/footerItems";
-import { ICON_FONT, ICON_IOS, ICON_MATERIAL } from "../constants/icon";
-import { GIF } from "../constants/property";
+import { ICON_FONT, ICON_IOS, ICON_MATERIAL_C } from "../constants/icon";
+import { GIF_LIBRARY } from "../constants/property";
 import {
   APP_FOOTER_HEIGHT,
   SCREEN_HEIGHT,
@@ -27,11 +31,11 @@ import {
 } from "../constants/size";
 
 export default function GifEditor() {
+  const [animationData, setAnimationData] = useState([]);
+  const [selectedProperty, setSelectedProperty] = useState("");
   const gifURLs = useSelector(
     (state) => state.gifReducer.gifProperties.gifURLArrays,
   );
-  const [animationData, setAnimationData] = useState([]);
-  const [selectedProperty, setSelectedProperty] = useState("");
 
   const animationRefs = useRef([]);
 
@@ -65,7 +69,7 @@ export default function GifEditor() {
 
   return (
     <View>
-      {selectedProperty === GIF && (
+      {selectedProperty === GIF_LIBRARY && (
         <View style={styles.container}>
           <ScrollView
             pagingEnabled
@@ -103,8 +107,8 @@ export default function GifEditor() {
                 color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
               />
             )}
-            {item.icon === ICON_MATERIAL && (
-              <MaterialIcons
+            {item.icon === ICON_MATERIAL_C && (
+              <MaterialCommunityIcons
                 name={item.iconName}
                 size={30}
                 color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
