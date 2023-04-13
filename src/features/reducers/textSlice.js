@@ -7,11 +7,10 @@ const textProperties = {
   textArray: [],
 };
 
-const elements = [
-  { text: "GIF", size: 16 },
-  { text: "ASSETS", size: 16 },
-  { text: "IMAGES", size: 16 },
-];
+const elements = {
+  0: { text: "Sample Text 1", x: 0, y: 0, size: 20 },
+  1: { text: "Sample Text 2", x: 0, y: 0, size: 30 },
+};
 
 const initialState = {
   textProperties,
@@ -38,7 +37,16 @@ export const textSlice = createSlice({
       textProperties.selectedSize = action.payload;
     },
     changeTextElements: (state, action) => {
-      state.elements = action.payload;
+      state.elements = action.payload.reduce((acc, el, index) => {
+        return { ...acc, [index]: el };
+      }, {});
+    },
+    updateTextPosition: (state, action) => {
+      const { index } = action.payload;
+      const { x, y } = action.payload;
+
+      state.elements[index].x += x;
+      state.elements[index].y += y;
     },
   },
 });
@@ -48,5 +56,6 @@ export const {
   selectTextIndex,
   changeTextSize,
   changeTextElements,
+  updateTextPosition,
 } = textSlice.actions;
 export default textSlice.reducer;

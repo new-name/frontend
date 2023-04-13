@@ -33,19 +33,15 @@ export const shapeEditor = [
 ];
 
 export const textEditor = [
-  { icon: "FontAwesome", iconName: "mouse-pointer", text: "Select" },
-  { icon: "Ionicons", iconName: "move", text: "Move" },
-  { icon: "Ionicons", iconName: "ios-color-palette-outline", text: "Color" },
   { icon: "Ionicons", iconName: "add", text: "Add" },
   { icon: "Ionicons", iconName: "remove-circle-outline", text: "Remove" },
+  { icon: "Ionicons", iconName: "move", text: "Move" },
+  { icon: "Ionicons", iconName: "ios-color-palette-outline", text: "Color" },
   { icon: "MaterialIcons", iconName: "edit", text: "Edit" },
   { icon: "FontAwesome", iconName: "text-height", text: "Size" },
   { icon: "FontAwesome", iconName: "rotate-left", text: "Left Rotate" },
   { icon: "FontAwesome", iconName: "rotate-right", text: "Right Rotate" },
   { icon: "FontAwesome", iconName: "font", text: "Font Style" },
-  { icon: "Ionicons", iconName: "ios-lock-closed-outline", text: "Lock" },
-  { icon: "Ionicons", iconName: "ios-lock-open-outline", text: "UnLock" },
-  { icon: "MaterialIcons", iconName: "align-horizontal-center", text: "Align" },
 ];
 
 export const gifEditor = [
