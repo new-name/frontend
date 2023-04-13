@@ -1,24 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const texts = {
-  selectedText: "",
-  selectedTextIndex: null,
+const textProperties = {
+  selectedProperty: "",
+  selectedIndex: null,
+  selectedSize: 0,
   textArray: [],
 };
 
 const initialState = {
-  texts,
+  textProperties,
 };
 
 export const textSlice = createSlice({
   name: "text",
   initialState,
   reducers: {
-    updateText: (state, action) => {
-      state.texts.push(action.payload);
+    selectText: (state, action) => {
+      const { textProperties } = state;
+
+      textProperties.selectedProperty = action.payload;
+    },
+    selectTextIndex: (state, action) => {
+      const { textProperties } = state;
+
+      textProperties.selectedIndex = action.payload;
+    },
+    changeTextSize: (state, action) => {
+      const { textProperties } = state;
+
+      textProperties.selectedSize = action.payload;
     },
   },
 });
 
-export const { updateText } = textSlice.actions;
+export const { selectText, selectTextIndex, changeTextSize } =
+  textSlice.actions;
 export default textSlice.reducer;

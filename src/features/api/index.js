@@ -81,7 +81,9 @@ async function getGifs() {
   try {
     const response = await axiosInstance.get("/api/assets/gifs");
 
-    return response;
+    if (response.status === 200) {
+      return response.data.gifURLs;
+    }
   } catch (err) {
     console.log(err);
   }
