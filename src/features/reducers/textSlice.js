@@ -14,19 +14,8 @@ const elements = {
     y: 0,
     size: 20,
     color: "black",
-    fontStyle: "",
     zIndex: 0,
     isEditable: false,
-  },
-  1: {
-    text: "Sample Text",
-    x: 0,
-    y: 0,
-    size: 40,
-    color: "red",
-    fontStyle: "",
-    zIndex: 0,
-    isEditbale: false,
   },
 };
 
@@ -34,6 +23,7 @@ const initialState = {
   textProperties,
   elements,
   colorPickerVisible: false,
+  fontContainerVisible: false,
 };
 
 export const textSlice = createSlice({
@@ -62,6 +52,8 @@ export const textSlice = createSlice({
     },
     addTextElements: (state, action) => {
       state.elements = action.payload;
+
+      state.textProperties.selectedProperty = "";
     },
     removeTextElements: (state, action) => {
       const selectedTextIndex = String(action.payload);
@@ -110,6 +102,18 @@ export const textSlice = createSlice({
         console.error(`Element at index ${index} not found.`);
       }
     },
+    updateFontContainerVisible: (state, action) => {
+      state.fontContainerVisible = action.payload;
+      state.textProperties.selectedProperty = "";
+    },
+    updateTextFontStyle: (state, action) => {
+      const { index, font } = action.payload;
+
+      state.elements[index].fontFamily = font;
+
+      state.fontContainerVisible = false;
+      state.textProperties.selectedProperty = "";
+    },
   },
 });
 
@@ -125,5 +129,7 @@ export const {
   updateTextColor,
   updateColorPickerVisible,
   updateTextContents,
+  updateFontContainerVisible,
+  updateTextFontStyle,
 } = textSlice.actions;
 export default textSlice.reducer;

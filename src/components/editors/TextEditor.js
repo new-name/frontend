@@ -26,6 +26,7 @@ import {
   TEXT_EDIT,
   TEXT_REMOVE,
   TEXT_SIZE,
+  TEXT_STYLE,
 } from "../../constants/property";
 import {
   APP_FOOTER_HEIGHT,
@@ -43,6 +44,7 @@ import {
   selectText,
   selectTextContents,
   updateColorPickerVisible,
+  updateFontContainerVisible,
 } from "../../features/reducers/textSlice";
 
 export default function TextEditor() {
@@ -186,6 +188,19 @@ export default function TextEditor() {
 
       if (selectedTextIndex !== null) {
         dispatch(selectTextContents({ index: selectedTextIndex, value: true }));
+      }
+    }
+  }, [selectedProperty]);
+
+  useEffect(() => {
+    if (selectedProperty === TEXT_STYLE) {
+      if (selectedTextIndex === null) {
+        Alert.alert("원하는 텍스트를 선택해주세요.");
+        dispatch(selectText(""));
+      }
+
+      if (selectedTextIndex !== null) {
+        dispatch(updateFontContainerVisible(true));
       }
     }
   }, [selectedProperty]);

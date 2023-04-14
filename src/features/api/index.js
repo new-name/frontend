@@ -89,10 +89,23 @@ async function getGifs() {
   }
 }
 
+async function getFonts() {
+  try {
+    const response = await axiosInstance.get("/api/assets/fonts");
+
+    if (response.status === 200) {
+      return response.data.fontURLs;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export default {
   postSignUp,
   postSignIn,
   getGifs,
   getImages,
   searchImages,
+  getFonts,
 };

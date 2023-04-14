@@ -12,7 +12,6 @@ import {
   PanResponder,
   TextInput,
   Keyboard,
-  SafeAreaView,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
@@ -20,6 +19,7 @@ import { KeyboardAccessoryView } from "react-native-keyboard-accessory";
 import { useDispatch, useSelector } from "react-redux";
 
 import ColorPicker from "../components/ColorPicker";
+import FontModal from "../components/FontModal";
 import GifEditor from "../components/editors/GifEditor";
 import ImageEditor from "../components/editors/ImageEditor";
 import ShapeEditor from "../components/editors/ShapeEditor";
@@ -89,9 +89,6 @@ export default function Editor({ navigation }) {
     (state) => state.textReducer.textProperties.selectedIndex,
   );
   const textElements = useSelector((state) => state.textReducer.elements);
-  const [editedText, setEditedText] = useState(
-    textElements[selectedTextIndex]?.text,
-  );
 
   const selectedIndexRef = useRef(null);
   const positionRef = useRef({ x: 0, y: 0 });
@@ -151,7 +148,11 @@ export default function Editor({ navigation }) {
 
     const textElement = (
       <Text
-        style={{ fontSize: element[index]?.size, color: element[index]?.color }}
+        style={{
+          fontSize: element[index]?.size,
+          color: element[index]?.color,
+          fontFamily: element[index]?.fontFamily,
+        }}
       >
         {element[index]?.text}
       </Text>
@@ -177,58 +178,55 @@ export default function Editor({ navigation }) {
 
     if (isSelected && selectedTextProperty === TEXT_EDIT && isEditable) {
       return (
-        <SafeAreaView
-          key={element[index]?.x + element[index].y}
+        <KeyboardAvoidingView
           style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : null}
+          key={element[index]?.x + element[index].y}
         >
-          <KeyboardAvoidingView
-            style={{ flex: 1 }}
-            behavior={Platform.OS === "ios" ? "padding" : null}
+          <TouchableOpacity
+            onPress={() => handleSelectText(index)}
+            style={[{ position: "absolute" }, positionStyle]}
           >
-            <TouchableOpacity
-              onPress={() => handleSelectText(index)}
-              style={[{ position: "absolute" }, positionStyle]}
-            >
-              <TextInput
-                multiline
-                style={{
-                  fontSize: element[index]?.size,
-                  color: element[index]?.color,
+            <TextInput
+              multiline
+              style={{
+                fontSize: element[index]?.size,
+                color: element[index]?.color,
+                fontFamily: element[index]?.fontFamily,
+              }}
+              value={element[index]?.text}
+              onChangeText={(newText) => {
+                dispatch(
+                  updateTextContents({
+                    index: selectedTextIndex,
+                    value: newText,
+                  }),
+                );
+              }}
+              onBlur={() => {
+                dispatch(
+                  selectTextContents({
+                    index: selectedTextIndex,
+                    value: false,
+                  }),
+                );
+              }}
+            />
+          </TouchableOpacity>
+          <KeyboardAccessoryView>
+            <View style={styles.keyboardAccesoryView}>
+              <TouchableOpacity
+                onPress={() => {
+                  Keyboard.dismiss();
+                  dispatch(selectText(""));
                 }}
-                value={element[index]?.text}
-                onChangeText={(newText) => {
-                  dispatch(
-                    updateTextContents({
-                      index: selectedTextIndex,
-                      value: newText,
-                    }),
-                  );
-                }}
-                onBlur={() => {
-                  dispatch(
-                    selectTextContents({
-                      index: selectedTextIndex,
-                      value: false,
-                    }),
-                  );
-                }}
-              />
-            </TouchableOpacity>
-            <KeyboardAccessoryView>
-              <View style={styles.keyboardAccesoryView}>
-                <TouchableOpacity
-                  onPress={() => {
-                    Keyboard.dismiss();
-                    dispatch(selectText(""));
-                  }}
-                  style={{ padding: 10, paddingHorizontal: 20 }}
-                >
-                  <Text style={{ fontSize: 16 }}>Done</Text>
-                </TouchableOpacity>
-              </View>
-            </KeyboardAccessoryView>
-          </KeyboardAvoidingView>
-        </SafeAreaView>
+                style={{ padding: 10, paddingHorizontal: 20 }}
+              >
+                <Text style={{ fontSize: 16 }}>Done</Text>
+              </TouchableOpacity>
+            </View>
+          </KeyboardAccessoryView>
+        </KeyboardAvoidingView>
       );
     }
 
@@ -279,6 +277,7 @@ export default function Editor({ navigation }) {
       </AppHeader>
       <ContentBox>
         <View style={styles.contentContainer}>
+          <FontModal />
           <ColorPicker />
           {Object.keys(textElements).map((element, index) =>
             renderTextElement(textElements, index),
