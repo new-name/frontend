@@ -11,7 +11,12 @@ import {
   Animated,
   PanResponder,
   TextInput,
+  Keyboard,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
+import { KeyboardAccessoryView } from "react-native-keyboard-accessory";
 import { useDispatch, useSelector } from "react-redux";
 
 import ColorPicker from "../components/ColorPicker";
@@ -36,11 +41,13 @@ import {
 import {
   APP_FOOTER_HEIGHT,
   CONTAINER_WIDTH,
+  SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from "../constants/size";
 import api from "../features/api";
 import { getGifURL } from "../features/reducers/gifSlice";
 import {
+  selectText,
   selectTextContents,
   selectTextIndex,
   updateTextContents,
@@ -170,33 +177,58 @@ export default function Editor({ navigation }) {
 
     if (isSelected && selectedTextProperty === TEXT_EDIT && isEditable) {
       return (
-        <TouchableOpacity
+        <SafeAreaView
           key={element[index]?.x + element[index].y}
-          onPress={() => handleSelectText(index)}
-          style={[{ position: "absolute" }, positionStyle]}
+          style={{ flex: 1 }}
         >
-          <TextInput
-            multiline
-            style={{
-              fontSize: element[index]?.size,
-              color: element[index]?.color,
-            }}
-            value={element[index]?.text}
-            onChangeText={(newText) => {
-              dispatch(
-                updateTextContents({
-                  index: selectedTextIndex,
-                  value: newText,
-                }),
-              );
-            }}
-            onBlur={() => {
-              dispatch(
-                selectTextContents({ index: selectedTextIndex, value: false }),
-              );
-            }}
-          />
-        </TouchableOpacity>
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : null}
+          >
+            <TouchableOpacity
+              onPress={() => handleSelectText(index)}
+              style={[{ position: "absolute" }, positionStyle]}
+            >
+              <TextInput
+                multiline
+                style={{
+                  fontSize: element[index]?.size,
+                  color: element[index]?.color,
+                }}
+                value={element[index]?.text}
+                onChangeText={(newText) => {
+                  dispatch(
+                    updateTextContents({
+                      index: selectedTextIndex,
+                      value: newText,
+                    }),
+                  );
+                }}
+                onBlur={() => {
+                  dispatch(
+                    selectTextContents({
+                      index: selectedTextIndex,
+                      value: false,
+                    }),
+                  );
+                }}
+              />
+            </TouchableOpacity>
+            <KeyboardAccessoryView>
+              <View style={styles.keyboardAccesoryView}>
+                <TouchableOpacity
+                  onPress={() => {
+                    Keyboard.dismiss();
+                    dispatch(selectText(""));
+                  }}
+                  style={{ padding: 10, paddingHorizontal: 20 }}
+                >
+                  <Text style={{ fontSize: 16 }}>Done</Text>
+                </TouchableOpacity>
+              </View>
+            </KeyboardAccessoryView>
+          </KeyboardAvoidingView>
+        </SafeAreaView>
       );
     }
 
@@ -364,5 +396,15 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 12,
     color: UNACTIVE_COLOR,
+  },
+  keyboardAccesoryView: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    top: SCREEN_HEIGHT * 0.795,
+    marginLeft: -SCREEN_WIDTH * 0.05,
+    width: SCREEN_WIDTH,
+    borderTopWidth: 1,
+    borderColor: "#e5e5e5",
+    backgroundColor: "#f5f5f5",
   },
 });
