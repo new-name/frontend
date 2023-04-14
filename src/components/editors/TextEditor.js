@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   PanResponder,
   ScrollView,
-  Animated,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 

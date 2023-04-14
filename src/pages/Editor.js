@@ -28,6 +28,8 @@ import {
   IMAGE,
   SHAPE,
   TEXT,
+  TEXT_ADD,
+  TEXT_COLOR,
   TEXT_MOVE,
   TEXT_SIZE,
 } from "../constants/property";
@@ -39,6 +41,7 @@ import {
 import api from "../features/api";
 import { getGifURL } from "../features/reducers/gifSlice";
 import {
+  addTextElements,
   changeTextElements,
   selectTextIndex,
   updateTextPosition,
@@ -51,20 +54,6 @@ export default function Editor({ navigation }) {
   const { navigate } = navigation;
   const dispatch = useDispatch();
   const [activeEditor, setActiveEditor] = useState("");
-  const [moveResponder, setMoveResponder] = useState({});
-  const selectedTextProperty = useSelector(
-    (state) => state.textReducer.textProperties.selectedProperty,
-  );
-  const selectedTextIndex = useSelector(
-    (state) => state.textReducer.textProperties.selectedIndex,
-  );
-  const selectedTextSize = useSelector(
-    (state) => state.textReducer.textProperties.selectedSize,
-  );
-  const textElements = useSelector((state) => state.textReducer.elements);
-
-  const selectedIndexRef = useRef(null);
-  const positionRef = useRef({ x: 0, y: 0 });
 
   const handleSelectedProperty = (name) => {
     setActiveEditor((prevState) => (prevState === name ? "" : name));
@@ -84,12 +73,28 @@ export default function Editor({ navigation }) {
     }
   };
 
+  /* 텍스트 기능 **/
+  const [moveResponder, setMoveResponder] = useState({});
+  const selectedTextProperty = useSelector(
+    (state) => state.textReducer.textProperties.selectedProperty,
+  );
+  const selectedTextIndex = useSelector(
+    (state) => state.textReducer.textProperties.selectedIndex,
+  );
+  const selectedTextSize = useSelector(
+    (state) => state.textReducer.textProperties.selectedSize,
+  );
+  const textElements = useSelector((state) => state.textReducer.elements);
+
+  const selectedIndexRef = useRef(null);
+  const positionRef = useRef({ x: 0, y: 0 });
+  const movePan = useRef(new Animated.ValueXY()).current;
+
   const handleSelectText = (index) => {
     selectedIndexRef.current = index;
     dispatch(selectTextIndex(index));
   };
 
-  const movePan = useRef(new Animated.ValueXY()).current;
   useEffect(() => {
     setMoveResponder(
       PanResponder.create({
@@ -186,6 +191,25 @@ export default function Editor({ navigation }) {
     }
   }, [selectedTextIndex, selectedTextSize]);
 
+  useEffect(() => {
+    if (selectedTextProperty === TEXT_ADD) {
+      const nextIndex = Object.keys(textElements).length;
+      const newTextModel = {
+        text: `Sample Text ${nextIndex + 1}`,
+        x: 0,
+        y: 0,
+        size: 16,
+      };
+
+      const updatedTextElements = {
+        ...textElements,
+        [nextIndex]: newTextModel,
+      };
+
+      dispatch(addTextElements(updatedTextElements));
+    }
+  }, [selectedTextProperty]);
+
   return (
     <View style={styles.container}>
       <AppHeader>
@@ -228,7 +252,7 @@ export default function Editor({ navigation }) {
         </View>
       </ContentBox>
       {activeEditor === SHAPE && (
-        <View style={styles.gifEditorContainer}>
+        <View style={styles.imageEditorContainer}>
           <ShapeEditor />
         </View>
       )}
@@ -238,12 +262,12 @@ export default function Editor({ navigation }) {
         </View>
       )}
       {activeEditor === GIF && (
-        <View style={styles.gifEditorContainer}>
+        <View style={styles.imageEditorContainer}>
           <GifEditor />
         </View>
       )}
       {activeEditor === IMAGE && (
-        <View style={styles.gifEditorContainer}>
+        <View style={styles.imageEditorContainer}>
           <ImageEditor />
         </View>
       )}
@@ -320,7 +344,7 @@ const styles = StyleSheet.create({
     height: APP_FOOTER_HEIGHT,
     bottom: APP_FOOTER_HEIGHT + APP_FOOTER_HEIGHT * 0.35,
   },
-  gifEditorContainer: {
+  imageEditorContainer: {
     position: "absolute",
     zIndex: 2,
     bottom: APP_FOOTER_HEIGHT + APP_FOOTER_HEIGHT * 0.35,

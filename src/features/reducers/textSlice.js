@@ -36,6 +36,9 @@ export const textSlice = createSlice({
 
       textProperties.selectedSize = action.payload;
     },
+    addTextElements: (state, action) => {
+      state.elements = action.payload;
+    },
     changeTextElements: (state, action) => {
       state.elements = action.payload.reduce((acc, el, index) => {
         return { ...acc, [index]: el };
@@ -57,5 +60,6 @@ export const {
   changeTextSize,
   changeTextElements,
   updateTextPosition,
+  addTextElements,
 } = textSlice.actions;
 export default textSlice.reducer;
