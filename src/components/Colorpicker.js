@@ -1,6 +1,14 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { useState } from "react";
-import { Modal, Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import {
+  Modal,
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  PanResponder,
+  Animated,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 import { UNACTIVE_COLOR } from "../constants/color";
@@ -14,24 +22,50 @@ import AppHeader from "../layout/AppHeader";
 export default function Colorpicker() {
   const dispatch = useDispatch();
   const [selectedColor, setSelectedColor] = useState("");
+  const [selectedColorOpacity, setSelectedColorOpacity] = useState(1);
   const isColorPickerVisible = useSelector(
     (state) => state.textReducer.colorpickerVisible,
   );
   const selectedTextIndex = useSelector(
     (state) => state.textReducer.textProperties.selectedIndex,
   );
-  const updateColor = () => {
-    dispatch(updateTextColor({ index: selectedTextIndex, selectedColor }));
-  };
-
   const colorsArray = Array.from({ length: 121 }, (_, index) => {
     if (index < 11) {
       const lightness = 100 - index * 10;
       return `hsl(0, 0%, ${lightness}%)`;
     }
 
-    return `hsl(${((index - 10) * 3) % 360}, 100%, 50%)`;
+    return `hsla(${((index - 10) * 3) % 360}, 100%, 50%, 1)`;
   });
+  const updateColor = () => {
+    dispatch(updateTextColor({ index: selectedTextIndex, selectedColor }));
+  };
+
+  const opacityPan = useRef(
+    new Animated.Value(SCREEN_WIDTH * 0.8 - 60),
+  ).current;
+  const positionRef = useRef(SCREEN_WIDTH * 0.8 - 60);
+  const [opacityResponder, setOpacityResponder] = useState({});
+
+  useEffect(() => {
+    setOpacityResponder(
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderGrant: (_, gestureState) => {
+          positionRef.current += gestureState.dx;
+
+          opacityPan.setOffset(positionRef.current);
+        },
+        onPanResponderMove: Animated.event([null, { dx: opacityPan }], {
+          useNativeDriver: false,
+        }),
+        onPanResponderRelease: (_, gestureState) => {
+          positionRef.current += gestureState.dx;
+        },
+      }),
+    );
+  }, [opacityPan]);
 
   return (
     <Modal visible={isColorPickerVisible} animationType="slide">
@@ -75,11 +109,26 @@ export default function Colorpicker() {
         </View>
         <View style={styles.opacity}>
           <Text style={{ fontSize: 18, color: UNACTIVE_COLOR }}>OPACITY</Text>
-          <View style={styles.opacityHandlerContainer} />
+          <View
+            style={{
+              ...styles.opacityHandlerContainer,
+              backgroundColor: `hsla(${selectedColor}, ${selectedColorOpacity})`,
+            }}
+          >
+            <Animated.View
+              style={{
+                ...styles.opacityScrollHandler,
+                left: opacityPan,
+              }}
+              {...opacityResponder.panHandlers}
+            />
+          </View>
         </View>
         <View style={styles.border} />
         <View style={styles.bottom}>
-          <View style={styles.selectedColor} />
+          <View
+            style={{ ...styles.selectedColor, backgroundColor: selectedColor }}
+          />
           <Text style={{ fontSize: 20 }}>The color you selected</Text>
         </View>
       </View>
@@ -140,6 +189,16 @@ const styles = StyleSheet.create({
     height: 60,
     backgroundColor: UNACTIVE_COLOR,
     borderRadius: 30,
+    borderWidth: 0.2,
+  },
+  opacityScrollHandler: {
+    position: "absolute",
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    borderWidth: 2,
+    borderColor: "white",
+    left: SCREEN_WIDTH * 0.8 - 60,
   },
   border: {
     width: SCREEN_WIDTH * 0.8,
