@@ -31,6 +31,7 @@ import {
   TEXT_ADD,
   TEXT_COLOR,
   TEXT_MOVE,
+  TEXT_REMOVE,
   TEXT_SIZE,
 } from "../constants/property";
 import {
@@ -43,6 +44,8 @@ import { getGifURL } from "../features/reducers/gifSlice";
 import {
   addTextElements,
   changeTextElements,
+  removeTextElements,
+  selectText,
   selectTextIndex,
   updateTextPosition,
 } from "../features/reducers/textSlice";
@@ -137,20 +140,20 @@ export default function Editor({ navigation }) {
     const isSelected = index === selectedTextIndex;
 
     const positionStyle = {
-      left: element[index].x,
-      top: element[index].y,
+      left: element[index]?.x,
+      top: element[index]?.y,
     };
 
     const textElement = (
-      <Text style={{ fontSize: element[index].size }}>
-        {element[index].text}
+      <Text style={{ fontSize: element[index]?.size }}>
+        {element[index]?.text}
       </Text>
     );
 
     if (isSelected && selectedTextProperty === TEXT_MOVE) {
       return (
         <Animated.View
-          key={element[index].text + index}
+          key={Date.now() + index}
           onPress={() => handleSelectText(index)}
           style={[
             positionStyle,
@@ -160,14 +163,14 @@ export default function Editor({ navigation }) {
           ]}
           {...moveResponder.panHandlers}
         >
-          {textElement}
+          <TouchableOpacity>{textElement}</TouchableOpacity>
         </Animated.View>
       );
     }
 
     return (
       <TouchableOpacity
-        key={element[index].text + index}
+        key={Date.now() + index}
         onPress={() => handleSelectText(index)}
         style={[{ position: "absolute" }, positionStyle]}
       >
@@ -195,7 +198,7 @@ export default function Editor({ navigation }) {
     if (selectedTextProperty === TEXT_ADD) {
       const nextIndex = Object.keys(textElements).length;
       const newTextModel = {
-        text: `Sample Text ${nextIndex + 1}`,
+        text: "Sample Text",
         x: 0,
         y: 0,
         size: 16,
@@ -207,6 +210,33 @@ export default function Editor({ navigation }) {
       };
 
       dispatch(addTextElements(updatedTextElements));
+    }
+  }, [selectedTextProperty]);
+
+  useEffect(() => {
+    if (selectedTextProperty === TEXT_REMOVE) {
+      if (selectedTextIndex === null) {
+        Alert.alert("제거를 원하는 텍스트를 선택해주세요.");
+        dispatch(selectText(""));
+      }
+
+      if (selectedTextIndex !== null) {
+        Alert.alert(
+          "선택한 텍스트를 제거하시겠습니까?",
+          `${textElements[selectedTextIndex]?.text}`,
+          [
+            {
+              text: "Cancel",
+              onPress: () => dispatch(selectText("")),
+              style: "cancel",
+            },
+            {
+              text: "OK",
+              onPress: () => dispatch(removeTextElements(selectedTextIndex)),
+            },
+          ],
+        );
+      }
     }
   }, [selectedTextProperty]);
 
