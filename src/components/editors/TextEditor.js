@@ -1,5 +1,5 @@
 import { FontAwesome, MaterialIcons, Ionicons } from "@expo/vector-icons";
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   PanResponder,
   ScrollView,
+  Alert,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -19,7 +20,12 @@ import {
 } from "../../constants/color";
 import { textEditor } from "../../constants/footerItems";
 import { ICON_FONT, ICON_MATERIAL, ICON_IOS } from "../../constants/icon";
-import { TEXT_SIZE } from "../../constants/property";
+import {
+  TEXT_ADD,
+  TEXT_COLOR,
+  TEXT_REMOVE,
+  TEXT_SIZE,
+} from "../../constants/property";
 import {
   APP_FOOTER_HEIGHT,
   SCREEN_HEIGHT,
@@ -28,7 +34,14 @@ import {
   MIN_TEXT_SIZE,
   MAX_TEXT_SIZE,
 } from "../../constants/size";
-import { changeTextSize, selectText } from "../../features/reducers/textSlice";
+import {
+  addTextElements,
+  changeTextElements,
+  changeTextSize,
+  removeTextElements,
+  selectText,
+  updateColorpickerVisible,
+} from "../../features/reducers/textSlice";
 
 export default function TextEditor() {
   const dispatch = useDispatch();
@@ -36,6 +49,14 @@ export default function TextEditor() {
   const selectedProperty = useSelector(
     (state) => state.textReducer.textProperties.selectedProperty,
   );
+  const selectedTextIndex = useSelector(
+    (state) => state.textReducer.textProperties.selectedIndex,
+  );
+  const selectedTextSize = useSelector(
+    (state) => state.textReducer.textProperties.selectedSize,
+  );
+  const textElements = useSelector((state) => state.textReducer.elements);
+
   const customScrollbarRef = useRef(null);
   const sizeResponder = useRef(
     PanResponder.create({
@@ -75,6 +96,84 @@ export default function TextEditor() {
     const newSelectedProperty = selectedProperty === name ? "" : name;
     dispatch(selectText(newSelectedProperty));
   };
+
+  useEffect(() => {
+    if (selectedProperty === TEXT_SIZE && selectedTextIndex !== null) {
+      const updatedTextElements = Object.keys(textElements).map(
+        (element, index) => {
+          if (index === selectedTextIndex) {
+            return { ...textElements[element], size: selectedTextSize };
+          }
+          return textElements[element];
+        },
+      );
+
+      dispatch(changeTextElements(updatedTextElements));
+    }
+  }, [selectedTextIndex, selectedTextSize]);
+
+  useEffect(() => {
+    if (selectedProperty === TEXT_ADD) {
+      const nextIndex = Object.keys(textElements).length;
+      const newTextModel = {
+        text: "Sample Text",
+        x: 0,
+        y: 0,
+        size: 20,
+        color: "black",
+        fontStyle: "",
+        rotate: 0,
+        zIndex: 0,
+      };
+
+      const updatedTextElements = {
+        ...textElements,
+        [nextIndex]: newTextModel,
+      };
+
+      dispatch(addTextElements(updatedTextElements));
+    }
+  }, [selectedProperty]);
+
+  useEffect(() => {
+    if (selectedProperty === TEXT_REMOVE) {
+      if (selectedTextIndex === null) {
+        Alert.alert("제거를 원하는 텍스트를 선택해주세요.");
+        dispatch(selectText(""));
+      }
+
+      if (selectedTextIndex !== null) {
+        Alert.alert(
+          "선택한 텍스트를 제거하시겠습니까?",
+          `${textElements[selectedTextIndex]?.text}`,
+          [
+            {
+              text: "Cancel",
+              onPress: () => dispatch(selectText("")),
+              style: "cancel",
+            },
+            {
+              text: "OK",
+              onPress: () => dispatch(removeTextElements(selectedTextIndex)),
+            },
+          ],
+        );
+      }
+    }
+  }, [selectedProperty]);
+
+  useEffect(() => {
+    if (selectedProperty === TEXT_COLOR) {
+      if (selectedTextIndex === null) {
+        Alert.alert("원하는 텍스트를 선택해주세요.");
+        dispatch(selectText(""));
+      }
+
+      if (selectedTextIndex !== null) {
+        dispatch(updateColorpickerVisible(true));
+      }
+    }
+  }, [selectedProperty]);
 
   return (
     <View style={styles.container}>

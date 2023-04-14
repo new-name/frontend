@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
+import Colorpicker from "../components/Colorpicker";
 import GifEditor from "../components/editors/GifEditor";
 import ImageEditor from "../components/editors/ImageEditor";
 import ShapeEditor from "../components/editors/ShapeEditor";
@@ -23,17 +24,7 @@ import {
   UNACTIVE_COLOR,
 } from "../constants/color";
 import { editorFooter } from "../constants/footerItems";
-import {
-  GIF,
-  IMAGE,
-  SHAPE,
-  TEXT,
-  TEXT_ADD,
-  TEXT_COLOR,
-  TEXT_MOVE,
-  TEXT_REMOVE,
-  TEXT_SIZE,
-} from "../constants/property";
+import { GIF, IMAGE, SHAPE, TEXT, TEXT_MOVE } from "../constants/property";
 import {
   APP_FOOTER_HEIGHT,
   CONTAINER_WIDTH,
@@ -42,10 +33,6 @@ import {
 import api from "../features/api";
 import { getGifURL } from "../features/reducers/gifSlice";
 import {
-  addTextElements,
-  changeTextElements,
-  removeTextElements,
-  selectText,
   selectTextIndex,
   updateTextPosition,
 } from "../features/reducers/textSlice";
@@ -83,9 +70,6 @@ export default function Editor({ navigation }) {
   );
   const selectedTextIndex = useSelector(
     (state) => state.textReducer.textProperties.selectedIndex,
-  );
-  const selectedTextSize = useSelector(
-    (state) => state.textReducer.textProperties.selectedSize,
   );
   const textElements = useSelector((state) => state.textReducer.elements);
 
@@ -145,7 +129,9 @@ export default function Editor({ navigation }) {
     };
 
     const textElement = (
-      <Text style={{ fontSize: element[index]?.size }}>
+      <Text
+        style={{ fontSize: element[index]?.size, color: element[index]?.color }}
+      >
         {element[index]?.text}
       </Text>
     );
@@ -178,67 +164,6 @@ export default function Editor({ navigation }) {
       </TouchableOpacity>
     );
   };
-
-  useEffect(() => {
-    if (selectedTextProperty === TEXT_SIZE && selectedTextIndex !== null) {
-      const updatedTextElements = Object.keys(textElements).map(
-        (element, index) => {
-          if (index === selectedTextIndex) {
-            return { ...textElements[element], size: selectedTextSize };
-          }
-          return textElements[element];
-        },
-      );
-
-      dispatch(changeTextElements(updatedTextElements));
-    }
-  }, [selectedTextIndex, selectedTextSize]);
-
-  useEffect(() => {
-    if (selectedTextProperty === TEXT_ADD) {
-      const nextIndex = Object.keys(textElements).length;
-      const newTextModel = {
-        text: "Sample Text",
-        x: 0,
-        y: 0,
-        size: 16,
-      };
-
-      const updatedTextElements = {
-        ...textElements,
-        [nextIndex]: newTextModel,
-      };
-
-      dispatch(addTextElements(updatedTextElements));
-    }
-  }, [selectedTextProperty]);
-
-  useEffect(() => {
-    if (selectedTextProperty === TEXT_REMOVE) {
-      if (selectedTextIndex === null) {
-        Alert.alert("제거를 원하는 텍스트를 선택해주세요.");
-        dispatch(selectText(""));
-      }
-
-      if (selectedTextIndex !== null) {
-        Alert.alert(
-          "선택한 텍스트를 제거하시겠습니까?",
-          `${textElements[selectedTextIndex]?.text}`,
-          [
-            {
-              text: "Cancel",
-              onPress: () => dispatch(selectText("")),
-              style: "cancel",
-            },
-            {
-              text: "OK",
-              onPress: () => dispatch(removeTextElements(selectedTextIndex)),
-            },
-          ],
-        );
-      }
-    }
-  }, [selectedTextProperty]);
 
   return (
     <View style={styles.container}>
@@ -276,6 +201,7 @@ export default function Editor({ navigation }) {
       </AppHeader>
       <ContentBox>
         <View style={styles.contentContainer}>
+          <Colorpicker />
           {Object.keys(textElements).map((element, index) =>
             renderTextElement(textElements, index),
           )}

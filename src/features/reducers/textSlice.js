@@ -8,13 +8,32 @@ const textProperties = {
 };
 
 const elements = {
-  0: { text: "Sample Text", x: 0, y: 0, size: 20 },
-  1: { text: "Sample Text", x: 0, y: 0, size: 30 },
+  0: {
+    text: "Sample Text",
+    x: 0,
+    y: 0,
+    size: 20,
+    color: "black",
+    fontStyle: "",
+    rotate: 0,
+    zIndex: 0,
+  },
+  1: {
+    text: "Sample Text",
+    x: 0,
+    y: 0,
+    size: 40,
+    color: "red",
+    fontStyle: "",
+    rotate: 0,
+    zIndex: 0,
+  },
 };
 
 const initialState = {
   textProperties,
   elements,
+  colorpickerVisible: false,
 };
 
 export const textSlice = createSlice({
@@ -67,6 +86,15 @@ export const textSlice = createSlice({
       state.elements[index].x += x;
       state.elements[index].y += y;
     },
+    updateTextColor: (state, action) => {
+      const { index, selectedColor } = action.payload;
+
+      state.elements[index].color = selectedColor;
+    },
+    updateColorpickerVisible: (state, action) => {
+      state.colorpickerVisible = action.payload;
+      state.textProperties.selectedProperty = "";
+    },
   },
 });
 
@@ -78,5 +106,7 @@ export const {
   updateTextPosition,
   addTextElements,
   removeTextElements,
+  updateTextColor,
+  updateColorpickerVisible,
 } = textSlice.actions;
 export default textSlice.reducer;
