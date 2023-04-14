@@ -1,10 +1,8 @@
 import PropTypes from "prop-types";
-import { StyleSheet, View, Dimensions } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { HEADER } from "../constants/color";
-
-const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
-const appHeaderHeight = screenHeight / 12;
+import { APP_FOOTER_HEIGHT, SCREEN_WIDTH } from "../constants/size";
 
 export default function AppHeader({ children }) {
   return <View style={styles.container}>{children}</View>;
@@ -20,9 +18,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: screenWidth,
-    height: appHeaderHeight + appHeaderHeight * 0.65,
-    paddingTop: appHeaderHeight,
+    width: SCREEN_WIDTH,
+    height: APP_FOOTER_HEIGHT + APP_FOOTER_HEIGHT * 0.65,
+    paddingTop: APP_FOOTER_HEIGHT * 0.9,
     paddingHorizontal: 10,
     backgroundColor: HEADER,
   },

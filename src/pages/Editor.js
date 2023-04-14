@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
+import Colorpicker from "../components/Colorpicker";
 import GifEditor from "../components/editors/GifEditor";
 import ImageEditor from "../components/editors/ImageEditor";
 import ShapeEditor from "../components/editors/ShapeEditor";
@@ -23,16 +24,7 @@ import {
   UNACTIVE_COLOR,
 } from "../constants/color";
 import { editorFooter } from "../constants/footerItems";
-import {
-  GIF,
-  IMAGE,
-  SHAPE,
-  TEXT,
-  TEXT_ADD,
-  TEXT_COLOR,
-  TEXT_MOVE,
-  TEXT_SIZE,
-} from "../constants/property";
+import { GIF, IMAGE, SHAPE, TEXT, TEXT_MOVE } from "../constants/property";
 import {
   APP_FOOTER_HEIGHT,
   CONTAINER_WIDTH,
@@ -41,8 +33,6 @@ import {
 import api from "../features/api";
 import { getGifURL } from "../features/reducers/gifSlice";
 import {
-  addTextElements,
-  changeTextElements,
   selectTextIndex,
   updateTextPosition,
 } from "../features/reducers/textSlice";
@@ -80,9 +70,6 @@ export default function Editor({ navigation }) {
   );
   const selectedTextIndex = useSelector(
     (state) => state.textReducer.textProperties.selectedIndex,
-  );
-  const selectedTextSize = useSelector(
-    (state) => state.textReducer.textProperties.selectedSize,
   );
   const textElements = useSelector((state) => state.textReducer.elements);
 
@@ -137,20 +124,22 @@ export default function Editor({ navigation }) {
     const isSelected = index === selectedTextIndex;
 
     const positionStyle = {
-      left: element[index].x,
-      top: element[index].y,
+      left: element[index]?.x,
+      top: element[index]?.y,
     };
 
     const textElement = (
-      <Text style={{ fontSize: element[index].size }}>
-        {element[index].text}
+      <Text
+        style={{ fontSize: element[index]?.size, color: element[index]?.color }}
+      >
+        {element[index]?.text}
       </Text>
     );
 
     if (isSelected && selectedTextProperty === TEXT_MOVE) {
       return (
         <Animated.View
-          key={element[index].text + index}
+          key={Date.now() + index}
           onPress={() => handleSelectText(index)}
           style={[
             positionStyle,
@@ -160,14 +149,14 @@ export default function Editor({ navigation }) {
           ]}
           {...moveResponder.panHandlers}
         >
-          {textElement}
+          <TouchableOpacity>{textElement}</TouchableOpacity>
         </Animated.View>
       );
     }
 
     return (
       <TouchableOpacity
-        key={element[index].text + index}
+        key={Date.now() + index}
         onPress={() => handleSelectText(index)}
         style={[{ position: "absolute" }, positionStyle]}
       >
@@ -175,40 +164,6 @@ export default function Editor({ navigation }) {
       </TouchableOpacity>
     );
   };
-
-  useEffect(() => {
-    if (selectedTextProperty === TEXT_SIZE && selectedTextIndex !== null) {
-      const updatedTextElements = Object.keys(textElements).map(
-        (element, index) => {
-          if (index === selectedTextIndex) {
-            return { ...textElements[element], size: selectedTextSize };
-          }
-          return textElements[element];
-        },
-      );
-
-      dispatch(changeTextElements(updatedTextElements));
-    }
-  }, [selectedTextIndex, selectedTextSize]);
-
-  useEffect(() => {
-    if (selectedTextProperty === TEXT_ADD) {
-      const nextIndex = Object.keys(textElements).length;
-      const newTextModel = {
-        text: `Sample Text ${nextIndex + 1}`,
-        x: 0,
-        y: 0,
-        size: 16,
-      };
-
-      const updatedTextElements = {
-        ...textElements,
-        [nextIndex]: newTextModel,
-      };
-
-      dispatch(addTextElements(updatedTextElements));
-    }
-  }, [selectedTextProperty]);
 
   return (
     <View style={styles.container}>
@@ -246,6 +201,7 @@ export default function Editor({ navigation }) {
       </AppHeader>
       <ContentBox>
         <View style={styles.contentContainer}>
+          <Colorpicker />
           {Object.keys(textElements).map((element, index) =>
             renderTextElement(textElements, index),
           )}
