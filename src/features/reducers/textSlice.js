@@ -90,6 +90,7 @@ export const textSlice = createSlice({
       const { index, selectedColor } = action.payload;
 
       state.elements[index].color = selectedColor;
+      state.colorpickerVisible = false;
     },
     updateColorpickerVisible: (state, action) => {
       state.colorpickerVisible = action.payload;

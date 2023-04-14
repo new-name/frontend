@@ -1,4 +1,5 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useRef, useState } from "react";
 import {
   Modal,
@@ -11,7 +12,7 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { UNACTIVE_COLOR } from "../constants/color";
+import { ACTIVE_COLOR, UNACTIVE_COLOR } from "../constants/color";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/size";
 import {
   updateColorpickerVisible,
@@ -19,9 +20,18 @@ import {
 } from "../features/reducers/textSlice";
 import AppHeader from "../layout/AppHeader";
 
+const colorsArray = Array.from({ length: 121 }, (_, index) => {
+  if (index < 11) {
+    const lightness = 100 - index * 10;
+    return `hsl(0, 0%, ${lightness}%)`;
+  }
+
+  return `hsl(${((index - 10) * 3) % 360}, 100%, 50%)`;
+});
+
 export default function Colorpicker() {
   const dispatch = useDispatch();
-  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedColor, setSelectedColor] = useState(colorsArray[0]);
   const [selectedColorOpacity, setSelectedColorOpacity] = useState(1);
   const isColorPickerVisible = useSelector(
     (state) => state.textReducer.colorpickerVisible,
@@ -29,16 +39,23 @@ export default function Colorpicker() {
   const selectedTextIndex = useSelector(
     (state) => state.textReducer.textProperties.selectedIndex,
   );
-  const colorsArray = Array.from({ length: 121 }, (_, index) => {
-    if (index < 11) {
-      const lightness = 100 - index * 10;
-      return `hsl(0, 0%, ${lightness}%)`;
-    }
 
-    return `hsla(${((index - 10) * 3) % 360}, 100%, 50%, 1)`;
-  });
   const updateColor = () => {
-    dispatch(updateTextColor({ index: selectedTextIndex, selectedColor }));
+    const color = hslToHsla(selectedColor, selectedColorOpacity);
+    dispatch(
+      updateTextColor({ index: selectedTextIndex, selectedColor: color }),
+    );
+  };
+
+  const calculateOpacity = () => {
+    const minPosition = 0;
+    const maxPosition = SCREEN_WIDTH * 0.8 - 60;
+    const currentPosition = positionRef.current;
+
+    const opacity =
+      (currentPosition - minPosition) / (maxPosition - minPosition);
+
+    setSelectedColorOpacity(opacity);
   };
 
   const opacityPan = useRef(
@@ -62,6 +79,7 @@ export default function Colorpicker() {
         }),
         onPanResponderRelease: (_, gestureState) => {
           positionRef.current += gestureState.dx;
+          calculateOpacity();
         },
       }),
     );
@@ -87,7 +105,7 @@ export default function Colorpicker() {
             <Text style={{ fontSize: 20, color: "darkgray" }}>Colors</Text>
           </View>
           <TouchableOpacity onPress={updateColor} style={styles.colorPick}>
-            <MaterialIcons name="colorize" size={30} color="darkgray" />
+            <MaterialIcons name="colorize" size={30} color={ACTIVE_COLOR} />
           </TouchableOpacity>
         </AppHeader>
         <View style={styles.gridText}>
@@ -109,11 +127,11 @@ export default function Colorpicker() {
         </View>
         <View style={styles.opacity}>
           <Text style={{ fontSize: 18, color: UNACTIVE_COLOR }}>OPACITY</Text>
-          <View
-            style={{
-              ...styles.opacityHandlerContainer,
-              backgroundColor: `hsla(${selectedColor}, ${selectedColorOpacity})`,
-            }}
+          <LinearGradient
+            colors={[hslToHsla(selectedColor, 0), hslToHsla(selectedColor, 1)]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.opacityHandlerContainer}
           >
             <Animated.View
               style={{
@@ -122,18 +140,35 @@ export default function Colorpicker() {
               }}
               {...opacityResponder.panHandlers}
             />
-          </View>
+          </LinearGradient>
         </View>
         <View style={styles.border} />
         <View style={styles.bottom}>
           <View
-            style={{ ...styles.selectedColor, backgroundColor: selectedColor }}
+            style={{
+              ...styles.selectedColor,
+              backgroundColor: hslToHsla(selectedColor, selectedColorOpacity),
+            }}
           />
           <Text style={{ fontSize: 20 }}>The color you selected</Text>
         </View>
       </View>
     </Modal>
   );
+}
+
+function hslToHsla(hslColor, alpha) {
+  const regex = /hsl\((\d+),\s*(\d+)%?,\s*(\d+)%?\)/;
+
+  const matches = hslColor.match(regex);
+
+  if (matches) {
+    const h = parseInt(matches[1], 10);
+    const s = parseInt(matches[2], 10);
+    const l = parseInt(matches[3], 10);
+
+    return `hsla(${h}, ${s}%, ${l}%, ${alpha})`;
+  }
 }
 
 const styles = StyleSheet.create({
@@ -187,7 +222,6 @@ const styles = StyleSheet.create({
   opacityHandlerContainer: {
     width: SCREEN_WIDTH * 0.8,
     height: 60,
-    backgroundColor: UNACTIVE_COLOR,
     borderRadius: 30,
     borderWidth: 0.2,
   },
@@ -217,5 +251,6 @@ const styles = StyleSheet.create({
     height: 75,
     borderWidth: 2,
     borderRadius: 15,
+    borderColor: "gray",
   },
 });

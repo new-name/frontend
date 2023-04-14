@@ -39,8 +39,6 @@ export const textEditor = [
   { icon: "FontAwesome", iconName: "text-height", text: "Size" },
   { icon: "Ionicons", iconName: "ios-color-palette-outline", text: "Color" },
   { icon: "FontAwesome", iconName: "font", text: "Font Style" },
-  { icon: "FontAwesome", iconName: "rotate-left", text: "Left Rotate" },
-  { icon: "FontAwesome", iconName: "rotate-right", text: "Right Rotate" },
   { icon: "Ionicons", iconName: "remove-circle-outline", text: "Remove" },
 ];
 
