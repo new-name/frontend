@@ -7,6 +7,7 @@ export const TEXT_REMOVE = "Remove";
 export const TEXT_COLOR = "Color";
 export const TEXT_SIZE = "Size";
 export const TEXT_MOVE = "Move";
+export const TEXT_EDIT = "Edit";
 export const TEXT_STYLE = "Font Style";
 
 export const IMAGE = "Image";

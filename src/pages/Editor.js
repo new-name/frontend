@@ -10,10 +10,11 @@ import {
   Alert,
   Animated,
   PanResponder,
+  TextInput,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import Colorpicker from "../components/Colorpicker";
+import ColorPicker from "../components/ColorPicker";
 import GifEditor from "../components/editors/GifEditor";
 import ImageEditor from "../components/editors/ImageEditor";
 import ShapeEditor from "../components/editors/ShapeEditor";
@@ -24,7 +25,14 @@ import {
   UNACTIVE_COLOR,
 } from "../constants/color";
 import { editorFooter } from "../constants/footerItems";
-import { GIF, IMAGE, SHAPE, TEXT, TEXT_MOVE } from "../constants/property";
+import {
+  GIF,
+  IMAGE,
+  SHAPE,
+  TEXT,
+  TEXT_EDIT,
+  TEXT_MOVE,
+} from "../constants/property";
 import {
   APP_FOOTER_HEIGHT,
   CONTAINER_WIDTH,
@@ -33,7 +41,9 @@ import {
 import api from "../features/api";
 import { getGifURL } from "../features/reducers/gifSlice";
 import {
+  selectTextContents,
   selectTextIndex,
+  updateTextContents,
   updateTextPosition,
 } from "../features/reducers/textSlice";
 import AppFooter from "../layout/AppFooter";
@@ -72,6 +82,9 @@ export default function Editor({ navigation }) {
     (state) => state.textReducer.textProperties.selectedIndex,
   );
   const textElements = useSelector((state) => state.textReducer.elements);
+  const [editedText, setEditedText] = useState(
+    textElements[selectedTextIndex]?.text,
+  );
 
   const selectedIndexRef = useRef(null);
   const positionRef = useRef({ x: 0, y: 0 });
@@ -122,6 +135,7 @@ export default function Editor({ navigation }) {
 
   const renderTextElement = (element, index) => {
     const isSelected = index === selectedTextIndex;
+    const isEditable = element[index]?.isEditable;
 
     const positionStyle = {
       left: element[index]?.x,
@@ -151,6 +165,38 @@ export default function Editor({ navigation }) {
         >
           <TouchableOpacity>{textElement}</TouchableOpacity>
         </Animated.View>
+      );
+    }
+
+    if (isSelected && selectedTextProperty === TEXT_EDIT && isEditable) {
+      return (
+        <TouchableOpacity
+          key={element[index]?.x + element[index].y}
+          onPress={() => handleSelectText(index)}
+          style={[{ position: "absolute" }, positionStyle]}
+        >
+          <TextInput
+            multiline
+            style={{
+              fontSize: element[index]?.size,
+              color: element[index]?.color,
+            }}
+            value={element[index]?.text}
+            onChangeText={(newText) => {
+              dispatch(
+                updateTextContents({
+                  index: selectedTextIndex,
+                  value: newText,
+                }),
+              );
+            }}
+            onBlur={() => {
+              dispatch(
+                selectTextContents({ index: selectedTextIndex, value: false }),
+              );
+            }}
+          />
+        </TouchableOpacity>
       );
     }
 
@@ -201,7 +247,7 @@ export default function Editor({ navigation }) {
       </AppHeader>
       <ContentBox>
         <View style={styles.contentContainer}>
-          <Colorpicker />
+          <ColorPicker />
           {Object.keys(textElements).map((element, index) =>
             renderTextElement(textElements, index),
           )}

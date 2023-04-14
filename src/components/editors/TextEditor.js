@@ -23,6 +23,7 @@ import { ICON_FONT, ICON_MATERIAL, ICON_IOS } from "../../constants/icon";
 import {
   TEXT_ADD,
   TEXT_COLOR,
+  TEXT_EDIT,
   TEXT_REMOVE,
   TEXT_SIZE,
 } from "../../constants/property";
@@ -40,7 +41,8 @@ import {
   changeTextSize,
   removeTextElements,
   selectText,
-  updateColorpickerVisible,
+  selectTextContents,
+  updateColorPickerVisible,
 } from "../../features/reducers/textSlice";
 
 export default function TextEditor() {
@@ -170,7 +172,20 @@ export default function TextEditor() {
       }
 
       if (selectedTextIndex !== null) {
-        dispatch(updateColorpickerVisible(true));
+        dispatch(updateColorPickerVisible(true));
+      }
+    }
+  }, [selectedProperty]);
+
+  useEffect(() => {
+    if (selectedProperty === TEXT_EDIT) {
+      if (selectedTextIndex === null) {
+        Alert.alert("원하는 텍스트를 선택해주세요.");
+        dispatch(selectText(""));
+      }
+
+      if (selectedTextIndex !== null) {
+        dispatch(selectTextContents({ index: selectedTextIndex, value: true }));
       }
     }
   }, [selectedProperty]);

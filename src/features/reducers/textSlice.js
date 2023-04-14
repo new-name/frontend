@@ -15,8 +15,8 @@ const elements = {
     size: 20,
     color: "black",
     fontStyle: "",
-    rotate: 0,
     zIndex: 0,
+    isEditable: false,
   },
   1: {
     text: "Sample Text",
@@ -25,15 +25,15 @@ const elements = {
     size: 40,
     color: "red",
     fontStyle: "",
-    rotate: 0,
     zIndex: 0,
+    isEditbale: false,
   },
 };
 
 const initialState = {
   textProperties,
   elements,
-  colorpickerVisible: false,
+  colorPickerVisible: false,
 };
 
 export const textSlice = createSlice({
@@ -49,6 +49,11 @@ export const textSlice = createSlice({
       const { textProperties } = state;
 
       textProperties.selectedIndex = action.payload;
+    },
+    selectTextContents: (state, action) => {
+      const { index, value } = action.payload;
+
+      state.elements[index].isEditable = value;
     },
     changeTextSize: (state, action) => {
       const { textProperties } = state;
@@ -90,11 +95,20 @@ export const textSlice = createSlice({
       const { index, selectedColor } = action.payload;
 
       state.elements[index].color = selectedColor;
-      state.colorpickerVisible = false;
+      state.colorPickerVisible = false;
     },
-    updateColorpickerVisible: (state, action) => {
-      state.colorpickerVisible = action.payload;
+    updateColorPickerVisible: (state, action) => {
+      state.colorPickerVisible = action.payload;
       state.textProperties.selectedProperty = "";
+    },
+    updateTextContents: (state, action) => {
+      const { index, value } = action.payload;
+
+      if (state.elements[index]) {
+        state.elements[index].text = value;
+      } else {
+        console.error(`Element at index ${index} not found.`);
+      }
     },
   },
 });
@@ -102,12 +116,14 @@ export const textSlice = createSlice({
 export const {
   selectText,
   selectTextIndex,
+  selectTextContents,
   changeTextSize,
   changeTextElements,
   updateTextPosition,
   addTextElements,
   removeTextElements,
   updateTextColor,
-  updateColorpickerVisible,
+  updateColorPickerVisible,
+  updateTextContents,
 } = textSlice.actions;
 export default textSlice.reducer;

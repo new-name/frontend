@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ACTIVE_COLOR, UNACTIVE_COLOR } from "../constants/color";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/size";
 import {
-  updateColorpickerVisible,
+  updateColorPickerVisible,
   updateTextColor,
 } from "../features/reducers/textSlice";
 import AppHeader from "../layout/AppHeader";
@@ -29,12 +29,12 @@ const colorsArray = Array.from({ length: 121 }, (_, index) => {
   return `hsl(${((index - 10) * 3) % 360}, 100%, 50%)`;
 });
 
-export default function Colorpicker() {
+export default function ColorPicker() {
   const dispatch = useDispatch();
   const [selectedColor, setSelectedColor] = useState(colorsArray[0]);
   const [selectedColorOpacity, setSelectedColorOpacity] = useState(1);
   const isColorPickerVisible = useSelector(
-    (state) => state.textReducer.colorpickerVisible,
+    (state) => state.textReducer.colorPickerVisible,
   );
   const selectedTextIndex = useSelector(
     (state) => state.textReducer.textProperties.selectedIndex,
@@ -96,7 +96,7 @@ export default function Colorpicker() {
               color="darkgray"
             />
             <TouchableOpacity
-              onPress={() => dispatch(updateColorpickerVisible(false))}
+              onPress={() => dispatch(updateColorPickerVisible(false))}
             >
               <Text style={{ color: "darkgray" }}>뒤로 가기</Text>
             </TouchableOpacity>
