@@ -3,8 +3,9 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useDispatch } from "react-redux";
 
 import {
   ACTIVE_COLOR,
@@ -18,14 +19,24 @@ import {
   ICON_MATERIAL,
   ICON_MATERIAL_C,
 } from "../../constants/icon";
+import { SHAPE_ICONS } from "../../constants/property";
 import { APP_FOOTER_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
+import { updateIconModalState } from "../../features/reducers/shapeSlice";
 
 export default function ShapeEditor() {
+  const dispatch = useDispatch();
   const [selectedProperty, setSelectedProperty] = useState("");
 
   const handleSelectedProperty = (name) => {
     setSelectedProperty((prevState) => (prevState === name ? "" : name));
   };
+
+  useEffect(() => {
+    if (selectedProperty === SHAPE_ICONS) {
+      dispatch(updateIconModalState(true));
+      setSelectedProperty("");
+    }
+  }, [selectedProperty]);
 
   return (
     <View style={styles.container}>

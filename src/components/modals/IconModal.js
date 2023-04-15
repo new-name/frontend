@@ -1,5 +1,9 @@
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import {
+  FontAwesome,
+  MaterialCommunityIcons,
+  Ionicons,
+} from "@expo/vector-icons";
+import { useState } from "react";
 import {
   Modal,
   Text,
@@ -8,7 +12,6 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
-  Image,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -18,7 +21,6 @@ import {
   EDITOR_COLOR,
 } from "../../constants/color";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
-import api from "../../features/api";
 import {
   getIcons,
   updateIconModalState,
@@ -29,7 +31,8 @@ export default function IconModal() {
   const dispatch = useDispatch();
   const [selectedIcon, setSelectedIcon] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [iconArrays, setIconArrays] = useState([]);
+  const iconNames = Object.keys(MaterialCommunityIcons.glyphMap).slice(0, 50);
+  const [filteredIconNames, setFilteredIconNames] = useState(iconNames);
 
   const isIconModalVisible = useSelector(
     (state) => state.shapeReducer.isIconModalVisible,
@@ -39,25 +42,21 @@ export default function IconModal() {
     dispatch(getIcons(selectedIcon));
   };
 
-  const getIconArrays = async (query) => {
-    const response = await api.getIcons(query, 10, 40);
-
-    setIconArrays(response);
-  };
-
   const handleSearch = () => {
     try {
       if (searchQuery !== "") {
-        getIconArrays(searchQuery);
+        const filtered = Object.keys(MaterialCommunityIcons.glyphMap).filter(
+          (iconName) =>
+            iconName.toLowerCase().includes(searchQuery.toLowerCase()),
+        );
+        return setFilteredIconNames(filtered);
       }
+
+      return setFilteredIconNames(iconNames);
     } catch (error) {
       console.error("Error searching icons:", error);
     }
   };
-
-  useEffect(() => {
-    getIconArrays("happy");
-  }, []);
 
   return (
     <Modal visible={isIconModalVisible} animationType="slide">
@@ -87,25 +86,30 @@ export default function IconModal() {
           onChangeText={setSearchQuery}
           value={searchQuery}
           onSubmitEditing={handleSearch}
-          placeholder="Search Icons in Noun Projects"
+          placeholder="Search Icons"
         />
         <ScrollView
           pagingEnabled
           contentContainerStyle={styles.scrollContainer}
         >
           <View style={styles.gridContainer}>
-            {iconArrays?.map((uri) => (
+            {filteredIconNames?.map((icon, index) => (
               <TouchableOpacity
-                key={uri}
-                onPress={() => setSelectedIcon(uri)}
+                key={icon}
+                onPress={() => setSelectedIcon(icon)}
                 style={{
                   ...styles?.icons,
-                  borderColor: selectedIcon === uri ? "blue" : "gray",
-                  borderWidth: selectedIcon === uri ? 2 : 1,
+                  borderColor: selectedIcon === icon ? "blue" : "gray",
+                  borderWidth: selectedIcon === icon ? 2 : 1,
                 }}
               >
                 <View style={styles.iconProperty}>
-                  <Image style={styles.icon} source={{ uri }} />
+                  <MaterialCommunityIcons
+                    name={icon}
+                    size={50}
+                    color={selectedIcon === icon ? "blue" : "gray"}
+                    style={styles.icon}
+                  />
                 </View>
               </TouchableOpacity>
             ))}
@@ -158,7 +162,7 @@ const styles = StyleSheet.create({
   icons: {
     justifyContent: "center",
     alignItems: "center",
-    width: SCREEN_WIDTH * 0.44,
+    width: SCREEN_WIDTH * 0.28,
     height: SCREEN_HEIGHT * 0.12,
     marginVertical: 10,
     borderWidth: 1,

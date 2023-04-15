@@ -1,4 +1,3 @@
-export const SHAPE = "Shape";
 export const MORE = "More";
 
 export const TEXT = "Text";
@@ -15,3 +14,6 @@ export const IMG_UNSPLASH = "Unsplash";
 
 export const GIF = "Gif";
 export const GIF_LIBRARY = "Library";
+
+export const SHAPE = "Shape";
+export const SHAPE_ICONS = "Icons";

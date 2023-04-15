@@ -24,6 +24,7 @@ import ShapeEditor from "../components/editors/ShapeEditor";
 import TextEditor from "../components/editors/TextEditor";
 import ColorModal from "../components/modals/ColorModal";
 import FontModal from "../components/modals/FontModal";
+import IconModal from "../components/modals/IconModal";
 import {
   ACTIVE_COLOR,
   CONTENT_COLOR,
@@ -279,6 +280,7 @@ export default function Editor({ navigation }) {
         <View style={styles.contentContainer}>
           <FontModal />
           <ColorModal />
+          <IconModal />
           {Object.keys(textElements).map((element, index) =>
             renderTextElement(textElements, index),
           )}
