@@ -12,7 +12,6 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { useSelector } from "react-redux";
 
 import {
   ACTIVE_COLOR,
@@ -29,19 +28,28 @@ import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from "../../constants/size";
+import api from "../../features/api";
 
 export default function GifEditor() {
   const [animationData, setAnimationData] = useState([]);
   const [selectedProperty, setSelectedProperty] = useState("");
-  const gifURLs = useSelector(
-    (state) => state.gifReducer.gifProperties.gifURLArrays,
-  );
+  const [gifURLs, setGifURLs] = useState([]);
 
   const animationRefs = useRef([]);
 
   const handleSelectedProperty = (name) => {
     setSelectedProperty((prevState) => (prevState === name ? "" : name));
   };
+
+  useEffect(() => {
+    async function getGif() {
+      const urls = await api.getGifs();
+
+      setGifURLs(urls);
+    }
+
+    getGif();
+  }, []);
 
   useEffect(() => {
     const fetchAnimationData = async (urls) => {

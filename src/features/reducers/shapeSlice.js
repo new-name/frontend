@@ -2,10 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const shapeProperties = {};
 const elements = {};
+const iconArrays = [];
 
 const initialState = {
   shapeProperties,
   elements,
+  iconArrays,
   isIconModalVisible: false,
 };
 
@@ -14,7 +16,7 @@ export const shapeSlice = createSlice({
   initialState,
   reducers: {
     getIcons: (state, action) => {
-      state.elements = action.payload;
+      state.iconArrays.push(action.payload);
       state.isIconModalVisible = false;
     },
     updateIconModalState: (state, action) => {

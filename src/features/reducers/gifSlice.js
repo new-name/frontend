@@ -4,7 +4,6 @@ const gifProperties = {
   selectedProperty: "",
   selectedIndex: null,
   selectedSize: 0,
-  gifURLArrays: [],
   gifArray: [],
 };
 
@@ -16,11 +15,6 @@ export const gifSlice = createSlice({
   name: "gif",
   initialState,
   reducers: {
-    getGifURL: (state, action) => {
-      const { gifProperties } = state;
-
-      gifProperties.gifURLArrays = action.payload;
-    },
     selectedGifIndex: (state, action) => {
       const { gifProperties } = state;
 
@@ -34,5 +28,5 @@ export const gifSlice = createSlice({
   },
 });
 
-export const { getGifURL, selectedGifIndex, changeGifSize } = gifSlice.actions;
+export const { selectedGifIndex, changeGifSize } = gifSlice.actions;
 export default gifSlice.reducer;

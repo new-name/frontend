@@ -24,7 +24,7 @@ import {
   updateTextPosition,
 } from "../../features/reducers/textSlice";
 
-export default function TextElement() {
+export default function TextElements() {
   const dispatch = useDispatch();
 
   const [moveResponder, setMoveResponder] = useState({});
