@@ -12,13 +12,13 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { ACTIVE_COLOR, UNACTIVE_COLOR } from "../constants/color";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/size";
+import { ACTIVE_COLOR, UNACTIVE_COLOR } from "../../constants/color";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import {
   updateColorPickerVisible,
   updateTextColor,
-} from "../features/reducers/textSlice";
-import AppHeader from "../layout/AppHeader";
+} from "../../features/reducers/textSlice";
+import AppHeader from "../../layout/AppHeader";
 
 const colorsArray = Array.from({ length: 121 }, (_, index) => {
   if (index < 11) {
@@ -29,7 +29,7 @@ const colorsArray = Array.from({ length: 121 }, (_, index) => {
   return `hsl(${((index - 10) * 3) % 360}, 100%, 50%)`;
 });
 
-export default function ColorPicker() {
+export default function ColorModal() {
   const dispatch = useDispatch();
   const [selectedColor, setSelectedColor] = useState(colorsArray[0]);
   const [selectedColorOpacity, setSelectedColorOpacity] = useState(1);

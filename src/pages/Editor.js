@@ -18,12 +18,12 @@ import {
 import { KeyboardAccessoryView } from "react-native-keyboard-accessory";
 import { useDispatch, useSelector } from "react-redux";
 
-import ColorPicker from "../components/ColorPicker";
-import FontModal from "../components/FontModal";
 import GifEditor from "../components/editors/GifEditor";
 import ImageEditor from "../components/editors/ImageEditor";
 import ShapeEditor from "../components/editors/ShapeEditor";
 import TextEditor from "../components/editors/TextEditor";
+import ColorModal from "../components/modals/ColorModal";
+import FontModal from "../components/modals/FontModal";
 import {
   ACTIVE_COLOR,
   CONTENT_COLOR,
@@ -278,7 +278,7 @@ export default function Editor({ navigation }) {
       <ContentBox>
         <View style={styles.contentContainer}>
           <FontModal />
-          <ColorPicker />
+          <ColorModal />
           {Object.keys(textElements).map((element, index) =>
             renderTextElement(textElements, index),
           )}

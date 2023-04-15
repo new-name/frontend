@@ -8,63 +8,59 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  Image,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { ACTIVE_COLOR, CONTENT_COLOR, EDITOR_COLOR } from "../constants/color";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/size";
-import api from "../features/api";
 import {
-  updateFontContainerVisible,
-  updateTextFontStyle,
-} from "../features/reducers/textSlice";
-import AppHeader from "../layout/AppHeader";
+  ACTIVE_COLOR,
+  CONTENT_COLOR,
+  EDITOR_COLOR,
+} from "../../constants/color";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
+import api from "../../features/api";
+import {
+  getIcons,
+  updateIconModalState,
+} from "../../features/reducers/shapeSlice";
+import AppHeader from "../../layout/AppHeader";
 
-export default function FontModal() {
+export default function IconModal() {
   const dispatch = useDispatch();
-  const [fontsNames, setFontsNames] = useState([]);
-  const [filteredFonts, setFilteredFonts] = useState([]);
-
-  const [selectedFonts, setSelectedFonts] = useState("");
+  const [selectedIcon, setSelectedIcon] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [iconArrays, setIconArrays] = useState([]);
 
-  const isFontContainerVisible = useSelector(
-    (state) => state.textReducer.fontContainerVisible,
+  const isIconModalVisible = useSelector(
+    (state) => state.shapeReducer.isIconModalVisible,
   );
-  const selectedTextIndex = useSelector(
-    (state) => state.textReducer.textProperties.selectedIndex,
-  );
+
+  const updateIcons = () => {
+    dispatch(getIcons(selectedIcon));
+  };
+
+  const getIconArrays = async (query) => {
+    const response = await api.getIcons(query, 10, 40);
+
+    setIconArrays(response);
+  };
 
   const handleSearch = () => {
     try {
-      const filtered = fontsNames.filter((font) =>
-        font.toLowerCase().includes(searchQuery.toLowerCase()),
-      );
-      setFilteredFonts(filtered);
+      if (searchQuery !== "") {
+        getIconArrays(searchQuery);
+      }
     } catch (error) {
-      console.error("Error searching fonts:", error);
+      console.error("Error searching icons:", error);
     }
   };
 
   useEffect(() => {
-    async function getFonts() {
-      const response = await api.getFonts();
-      const fonts = Object.keys(response);
-      setFontsNames(fonts);
-      setFilteredFonts(fonts);
-    }
-
-    getFonts();
+    getIconArrays("happy");
   }, []);
 
-  const updateFonts = () => {
-    dispatch(
-      updateTextFontStyle({ index: selectedTextIndex, font: selectedFonts }),
-    );
-  };
-
   return (
-    <Modal visible={isFontContainerVisible} animationType="slide">
+    <Modal visible={isIconModalVisible} animationType="slide">
       <View style={styles.container}>
         <AppHeader>
           <View style={styles.leftHeader}>
@@ -74,7 +70,7 @@ export default function FontModal() {
               color="darkgray"
             />
             <TouchableOpacity
-              onPress={() => dispatch(updateFontContainerVisible(false))}
+              onPress={() => dispatch(updateIconModalState(false))}
             >
               <Text style={{ color: "darkgray" }}>뒤로 가기</Text>
             </TouchableOpacity>
@@ -82,7 +78,7 @@ export default function FontModal() {
           <View style={styles.title}>
             <Text style={{ fontSize: 20, color: "darkgray" }}>Fonts</Text>
           </View>
-          <TouchableOpacity onPress={updateFonts} style={styles.fontIcon}>
+          <TouchableOpacity onPress={updateIcons} style={styles.fontIcon}>
             <FontAwesome name="font" size={30} color={ACTIVE_COLOR} />
           </TouchableOpacity>
         </AppHeader>
@@ -91,23 +87,25 @@ export default function FontModal() {
           onChangeText={setSearchQuery}
           value={searchQuery}
           onSubmitEditing={handleSearch}
-          placeholder="Search Fonts"
+          placeholder="Search Icons in Noun Projects"
         />
-        <ScrollView pagingEnabled contentContainerStyle={styles.fontContainer}>
+        <ScrollView
+          pagingEnabled
+          contentContainerStyle={styles.scrollContainer}
+        >
           <View style={styles.gridContainer}>
-            {filteredFonts?.map((font) => (
+            {iconArrays?.map((uri) => (
               <TouchableOpacity
-                key={font}
-                onPress={() => setSelectedFonts(font)}
+                key={uri}
+                onPress={() => setSelectedIcon(uri)}
                 style={{
-                  ...styles?.fonts,
-                  borderColor: selectedFonts === font ? "blue" : "gray",
-                  borderWidth: selectedFonts === font ? 2 : 1,
+                  ...styles?.icons,
+                  borderColor: selectedIcon === uri ? "blue" : "gray",
+                  borderWidth: selectedIcon === uri ? 2 : 1,
                 }}
               >
-                <Text style={{ fontFamily: font, fontSize: 30 }}>Hello</Text>
-                <View style={styles.fontProperty}>
-                  <Text style={{ fontSize: 12 }}>{font}</Text>
+                <View style={styles.iconProperty}>
+                  <Image style={styles.icon} source={{ uri }} />
                 </View>
               </TouchableOpacity>
             ))}
@@ -154,10 +152,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 20,
   },
-  fontContainer: {
+  scrollContainer: {
     width: SCREEN_WIDTH * 0.9,
   },
-  fonts: {
+  icons: {
     justifyContent: "center",
     alignItems: "center",
     width: SCREEN_WIDTH * 0.44,
@@ -167,9 +165,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: CONTENT_COLOR,
   },
-  fontProperty: {
+  iconProperty: {
     justifyContent: "center",
     alignItems: "center",
     width: "80%",
+  },
+  icon: {
+    width: 50,
+    height: 50,
   },
 });

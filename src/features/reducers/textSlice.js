@@ -4,7 +4,6 @@ const textProperties = {
   selectedProperty: "",
   selectedIndex: null,
   selectedSize: 0,
-  textArray: [],
 };
 
 const elements = {

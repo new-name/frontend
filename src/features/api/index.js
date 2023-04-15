@@ -1,4 +1,9 @@
-import { SERVER_URL, UNSPLASH_ACCESS_KEY } from "@env";
+import {
+  SERVER_URL,
+  UNSPLASH_ACCESS_KEY,
+  NOUNPROEJCT_ACCESS_KEY,
+  NOUNPROJECT_SECRET_KEY,
+} from "@env";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import { Alert } from "react-native";
@@ -11,6 +16,14 @@ const unsplashInstance = axios.create({
   baseURL: "https://api.unsplash.com/",
   headers: {
     Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`,
+  },
+});
+
+const nounProjectInstance = axios.create({
+  basURL: "https://api.thenounproject.com/v2",
+  auth: {
+    username: NOUNPROEJCT_ACCESS_KEY,
+    password: NOUNPROJECT_SECRET_KEY,
   },
 });
 
@@ -33,6 +46,34 @@ async function searchImages(query, page = 1, perPage = 30) {
     });
 
     return response;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function getIcons(query, limit, size) {
+  try {
+    const response = await nounProjectInstance.get(
+      `/icon?query=${query}&limit=${limit}$thumbnail_size=${size}`,
+    );
+
+    if (response.status === 200) {
+      return response.data.icons;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function getIconsSVG(id, color, size) {
+  try {
+    const response = await nounProjectInstance.get(
+      `/icon/${id}/download?color=${color}&filetype=svg&size=${size}`,
+    );
+
+    if (response.status === 200) {
+      return response.data.base64_encoded_file;
+    }
   } catch (err) {
     console.log(err);
   }
@@ -108,4 +149,6 @@ export default {
   getImages,
   searchImages,
   getFonts,
+  getIcons,
+  getIconsSVG,
 };
