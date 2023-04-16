@@ -13,6 +13,7 @@ export const editorFooter = [
 ];
 
 export const shapeEditor = [
+  { icon: "Ionicons", iconName: "move", text: "Move" },
   {
     icon: "MaterialCommunityIcons",
     iconName: "shape-rectangle-plus",
@@ -25,6 +26,7 @@ export const shapeEditor = [
   },
   { icon: "Entypo", iconName: "flow-line", text: "line" },
   { icon: "MaterialCommunityIcons", iconName: "google", text: "Icons" },
+  { icon: "Ionicons", iconName: "ios-color-palette-outline", text: "Color" },
   {
     icon: "MaterialIcons",
     iconName: "align-horizontal-center",

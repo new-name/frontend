@@ -7,15 +7,15 @@ const textProperties = {
 };
 
 const elements = {
-  0: {
-    text: "Sample Text",
-    x: 0,
-    y: 0,
-    size: 20,
-    color: "black",
-    zIndex: 0,
-    isEditable: false,
-  },
+  // 0: {
+  //   text: "Sample Text",
+  //   x: 0,
+  //   y: 0,
+  //   size: 20,
+  //   color: "black",
+  //   zIndex: 0,
+  //   isEditable: false,
+  // },
 };
 
 const initialState = {

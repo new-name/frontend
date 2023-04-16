@@ -26,7 +26,6 @@ import {
 
 export default function TextElements() {
   const dispatch = useDispatch();
-
   const [moveResponder, setMoveResponder] = useState({});
   const selectedTextProperty = useSelector(
     (state) => state.textReducer.textProperties.selectedProperty,
@@ -44,44 +43,6 @@ export default function TextElements() {
     selectedIndexRef.current = index;
     dispatch(selectTextIndex(index));
   };
-
-  useEffect(() => {
-    setMoveResponder(
-      PanResponder.create({
-        onMoveShouldSetPanResponder: () => true,
-        onPanResponderGrant: (_, gestureState) => {
-          positionRef.current = {
-            x: gestureState.dx,
-            y: gestureState.dy,
-          };
-          movePan.setOffset(positionRef.current);
-          movePan.setValue({ x: 0, y: 0 });
-        },
-        onPanResponderMove: Animated.event(
-          [null, { dx: movePan.x, dy: movePan.y }],
-          { useNativeDriver: false },
-        ),
-        onPanResponderRelease: ({ nativeEvent }, gestureState) => {
-          if (selectedIndexRef.current === null) return;
-
-          positionRef.current = {
-            x: positionRef.current.x + gestureState.dx,
-            y: positionRef.current.y + gestureState.dy,
-          };
-
-          dispatch(
-            updateTextPosition({
-              index: selectedIndexRef.current,
-              x: positionRef.current.x,
-              y: positionRef.current.y,
-            }),
-          );
-
-          movePan.setValue({ x: 0, y: 0 });
-        },
-      }),
-    );
-  }, [movePan.x, movePan.y]);
 
   const renderTextElement = (element, index) => {
     const isSelected = index === selectedTextIndex;
@@ -186,6 +147,44 @@ export default function TextElements() {
       </TouchableOpacity>
     );
   };
+
+  useEffect(() => {
+    setMoveResponder(
+      PanResponder.create({
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderGrant: (_, gestureState) => {
+          positionRef.current = {
+            x: gestureState.dx,
+            y: gestureState.dy,
+          };
+          movePan.setOffset(positionRef.current);
+          movePan.setValue({ x: 0, y: 0 });
+        },
+        onPanResponderMove: Animated.event(
+          [null, { dx: movePan.x, dy: movePan.y }],
+          { useNativeDriver: false },
+        ),
+        onPanResponderRelease: ({ nativeEvent }, gestureState) => {
+          if (selectedIndexRef.current === null) return;
+
+          positionRef.current = {
+            x: positionRef.current.x + gestureState.dx,
+            y: positionRef.current.y + gestureState.dy,
+          };
+
+          dispatch(
+            updateTextPosition({
+              index: selectedIndexRef.current,
+              x: positionRef.current.x,
+              y: positionRef.current.y,
+            }),
+          );
+
+          movePan.setValue({ x: 0, y: 0 });
+        },
+      }),
+    );
+  }, [movePan.x, movePan.y]);
 
   return (
     <>

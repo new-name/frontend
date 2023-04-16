@@ -22,7 +22,7 @@ import {
 } from "../../constants/color";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import {
-  getIcons,
+  handleRenderIcons,
   updateIconModalState,
 } from "../../features/reducers/shapeSlice";
 import AppHeader from "../../layout/AppHeader";
@@ -33,13 +33,29 @@ export default function IconModal() {
   const [searchQuery, setSearchQuery] = useState("");
   const iconNames = Object.keys(MaterialCommunityIcons.glyphMap).slice(0, 50);
   const [filteredIconNames, setFilteredIconNames] = useState(iconNames);
+  const shapeElements = useSelector((state) => state.shapeReducer.elements);
 
   const isIconModalVisible = useSelector(
     (state) => state.shapeReducer.isIconModalVisible,
   );
 
   const updateIcons = () => {
-    dispatch(getIcons(selectedIcon));
+    const nextIndex = Object.keys(shapeElements).length;
+    const property = {
+      type: "icon",
+      name: selectedIcon,
+      size: 30,
+      color: "gray",
+      x: 0,
+      y: 0,
+      zIndex: 0,
+    };
+
+    const updatedShapeElements = {
+      ...shapeElements,
+      [nextIndex]: property,
+    };
+    dispatch(handleRenderIcons(updatedShapeElements));
   };
 
   const handleSearch = () => {
