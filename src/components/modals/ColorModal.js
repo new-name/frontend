@@ -13,11 +13,11 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 import { ACTIVE_COLOR, UNACTIVE_COLOR } from "../../constants/color";
+import { SHAPE, TEXT } from "../../constants/property";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
-import {
-  updateColorPickerVisible,
-  updateTextColor,
-} from "../../features/reducers/textSlice";
+import { handleColorModalVisible } from "../../features/reducers/editorSlice";
+import { updateIconColor } from "../../features/reducers/shapeSlice";
+import { updateTextColor } from "../../features/reducers/textSlice";
 import AppHeader from "../../layout/AppHeader";
 
 const colorsArray = Array.from({ length: 121 }, (_, index) => {
@@ -29,22 +29,54 @@ const colorsArray = Array.from({ length: 121 }, (_, index) => {
   return `hsl(${((index - 10) * 3) % 360}, 100%, 50%)`;
 });
 
+const hslToHsla = (hslColor, alpha) => {
+  const regex = /hsl\((\d+),\s*(\d+)%?,\s*(\d+)%?\)/;
+
+  const matches = hslColor.match(regex);
+
+  if (matches) {
+    const h = parseInt(matches[1], 10);
+    const s = parseInt(matches[2], 10);
+    const l = parseInt(matches[3], 10);
+
+    return `hsla(${h}, ${s}%, ${l}%, ${alpha})`;
+  }
+};
+
 export default function ColorModal() {
   const dispatch = useDispatch();
   const [selectedColor, setSelectedColor] = useState(colorsArray[0]);
   const [selectedColorOpacity, setSelectedColorOpacity] = useState(1);
   const isColorPickerVisible = useSelector(
-    (state) => state.textReducer.colorPickerVisible,
+    (state) => state.editorReducer.colorPickerVisible,
   );
   const selectedTextIndex = useSelector(
     (state) => state.textReducer.textProperties.selectedIndex,
   );
+  const selectedShapeIndex = useSelector(
+    (state) => state.shapeReducer.shapeProperties.selectedIndex,
+  );
+
+  const activeEditor = useSelector(
+    (state) => state.editorReducer.selectedProperty,
+  );
 
   const updateColor = () => {
     const color = hslToHsla(selectedColor, selectedColorOpacity);
-    dispatch(
-      updateTextColor({ index: selectedTextIndex, selectedColor: color }),
-    );
+
+    if (activeEditor === SHAPE) {
+      dispatch(
+        updateIconColor({ index: selectedShapeIndex, selectedColor: color }),
+      );
+    }
+
+    if (activeEditor === TEXT) {
+      dispatch(
+        updateTextColor({ index: selectedTextIndex, selectedColor: color }),
+      );
+    }
+
+    dispatch(handleColorModalVisible(false));
   };
 
   const calculateOpacity = () => {
@@ -96,7 +128,7 @@ export default function ColorModal() {
               color="darkgray"
             />
             <TouchableOpacity
-              onPress={() => dispatch(updateColorPickerVisible(false))}
+              onPress={() => dispatch(handleColorModalVisible(false))}
             >
               <Text style={{ color: "darkgray" }}>뒤로 가기</Text>
             </TouchableOpacity>
@@ -155,20 +187,6 @@ export default function ColorModal() {
       </View>
     </Modal>
   );
-}
-
-function hslToHsla(hslColor, alpha) {
-  const regex = /hsl\((\d+),\s*(\d+)%?,\s*(\d+)%?\)/;
-
-  const matches = hslColor.match(regex);
-
-  if (matches) {
-    const h = parseInt(matches[1], 10);
-    const s = parseInt(matches[2], 10);
-    const l = parseInt(matches[3], 10);
-
-    return `hsla(${h}, ${s}%, ${l}%, ${alpha})`;
-  }
 }
 
 const styles = StyleSheet.create({

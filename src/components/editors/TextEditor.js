@@ -43,9 +43,9 @@ import {
   removeTextElements,
   selectText,
   selectTextContents,
-  updateColorPickerVisible,
   updateFontContainerVisible,
 } from "../../features/reducers/textSlice";
+import { handleColorModalVisible } from "../../features/reducers/editorSlice";
 
 export default function TextEditor() {
   const dispatch = useDispatch();
@@ -170,12 +170,13 @@ export default function TextEditor() {
     if (selectedProperty === TEXT_COLOR) {
       if (selectedTextIndex === null) {
         Alert.alert("원하는 텍스트를 선택해주세요.");
-        dispatch(selectText(""));
       }
 
       if (selectedTextIndex !== null) {
-        dispatch(updateColorPickerVisible(true));
+        dispatch(handleColorModalVisible(true));
       }
+
+      dispatch(selectText(""));
     }
   }, [selectedProperty]);
 

@@ -1,6 +1,5 @@
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import PropTypes from "prop-types";
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 

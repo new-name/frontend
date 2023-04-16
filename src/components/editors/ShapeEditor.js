@@ -1,5 +1,6 @@
 import {
   Entypo,
+  FontAwesome,
   Ionicons,
   MaterialCommunityIcons,
   MaterialIcons,
@@ -11,6 +12,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -23,12 +25,14 @@ import {
 import { shapeEditor } from "../../constants/footerItems";
 import {
   ICON_ENTYPO,
+  ICON_FONT,
   ICON_IOS,
   ICON_MATERIAL,
   ICON_MATERIAL_C,
 } from "../../constants/icon";
-import { SHAPE_ICONS } from "../../constants/property";
+import { SHAPE_COLOR, SHAPE_ICONS } from "../../constants/property";
 import { APP_FOOTER_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
+import { handleColorModalVisible } from "../../features/reducers/editorSlice";
 import {
   handleSelectProperty,
   updateIconModalState,
@@ -39,6 +43,9 @@ export default function ShapeEditor() {
   const selectedShapeProperty = useSelector(
     (state) => state.shapeReducer.shapeProperties.selectedProperty,
   );
+  const selectedShapeIndex = useSelector(
+    (state) => state.shapeReducer.shapeProperties.selectedIndex,
+  );
 
   const handleSelectedProperty = (name) => {
     const newSelectedProperty = selectedShapeProperty === name ? "" : name;
@@ -48,6 +55,19 @@ export default function ShapeEditor() {
   useEffect(() => {
     if (selectedShapeProperty === SHAPE_ICONS) {
       dispatch(updateIconModalState(true));
+    }
+  }, [selectedShapeProperty]);
+
+  useEffect(() => {
+    if (selectedShapeProperty === SHAPE_COLOR) {
+      if (selectedShapeIndex === null) {
+        Alert.alert("원하는 아이콘 또는 모양을 선택해주세요.");
+        dispatch(handleSelectProperty(""));
+      }
+
+      if (selectedShapeIndex !== null) {
+        dispatch(handleColorModalVisible(true));
+      }
     }
   }, [selectedShapeProperty]);
 
@@ -95,6 +115,17 @@ export default function ShapeEditor() {
             )}
             {item.icon === ICON_IOS && (
               <Ionicons
+                name={item.iconName}
+                size={30}
+                color={
+                  selectedShapeProperty === item.text
+                    ? ACTIVE_COLOR
+                    : UNACTIVE_COLOR
+                }
+              />
+            )}
+            {item.icon === ICON_FONT && (
+              <FontAwesome
                 name={item.iconName}
                 size={30}
                 color={

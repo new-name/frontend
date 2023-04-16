@@ -45,6 +45,11 @@ export const shapeSlice = createSlice({
       state.elements[index].x += x;
       state.elements[index].y += y;
     },
+    updateIconColor: (state, action) => {
+      const { index, selectedColor } = action.payload;
+
+      state.elements[index].color = selectedColor;
+    },
   },
 });
 
@@ -54,5 +59,6 @@ export const {
   updateIconModalState,
   handleSelectIcons,
   updateIconPosition,
+  updateIconColor,
 } = shapeSlice.actions;
 export default shapeSlice.reducer;

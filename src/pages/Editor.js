@@ -17,8 +17,6 @@ import EditorFooter from "../layout/EditorFooter";
 import EditorHeader from "../layout/EditorHeader";
 
 export default function Editor() {
-  const [activeEditor, setActiveEditor] = useState("");
-
   return (
     <View style={styles.container}>
       <AppHeader>
@@ -33,12 +31,9 @@ export default function Editor() {
           <ShapeElements />
         </View>
       </ContentBox>
-      <EditorRenderer activeEditor={activeEditor} />
+      <EditorRenderer />
       <AppFooter>
-        <EditorFooter
-          activeEditor={activeEditor}
-          setActiveEditor={setActiveEditor}
-        />
+        <EditorFooter />
       </AppFooter>
       <StatusBar style="auto" />
     </View>

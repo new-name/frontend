@@ -1,6 +1,6 @@
-import PropTypes from "prop-types";
 import React from "react";
 import { StyleSheet, View } from "react-native";
+import { useSelector } from "react-redux";
 
 import GifEditor from "../components/editors/GifEditor";
 import ImageEditor from "../components/editors/ImageEditor";
@@ -9,7 +9,11 @@ import TextEditor from "../components/editors/TextEditor";
 import { GIF, IMAGE, SHAPE, TEXT } from "../constants/property";
 import { APP_FOOTER_HEIGHT } from "../constants/size";
 
-export default function EditorRenderer({ activeEditor }) {
+export default function EditorRenderer() {
+  const activeEditor = useSelector(
+    (state) => state.editorReducer.selectedProperty,
+  );
+
   if (activeEditor === SHAPE) {
     return (
       <View style={styles.imageEditorContainer}>
@@ -41,10 +45,6 @@ export default function EditorRenderer({ activeEditor }) {
 
   return null;
 }
-
-EditorRenderer.propTypes = {
-  activeEditor: PropTypes.string,
-};
 
 const styles = StyleSheet.create({
   editorContainer: {

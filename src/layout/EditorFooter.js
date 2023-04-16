@@ -1,15 +1,22 @@
 import { Ionicons } from "@expo/vector-icons";
-import PropTypes from "prop-types";
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 import { ACTIVE_COLOR, UNACTIVE_COLOR } from "../constants/color";
 import { editorFooter } from "../constants/footerItems";
 import { SCREEN_WIDTH } from "../constants/size";
+import { handleActiveEditor } from "../features/reducers/editorSlice";
 
-export default function EditorFooter({ activeEditor, setActiveEditor }) {
+export default function EditorFooter() {
+  const dispatch = useDispatch();
+  const activeEditor = useSelector(
+    (state) => state.editorReducer.selectedProperty,
+  );
+
   const handleSelectedProperty = (name) => {
-    setActiveEditor((prevState) => (prevState === name ? "" : name));
+    const newSelectedProperty = activeEditor === name ? "" : name;
+    dispatch(handleActiveEditor(newSelectedProperty));
   };
 
   return (
@@ -38,11 +45,6 @@ export default function EditorFooter({ activeEditor, setActiveEditor }) {
     </View>
   );
 }
-
-EditorFooter.propTypes = {
-  activeEditor: PropTypes.string,
-  setActiveEditor: PropTypes.func,
-};
 
 const styles = StyleSheet.create({
   footer: {

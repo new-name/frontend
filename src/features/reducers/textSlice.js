@@ -21,7 +21,6 @@ const elements = {
 const initialState = {
   textProperties,
   elements,
-  colorPickerVisible: false,
   fontContainerVisible: false,
 };
 
@@ -86,20 +85,12 @@ export const textSlice = createSlice({
       const { index, selectedColor } = action.payload;
 
       state.elements[index].color = selectedColor;
-      state.colorPickerVisible = false;
-    },
-    updateColorPickerVisible: (state, action) => {
-      state.colorPickerVisible = action.payload;
-      state.textProperties.selectedProperty = "";
     },
     updateTextContents: (state, action) => {
       const { index, value } = action.payload;
+      const { elements } = state;
 
-      if (state.elements[index]) {
-        state.elements[index].text = value;
-      } else {
-        console.error(`Element at index ${index} not found.`);
-      }
+      elements[index].text = value;
     },
     updateFontContainerVisible: (state, action) => {
       state.fontContainerVisible = action.payload;
@@ -126,7 +117,6 @@ export const {
   addTextElements,
   removeTextElements,
   updateTextColor,
-  updateColorPickerVisible,
   updateTextContents,
   updateFontContainerVisible,
   updateTextFontStyle,

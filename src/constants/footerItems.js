@@ -26,6 +26,7 @@ export const shapeEditor = [
   },
   { icon: "Entypo", iconName: "flow-line", text: "line" },
   { icon: "MaterialCommunityIcons", iconName: "google", text: "Icons" },
+  { icon: "FontAwesome", iconName: "text-height", text: "Size" },
   { icon: "Ionicons", iconName: "ios-color-palette-outline", text: "Color" },
   {
     icon: "MaterialIcons",
