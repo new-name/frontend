@@ -5,7 +5,7 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   View,
   Text,
@@ -30,16 +30,24 @@ import {
   ICON_MATERIAL,
   ICON_MATERIAL_C,
 } from "../../constants/icon";
-import { SHAPE_COLOR, SHAPE_ICONS } from "../../constants/property";
+import {
+  SHAPE_COLOR,
+  SHAPE_ICONS,
+  SHAPE_RECT,
+  SHAPE_CIRCLE,
+  SHAPE_LINE,
+} from "../../constants/property";
 import { APP_FOOTER_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import { handleColorModalVisible } from "../../features/reducers/editorSlice";
 import {
+  handleRenderShapes,
   handleSelectProperty,
   updateIconModalState,
 } from "../../features/reducers/shapeSlice";
 
 export default function ShapeEditor() {
   const dispatch = useDispatch();
+  const shapeElements = useSelector((state) => state.shapeReducer.elements);
   const selectedShapeProperty = useSelector(
     (state) => state.shapeReducer.shapeProperties.selectedProperty,
   );
@@ -59,15 +67,77 @@ export default function ShapeEditor() {
   }, [selectedShapeProperty]);
 
   useEffect(() => {
+    if (
+      selectedShapeProperty === SHAPE_RECT ||
+      selectedShapeProperty === SHAPE_CIRCLE ||
+      selectedShapeProperty === SHAPE_LINE
+    ) {
+      const nextIndex = Object.keys(shapeElements).length;
+
+      let property;
+      if (selectedShapeProperty === SHAPE_RECT) {
+        property = {
+          type: "RECTANGLE",
+          x: 0,
+          y: 0,
+          width: 200,
+          height: 200,
+          stroke: "gray",
+          strokeWidth: 2,
+          color: "white",
+          zIndex: 0,
+        };
+      }
+
+      if (selectedShapeProperty === SHAPE_CIRCLE) {
+        property = {
+          type: "ELLIPSE",
+          x: 0,
+          y: 0,
+          width: 100,
+          height: 100,
+          stroke: "gray",
+          strokeWidth: 2,
+          color: "white",
+          zIndex: 0,
+        };
+      }
+
+      if (selectedShapeProperty === SHAPE_LINE) {
+        property = {
+          type: "LINE",
+          x: 0,
+          y: 0,
+          x1: 0,
+          y1: 20,
+          x2: SCREEN_WIDTH * 0.7,
+          y2: 20,
+          stroke: "gray",
+          strokeWidth: 3,
+          zIndex: 0,
+        };
+      }
+
+      const updatedShapeElements = {
+        ...shapeElements,
+        [nextIndex]: property,
+      };
+
+      dispatch(handleRenderShapes(updatedShapeElements));
+    }
+  }, [selectedShapeProperty]);
+
+  useEffect(() => {
     if (selectedShapeProperty === SHAPE_COLOR) {
       if (selectedShapeIndex === null) {
         Alert.alert("원하는 아이콘 또는 모양을 선택해주세요.");
-        dispatch(handleSelectProperty(""));
       }
 
       if (selectedShapeIndex !== null) {
         dispatch(handleColorModalVisible(true));
       }
+
+      dispatch(handleSelectProperty(""));
     }
   }, [selectedShapeProperty]);
 

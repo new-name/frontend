@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import { Animated, PanResponder, TouchableOpacity } from "react-native";
+import Svg, { Rect, Ellipse, Line } from "react-native-svg";
 import { useDispatch, useSelector } from "react-redux";
 
 import { SHAPE_MOVE } from "../../constants/property";
@@ -37,13 +38,65 @@ export default function ShapeElements() {
       top: element[index]?.y,
     };
 
-    const shapeElements = (
-      <MaterialCommunityIcons
-        name={iconElements[index].name}
-        size={iconElements[index].size}
-        color={iconElements[index].color}
-      />
-    );
+    let shapeElements;
+
+    if (element[index].type === "icon") {
+      shapeElements = (
+        <MaterialCommunityIcons
+          name={element[index].name}
+          size={element[index].size}
+          color={element[index].color}
+        />
+      );
+    }
+
+    if (element[index].type === "RECTANGLE") {
+      shapeElements = (
+        <Svg height={element[index].height} width={element[index].width}>
+          <Rect
+            width={element[index].width}
+            height={element[index].height}
+            stroke={element[index].stroke}
+            strokeWidth={element[index].strokeWidth}
+            fill={element[index].color}
+          />
+        </Svg>
+      );
+    }
+
+    if (element[index].type === "ELLIPSE") {
+      shapeElements = (
+        <Svg
+          height={element[index].height * 2}
+          width={element[index].width * 2}
+        >
+          <Ellipse
+            cx={element[index].width}
+            cy={element[index].height}
+            rx={element[index].width * 0.98}
+            ry={element[index].height * 0.98}
+            stroke={element[index].stroke}
+            strokeWidth={element[index].strokeWidth}
+            fill={element[index].color}
+          />
+        </Svg>
+      );
+    }
+
+    if (element[index].type === "LINE") {
+      shapeElements = (
+        <Svg height={20} width={element[index].x2}>
+          <Line
+            x1={element[index].x1}
+            y1={element[index].y1}
+            x2={element[index].x2}
+            y2={element[index].y2}
+            stroke={element[index].stroke}
+            strokeWidth={element[index].strokeWidth}
+          />
+        </Svg>
+      );
+    }
 
     if (isSelected && selectedShapeProperty === SHAPE_MOVE) {
       return (

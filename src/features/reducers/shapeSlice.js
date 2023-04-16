@@ -45,10 +45,24 @@ export const shapeSlice = createSlice({
       state.elements[index].x += x;
       state.elements[index].y += y;
     },
-    updateIconColor: (state, action) => {
-      const { index, selectedColor } = action.payload;
+    updateShapeColor: (state, action) => {
+      const { index, selectedColor, mode, strokeWidth } = action.payload;
 
-      state.elements[index].color = selectedColor;
+      if (mode === "Stroke") {
+        state.elements[index].stroke = selectedColor;
+        state.elements[index].strokeWidth = strokeWidth;
+      }
+
+      if (mode !== "Stroke") {
+        state.elements[index].color = selectedColor;
+      }
+    },
+    handleRenderShapes: (state, action) => {
+      state.elements = action.payload;
+
+      state.shapeProperties.selectedProperty = "";
+
+      console.log(state.elements);
     },
   },
 });
@@ -59,6 +73,7 @@ export const {
   updateIconModalState,
   handleSelectIcons,
   updateIconPosition,
-  updateIconColor,
+  updateShapeColor,
+  handleRenderShapes,
 } = shapeSlice.actions;
 export default shapeSlice.reducer;

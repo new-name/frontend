@@ -24,15 +24,11 @@ export const shapeEditor = [
     iconName: "shape-circle-plus",
     text: "Circle",
   },
-  { icon: "Entypo", iconName: "flow-line", text: "line" },
+  { icon: "Entypo", iconName: "flow-line", text: "Line" },
   { icon: "MaterialCommunityIcons", iconName: "google", text: "Icons" },
   { icon: "FontAwesome", iconName: "text-height", text: "Size" },
   { icon: "Ionicons", iconName: "ios-color-palette-outline", text: "Color" },
-  {
-    icon: "MaterialIcons",
-    iconName: "align-horizontal-center",
-    text: "Align",
-  },
+  { icon: "Ionicons", iconName: "remove-circle-outline", text: "Remove" },
 ];
 
 export const textEditor = [

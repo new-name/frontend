@@ -19,3 +19,7 @@ export const SHAPE = "Shape";
 export const SHAPE_ICONS = "Icons";
 export const SHAPE_MOVE = "Move";
 export const SHAPE_COLOR = "Color";
+export const SHAPE_RECT = "Rectangle";
+export const SHAPE_CIRCLE = "Circle";
+export const SHAPE_LINE = "Line";
+export const SHAPE_SIZE = "Size";

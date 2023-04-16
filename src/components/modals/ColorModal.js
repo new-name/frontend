@@ -9,6 +9,10 @@ import {
   TouchableOpacity,
   PanResponder,
   Animated,
+  TextInput,
+  Keyboard,
+  TouchableWithoutFeedback,
+  ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -16,7 +20,7 @@ import { ACTIVE_COLOR, UNACTIVE_COLOR } from "../../constants/color";
 import { SHAPE, TEXT } from "../../constants/property";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import { handleColorModalVisible } from "../../features/reducers/editorSlice";
-import { updateIconColor } from "../../features/reducers/shapeSlice";
+import { updateShapeColor } from "../../features/reducers/shapeSlice";
 import { updateTextColor } from "../../features/reducers/textSlice";
 import AppHeader from "../../layout/AppHeader";
 
@@ -45,6 +49,8 @@ const hslToHsla = (hslColor, alpha) => {
 
 export default function ColorModal() {
   const dispatch = useDispatch();
+  const [selectMode, setSelectMode] = useState("Fill");
+  const [typedNumber, setTypedNumber] = useState("2");
   const [selectedColor, setSelectedColor] = useState(colorsArray[0]);
   const [selectedColorOpacity, setSelectedColorOpacity] = useState(1);
   const isColorPickerVisible = useSelector(
@@ -56,6 +62,7 @@ export default function ColorModal() {
   const selectedShapeIndex = useSelector(
     (state) => state.shapeReducer.shapeProperties.selectedIndex,
   );
+  const shapeElements = useSelector((state) => state.shapeReducer.elements);
 
   const activeEditor = useSelector(
     (state) => state.editorReducer.selectedProperty,
@@ -66,7 +73,12 @@ export default function ColorModal() {
 
     if (activeEditor === SHAPE) {
       dispatch(
-        updateIconColor({ index: selectedShapeIndex, selectedColor: color }),
+        updateShapeColor({
+          index: selectedShapeIndex,
+          selectedColor: color,
+          mode: selectMode,
+          strokeWidth: parseInt(typedNumber, 10),
+        }),
       );
     }
 
@@ -119,72 +131,143 @@ export default function ColorModal() {
 
   return (
     <Modal visible={isColorPickerVisible} animationType="slide">
-      <View style={styles.container}>
-        <AppHeader>
-          <View style={styles.leftHeader}>
-            <Ionicons
-              name="ios-chevron-back-sharp"
-              size={25}
-              color="darkgray"
-            />
-            <TouchableOpacity
-              onPress={() => dispatch(handleColorModalVisible(false))}
-            >
-              <Text style={{ color: "darkgray" }}>뒤로 가기</Text>
-            </TouchableOpacity>
+      <ScrollView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.container}>
+            <AppHeader>
+              <View style={styles.leftHeader}>
+                <Ionicons
+                  name="ios-chevron-back-sharp"
+                  size={25}
+                  color="darkgray"
+                />
+                <TouchableOpacity
+                  onPress={() => dispatch(handleColorModalVisible(false))}
+                >
+                  <Text style={{ color: "darkgray" }}>뒤로 가기</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.title}>
+                <Text style={{ fontSize: 20, color: "darkgray" }}>Colors</Text>
+              </View>
+              <TouchableOpacity onPress={updateColor} style={styles.colorPick}>
+                <MaterialIcons name="colorize" size={30} color={ACTIVE_COLOR} />
+              </TouchableOpacity>
+            </AppHeader>
+            <View style={styles.gridText}>
+              <Text style={{ fontSize: 26 }}>Grid</Text>
+            </View>
+            <View style={styles.colorTable}>
+              {colorsArray.map((color) => (
+                <TouchableOpacity
+                  key={color}
+                  onPress={() => setSelectedColor(color)}
+                  style={{
+                    ...styles.colors,
+                    backgroundColor: color,
+                    borderWidth: selectedColor === color ? 2 : 0,
+                    borderColor: selectedColor === color ? "white" : null,
+                  }}
+                />
+              ))}
+            </View>
+            <View style={styles.opacity}>
+              <Text style={{ fontSize: 18, color: UNACTIVE_COLOR }}>
+                OPACITY
+              </Text>
+              <LinearGradient
+                colors={[
+                  hslToHsla(selectedColor, 0),
+                  hslToHsla(selectedColor, 1),
+                ]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.opacityHandlerContainer}
+              >
+                <Animated.View
+                  style={{
+                    ...styles.opacityScrollHandler,
+                    left: opacityPan,
+                  }}
+                  {...opacityResponder.panHandlers}
+                />
+              </LinearGradient>
+            </View>
+            <View style={styles.border} />
+            <View style={styles.bottom}>
+              <View
+                style={{
+                  ...styles.selectedColor,
+                  backgroundColor:
+                    selectMode === "Stroke"
+                      ? "white"
+                      : hslToHsla(selectedColor, selectedColorOpacity),
+                  borderColor:
+                    selectMode === "Stroke"
+                      ? hslToHsla(selectedColor, selectedColorOpacity)
+                      : null,
+                }}
+              />
+              {activeEditor === SHAPE &&
+              shapeElements[selectedShapeIndex]?.type !== "icon" ? (
+                <View style={styles.bottomRightContainer}>
+                  <TouchableOpacity
+                    onPress={() => setSelectMode("Fill")}
+                    style={{
+                      ...styles.fill,
+                      backgroundColor:
+                        selectMode === "Fill" ? ACTIVE_COLOR : "white",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 24,
+                        color: selectMode === "Fill" ? "white" : "gray",
+                      }}
+                    >
+                      Fill
+                    </Text>
+                  </TouchableOpacity>
+                  <View style={styles.strokeContainer}>
+                    <TouchableOpacity
+                      onPress={() => setSelectMode("Stroke")}
+                      style={{
+                        ...styles.fill,
+                        backgroundColor:
+                          selectMode === "Stroke" ? ACTIVE_COLOR : "white",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 24,
+                          color: selectMode === "Stroke" ? "white" : "gray",
+                        }}
+                      >
+                        Stroke
+                      </Text>
+                    </TouchableOpacity>
+                    <TextInput
+                      placeholder="Stroke Width"
+                      value={typedNumber}
+                      onChangeText={(value) => setTypedNumber(value)}
+                      keyboardType="numeric"
+                      editable={selectMode !== "Fill"}
+                      style={{
+                        paddingHorizontal: 5,
+                        width: 100,
+                        borderWidth: 2,
+                        borderRadius: 10,
+                      }}
+                    />
+                  </View>
+                </View>
+              ) : (
+                <Text style={{ fontSize: 20 }}>The color you selected</Text>
+              )}
+            </View>
           </View>
-          <View style={styles.title}>
-            <Text style={{ fontSize: 20, color: "darkgray" }}>Colors</Text>
-          </View>
-          <TouchableOpacity onPress={updateColor} style={styles.colorPick}>
-            <MaterialIcons name="colorize" size={30} color={ACTIVE_COLOR} />
-          </TouchableOpacity>
-        </AppHeader>
-        <View style={styles.gridText}>
-          <Text style={{ fontSize: 26 }}>Grid</Text>
-        </View>
-        <View style={styles.colorTable}>
-          {colorsArray.map((color) => (
-            <TouchableOpacity
-              key={color}
-              onPress={() => setSelectedColor(color)}
-              style={{
-                ...styles.colors,
-                backgroundColor: color,
-                borderWidth: selectedColor === color ? 2 : 0,
-                borderColor: selectedColor === color ? "white" : null,
-              }}
-            />
-          ))}
-        </View>
-        <View style={styles.opacity}>
-          <Text style={{ fontSize: 18, color: UNACTIVE_COLOR }}>OPACITY</Text>
-          <LinearGradient
-            colors={[hslToHsla(selectedColor, 0), hslToHsla(selectedColor, 1)]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.opacityHandlerContainer}
-          >
-            <Animated.View
-              style={{
-                ...styles.opacityScrollHandler,
-                left: opacityPan,
-              }}
-              {...opacityResponder.panHandlers}
-            />
-          </LinearGradient>
-        </View>
-        <View style={styles.border} />
-        <View style={styles.bottom}>
-          <View
-            style={{
-              ...styles.selectedColor,
-              backgroundColor: hslToHsla(selectedColor, selectedColorOpacity),
-            }}
-          />
-          <Text style={{ fontSize: 20 }}>The color you selected</Text>
-        </View>
-      </View>
+        </TouchableWithoutFeedback>
+      </ScrollView>
     </Modal>
   );
 }
@@ -270,5 +353,25 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 15,
     borderColor: "gray",
+  },
+  bottomRightContainer: {
+    height: 90,
+    justifyContent: "space-evenly",
+    alignItems: "center",
+  },
+  fill: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 100,
+    height: 30,
+    borderWidth: 2,
+    borderRadius: 25,
+    borderColor: "gray",
+  },
+  strokeContainer: {
+    justifyContent: "center",
+    width: 200,
+    flexDirection: "row",
+    gap: 10,
   },
 });
