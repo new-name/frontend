@@ -34,15 +34,20 @@ export const gifSlice = createSlice({
       state.gifProperties.selectedProperty = "";
     },
     updateGifSize: (state, action) => {
-      const { index, size } = action.payload;
+      const index = state.gifProperties.selectedIndex;
 
-      state.elements[index].size = size;
+      state.elements[index].size = action.payload;
     },
     updateGifPosition: (state, action) => {
       const { index, x, y } = action.payload;
 
       state.elements[index].x += x;
       state.elements[index].y += y;
+    },
+    updateGifElements: (state, action) => {
+      state.elements = action.payload.reduce((acc, el, index) => {
+        return { ...acc, [index]: el };
+      }, {});
     },
     handleRenderGif: (state, action) => {
       state.elements = action.payload;
@@ -59,5 +64,6 @@ export const {
   updateGifPosition,
   updateGifModalState,
   handleRenderGif,
+  updateGifElements,
 } = gifSlice.actions;
 export default gifSlice.reducer;

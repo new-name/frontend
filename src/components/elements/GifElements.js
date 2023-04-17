@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Animated, PanResponder, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { GIF_MOVE, GIF_SIZE } from "../../constants/property";
+import { GIF_MOVE } from "../../constants/property";
 import {
   handleSelectGif,
   updateGifPosition,
@@ -25,19 +25,28 @@ export default function GifElements() {
   const positionRef = useRef({ x: 0, y: 0 });
   const movePan = useRef(new Animated.ValueXY()).current;
 
-  const [resizeResponder, setResizeResponder] = useState({});
-  const sizeRef = useRef(null);
-
   const handleSelect = (index) => {
     selectedIndexRef.current = index;
     dispatch(handleSelectGif(index));
   };
 
-  const getDistance = (touch1, touch2) => {
-    const dx = touch1.pageX - touch2.pageX;
-    const dy = touch1.pageY - touch2.pageY;
-    return Math.sqrt(dx * dx + dy * dy);
-  };
+  // const [resizeResponder, setResizeResponder] = useState({});
+  // const sizePositionRef = useRef(0);
+  // const scaleRef = useRef(new Animated.Value(1)).current;
+
+  // const handleResizeOfGif = (scaleFactor) => {
+  //   if (selectedIndexRef.current === null) return;
+
+  //   const newSize = gifElements[selectedGifIndex]?.size * scaleFactor;
+
+  //   dispatch(updateGifSize(newSize));
+  // };
+
+  // const getDistance = (touch1, touch2) => {
+  //   const dx = touch1.pageX - touch2.pageX;
+  //   const dy = touch1.pageY - touch2.pageY;
+  //   return Math.sqrt(dx * dx + dy * dy);
+  // };
 
   const renderGifElements = (element, index) => {
     const isSelected = index === selectedGifIndex;
@@ -57,6 +66,23 @@ export default function GifElements() {
         loop
       />
     );
+
+    // if (isSelected && selectedGifProperty === GIF_SIZE) {
+    //   return (
+    //     <Animated.View
+    //       key={Date.now() + index}
+    //       style={[positionStyle, { transform: [{ scale: scaleRef }] }]}
+    //       {...resizeResponder.panHandlers}
+    //     >
+    //       <TouchableOpacity
+    //         key={Date.now() + index}
+    //         onPress={() => handleSelect(index)}
+    //       >
+    //         {gifElements}
+    //       </TouchableOpacity>
+    //     </Animated.View>
+    //   );
+    // }
 
     if (isSelected && selectedGifProperty === GIF_MOVE) {
       return (
@@ -86,6 +112,42 @@ export default function GifElements() {
       </TouchableOpacity>
     );
   };
+
+  // useEffect(() => {
+  //   setResizeResponder(
+  //     PanResponder.create({
+  //       onStartShouldSetPanResponder: () => true,
+  //       onMoveShouldSetPanResponder: () => true,
+  //       onPanResponderGrant: ({ nativeEvent }) => {
+  //         const { touches } = nativeEvent;
+
+  //         if (touches.length === 2) {
+  //           const [touch1, touch2] = touches;
+  //           const distance = getDistance(touch1, touch2);
+
+  //           sizePositionRef.current = distance;
+  //         }
+  //       },
+  //       onPanResponderMove: ({ nativeEvent }) => {
+  //         if (selectedIndexRef.current === null) return;
+  //         const { touches } = nativeEvent;
+
+  //         if (touches.length === 2) {
+  //           const [touch1, touch2] = touches;
+  //           const distance = getDistance(touch1, touch2);
+
+  //           const scaleFactor = distance / sizePositionRef?.current;
+
+  //           handleResizeOfGif(scaleFactor);
+  //         }
+  //       },
+  //       onPanResponderRelease: ({ nativeEvent }) => {
+  //         sizePositionRef.initialDistance = null;
+  //         scaleRef.setValue(1);
+  //       },
+  //     }),
+  //   );
+  // }, [scaleRef]);
 
   useEffect(() => {
     setMoveResponder(

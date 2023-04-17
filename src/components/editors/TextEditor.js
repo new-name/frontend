@@ -36,6 +36,7 @@ import {
   MIN_TEXT_SIZE,
   MAX_TEXT_SIZE,
 } from "../../constants/size";
+import { handleColorModalVisible } from "../../features/reducers/editorSlice";
 import {
   addTextElements,
   changeTextElements,
@@ -45,7 +46,6 @@ import {
   selectTextContents,
   updateFontContainerVisible,
 } from "../../features/reducers/textSlice";
-import { handleColorModalVisible } from "../../features/reducers/editorSlice";
 
 export default function TextEditor() {
   const dispatch = useDispatch();

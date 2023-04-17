@@ -46,7 +46,7 @@ export default function GifModal() {
       x: 0,
       y: 0,
       source: selected,
-      size: SCREEN_WIDTH * 0.3,
+      size: SCREEN_WIDTH * 0.4,
       zIndex: 0,
     };
 
