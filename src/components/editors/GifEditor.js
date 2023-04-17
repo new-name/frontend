@@ -3,19 +3,18 @@ import {
   MaterialCommunityIcons,
   Ionicons,
 } from "@expo/vector-icons";
-import Lottie from "lottie-react-native";
-import { useState, useEffect, useRef } from "react";
+import { useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   ACTIVE_COLOR,
-  CONTENT_COLOR,
   EDITOR_COLOR,
   SHADOW_COLOR,
   UNACTIVE_COLOR,
@@ -28,117 +27,85 @@ import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from "../../constants/size";
-import api from "../../features/api";
+import {
+  handleSelectGifProperty,
+  updateGifModalState,
+} from "../../features/reducers/gifSlice";
 
 export default function GifEditor() {
-  const [animationData, setAnimationData] = useState([]);
-  const [selectedProperty, setSelectedProperty] = useState("");
-  const [gifURLs, setGifURLs] = useState([]);
-
-  const animationRefs = useRef([]);
+  const dispatch = useDispatch();
+  const selectedProperty = useSelector(
+    (state) => state.gifReducer.gifProperties.selectedProperty,
+  );
 
   const handleSelectedProperty = (name) => {
-    setSelectedProperty((prevState) => (prevState === name ? "" : name));
+    const newSelectedProperty = selectedProperty === name ? "" : name;
+    dispatch(handleSelectGifProperty(newSelectedProperty));
   };
 
   useEffect(() => {
-    async function getGif() {
-      const urls = await api.getGifs();
-
-      setGifURLs(urls);
+    if (selectedProperty === GIF_LIBRARY) {
+      dispatch(updateGifModalState(true));
     }
-
-    getGif();
-  }, []);
-
-  useEffect(() => {
-    const fetchAnimationData = async (urls) => {
-      try {
-        const allData = await Promise.all(
-          urls.map(async (url) => {
-            const response = await fetch(url);
-
-            return await response.json();
-          }),
-        );
-
-        setAnimationData(allData);
-      } catch (error) {
-        console.error("Error fetching Lottie JSON data:", error);
-      }
-    };
-
-    fetchAnimationData(gifURLs);
-  }, [gifURLs]);
-
-  useEffect(() => {
-    animationRefs.current = animationRefs.current.slice(0, gifURLs.length);
-  }, [gifURLs]);
+  }, [selectedProperty]);
 
   return (
     <View>
-      {selectedProperty === GIF_LIBRARY && (
-        <View style={styles.container}>
-          <ScrollView
-            pagingEnabled
-            contentContainerStyle={styles.scrollViewContainer}
-          >
-            <View style={styles.gridContainer}>
-              {animationData.map((data, index) => (
-                <TouchableOpacity style={styles.gridItem} key={index}>
-                  <Lottie
-                    key={data + index + 1}
-                    ref={(element) => (animationRefs.current[index] = element)}
-                    onLayout={() => animationRefs.current[index]?.play()}
-                    style={styles.animationContainer}
-                    source={data}
-                    autoPlay
-                    loop
-                  />
-                </TouchableOpacity>
-              ))}
-            </View>
-          </ScrollView>
-        </View>
-      )}
       <View style={styles.controllerContainer}>
-        {gifEditor.map((item) => (
-          <TouchableOpacity
-            onPress={() => handleSelectedProperty(item.text)}
-            key={item.iconName}
-            style={styles.iconWithText}
-          >
-            {item.icon === ICON_FONT && (
-              <FontAwesome
-                name={item.iconName}
-                size={30}
-                color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
-              />
-            )}
-            {item.icon === ICON_MATERIAL_C && (
-              <MaterialCommunityIcons
-                name={item.iconName}
-                size={30}
-                color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
-              />
-            )}
-            {item.icon === ICON_IOS && (
-              <Ionicons
-                name={item.iconName}
-                size={30}
-                color={selectedProperty === item.text ? ACTIVE_COLOR : "gray"}
-              />
-            )}
-            <Text
-              style={{
-                ...styles.iconText,
-                color: selectedProperty === item.text ? ACTIVE_COLOR : "gray",
-              }}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {gifEditor.map((item) => (
+            <TouchableOpacity
+              onPress={() => handleSelectedProperty(item.text)}
+              key={item.iconName}
+              style={styles.iconWithText}
             >
-              {item.text}
-            </Text>
-          </TouchableOpacity>
-        ))}
+              {item.icon === ICON_FONT && (
+                <FontAwesome
+                  name={item.iconName}
+                  size={30}
+                  color={
+                    selectedProperty === item.text
+                      ? ACTIVE_COLOR
+                      : UNACTIVE_COLOR
+                  }
+                />
+              )}
+              {item.icon === ICON_MATERIAL_C && (
+                <MaterialCommunityIcons
+                  name={item.iconName}
+                  size={30}
+                  color={
+                    selectedProperty === item.text
+                      ? ACTIVE_COLOR
+                      : UNACTIVE_COLOR
+                  }
+                />
+              )}
+              {item.icon === ICON_IOS && (
+                <Ionicons
+                  name={item.iconName}
+                  size={30}
+                  color={
+                    selectedProperty === item.text
+                      ? ACTIVE_COLOR
+                      : UNACTIVE_COLOR
+                  }
+                />
+              )}
+              <Text
+                style={{
+                  ...styles.iconText,
+                  color:
+                    selectedProperty === item.text
+                      ? ACTIVE_COLOR
+                      : UNACTIVE_COLOR,
+                }}
+              >
+                {item.text}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
       </View>
     </View>
   );
@@ -179,32 +146,11 @@ const styles = StyleSheet.create({
   iconWithText: {
     flex: 1,
     alignItems: "center",
+    width: SCREEN_WIDTH * 0.185,
   },
   iconText: {
     marginTop: 5,
     fontSize: 12,
     color: UNACTIVE_COLOR,
-  },
-  scrollViewContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 30,
-  },
-  gridContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-  },
-  gridItem: {
-    width: "48%",
-    marginBottom: 20,
-  },
-  animationContainer: {
-    zIndex: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    width: SCREEN_WIDTH * 0.4,
-    borderWidth: 0.2,
-    borderRadius: 10,
-    backgroundColor: CONTENT_COLOR,
   },
 });

@@ -43,6 +43,7 @@ export const textEditor = [
 
 export const gifEditor = [
   { icon: "MaterialCommunityIcons", iconName: "folder-image", text: "Library" },
+  { icon: "Ionicons", iconName: "move", text: "Move" },
   { icon: "Ionicons", iconName: "ios-shapes", text: "Size" },
   { icon: "FontAwesome", iconName: "rotate-left", text: "Left Rotate" },
   { icon: "FontAwesome", iconName: "rotate-right", text: "Right Rotate" },

@@ -12,17 +12,17 @@ import {
   SHAPE_MOVE,
 } from "../../constants/property";
 import {
-  handleSelectIcons,
-  updateIconPosition,
+  handleSelectShape,
+  updateShapePosition,
 } from "../../features/reducers/shapeSlice";
 
 export default function ShapeElements() {
   const dispatch = useDispatch();
-  const iconElements = useSelector((state) => state.shapeReducer.elements);
+  const shapeElements = useSelector((state) => state.shapeReducer.elements);
   const selectedShapeProperty = useSelector(
     (state) => state.shapeReducer.shapeProperties.selectedProperty,
   );
-  const selectedIconIndex = useSelector(
+  const selectedShapeIndex = useSelector(
     (state) => state.shapeReducer.shapeProperties.selectedIndex,
   );
 
@@ -31,13 +31,13 @@ export default function ShapeElements() {
   const positionRef = useRef({ x: 0, y: 0 });
   const movePan = useRef(new Animated.ValueXY()).current;
 
-  const handleSelectShape = (index) => {
+  const handleSelect = (index) => {
     selectedIndexRef.current = index;
-    dispatch(handleSelectIcons(index));
+    dispatch(handleSelectShape(index));
   };
 
   const renderShapeElements = (element, index) => {
-    const isSelected = index === selectedIconIndex;
+    const isSelected = index === selectedShapeIndex;
 
     const positionStyle = {
       left: element[index]?.x,
@@ -108,7 +108,7 @@ export default function ShapeElements() {
       return (
         <Animated.View
           key={Date.now() + index}
-          onPress={() => handleSelectShape(index)}
+          onPress={() => handleSelect(index)}
           style={[
             positionStyle,
             {
@@ -125,7 +125,7 @@ export default function ShapeElements() {
     return (
       <TouchableOpacity
         key={Date.now() + index}
-        onPress={() => handleSelectShape(index)}
+        onPress={() => handleSelect(index)}
         style={[{ position: "absolute" }, positionStyle]}
       >
         {shapeElements}
@@ -158,7 +158,7 @@ export default function ShapeElements() {
           };
 
           dispatch(
-            updateIconPosition({
+            updateShapePosition({
               index: selectedIndexRef.current,
               x: positionRef.current.x,
               y: positionRef.current.y,
@@ -173,8 +173,8 @@ export default function ShapeElements() {
 
   return (
     <>
-      {Object.keys(iconElements).map((icon, index) =>
-        renderShapeElements(iconElements, index),
+      {Object.keys(shapeElements).map((element, index) =>
+        renderShapeElements(shapeElements, index),
       )}
     </>
   );

@@ -54,7 +54,7 @@ const hslToHsla = (hslColor, alpha) => {
 
 export default function ColorModal() {
   const dispatch = useDispatch();
-  const [selectMode, setSelectMode] = useState(FILL);
+  const [selectedMode, setSelectedMode] = useState(FILL);
   const [typedNumber, setTypedNumber] = useState("2");
   const [selectedColor, setSelectedColor] = useState(colorsArray[0]);
   const [selectedColorOpacity, setSelectedColorOpacity] = useState(1);
@@ -81,7 +81,7 @@ export default function ColorModal() {
         updateShapeColor({
           index: selectedShapeIndex,
           selectedColor: color,
-          mode: selectMode,
+          mode: selectedMode,
           strokeWidth: parseInt(typedNumber, 10),
         }),
       );
@@ -206,11 +206,11 @@ export default function ColorModal() {
                 style={{
                   ...styles.selectedColor,
                   backgroundColor:
-                    selectMode === STROKE
+                    selectedMode === STROKE
                       ? EDITOR_COLOR
                       : hslToHsla(selectedColor, selectedColorOpacity),
                   borderColor:
-                    selectMode === STROKE
+                    selectedMode === STROKE
                       ? hslToHsla(selectedColor, selectedColorOpacity)
                       : null,
                 }}
@@ -219,18 +219,18 @@ export default function ColorModal() {
               shapeElements[selectedShapeIndex]?.type !== ICON ? (
                 <View style={styles.bottomRightContainer}>
                   <TouchableOpacity
-                    onPress={() => setSelectMode(FILL)}
+                    onPress={() => setSelectedMode(FILL)}
                     style={{
                       ...styles.fill,
                       backgroundColor:
-                        selectMode === FILL ? ACTIVE_COLOR : EDITOR_COLOR,
+                        selectedMode === FILL ? ACTIVE_COLOR : EDITOR_COLOR,
                     }}
                   >
                     <Text
                       style={{
                         fontSize: 24,
                         color:
-                          selectMode === FILL ? EDITOR_COLOR : UNACTIVE_COLOR,
+                          selectedMode === FILL ? EDITOR_COLOR : UNACTIVE_COLOR,
                       }}
                     >
                       Fill
@@ -238,18 +238,18 @@ export default function ColorModal() {
                   </TouchableOpacity>
                   <View style={styles.strokeContainer}>
                     <TouchableOpacity
-                      onPress={() => setSelectMode(STROKE)}
+                      onPress={() => setSelectedMode(STROKE)}
                       style={{
                         ...styles.fill,
                         backgroundColor:
-                          selectMode === STROKE ? ACTIVE_COLOR : EDITOR_COLOR,
+                          selectedMode === STROKE ? ACTIVE_COLOR : EDITOR_COLOR,
                       }}
                     >
                       <Text
                         style={{
                           fontSize: 24,
                           color:
-                            selectMode === STROKE
+                            selectedMode === STROKE
                               ? EDITOR_COLOR
                               : UNACTIVE_COLOR,
                         }}
@@ -262,7 +262,7 @@ export default function ColorModal() {
                       value={typedNumber}
                       onChangeText={(value) => setTypedNumber(value)}
                       keyboardType="numeric"
-                      editable={selectMode !== FILL}
+                      editable={selectedMode !== FILL}
                       style={{
                         paddingHorizontal: 5,
                         width: 100,

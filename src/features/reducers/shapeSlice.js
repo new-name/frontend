@@ -30,17 +30,17 @@ export const shapeSlice = createSlice({
 
       state.isIconModalVisible = false;
     },
-    handleSelectIcons: (state, action) => {
+    handleRenderShapes: (state, action) => {
+      state.elements = action.payload;
+
+      state.shapeProperties.selectedProperty = "";
+    },
+    handleSelectShape: (state, action) => {
       const { shapeProperties } = state;
 
       shapeProperties.selectedIndex = action.payload;
     },
-    updateIconModalState: (state, action) => {
-      state.isIconModalVisible = action.payload;
-
-      state.shapeProperties.selectedProperty = "";
-    },
-    updateIconPosition: (state, action) => {
+    updateShapePosition: (state, action) => {
       const { index } = action.payload;
       const { x, y } = action.payload;
 
@@ -59,8 +59,8 @@ export const shapeSlice = createSlice({
         state.elements[index].color = selectedColor;
       }
     },
-    handleRenderShapes: (state, action) => {
-      state.elements = action.payload;
+    updateIconModalState: (state, action) => {
+      state.isIconModalVisible = action.payload;
 
       state.shapeProperties.selectedProperty = "";
     },
@@ -69,10 +69,10 @@ export const shapeSlice = createSlice({
 
 export const {
   handleSelectProperty,
+  handleSelectShape,
   handleRenderIcons,
   updateIconModalState,
-  handleSelectIcons,
-  updateIconPosition,
+  updateShapePosition,
   updateShapeColor,
   handleRenderShapes,
 } = shapeSlice.actions;
