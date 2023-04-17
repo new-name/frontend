@@ -23,3 +23,11 @@ export const SHAPE_RECT = "Rectangle";
 export const SHAPE_CIRCLE = "Circle";
 export const SHAPE_LINE = "Line";
 export const SHAPE_SIZE = "Size";
+
+export const RECTANGLE = "RECTANGLE";
+export const ELLIPSE = "ELLIPSE";
+export const LINE = "LINE";
+export const ICON = "icon";
+
+export const STROKE = "Stroke";
+export const FILL = "Fill";

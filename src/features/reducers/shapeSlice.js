@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import { STROKE } from "../../constants/property";
+
 const shapeProperties = {
   selectedProperty: "",
   selectedIndex: null,
@@ -48,12 +50,12 @@ export const shapeSlice = createSlice({
     updateShapeColor: (state, action) => {
       const { index, selectedColor, mode, strokeWidth } = action.payload;
 
-      if (mode === "Stroke") {
+      if (mode === STROKE) {
         state.elements[index].stroke = selectedColor;
         state.elements[index].strokeWidth = strokeWidth;
       }
 
-      if (mode !== "Stroke") {
+      if (mode !== STROKE) {
         state.elements[index].color = selectedColor;
       }
     },
@@ -61,8 +63,6 @@ export const shapeSlice = createSlice({
       state.elements = action.payload;
 
       state.shapeProperties.selectedProperty = "";
-
-      console.log(state.elements);
     },
   },
 });

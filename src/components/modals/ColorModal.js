@@ -16,8 +16,13 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { ACTIVE_COLOR, UNACTIVE_COLOR } from "../../constants/color";
-import { SHAPE, TEXT } from "../../constants/property";
+import {
+  ACTIVE_COLOR,
+  EDITOR_COLOR,
+  SUB_GRAY_COLOR,
+  UNACTIVE_COLOR,
+} from "../../constants/color";
+import { FILL, ICON, SHAPE, STROKE, TEXT } from "../../constants/property";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import { handleColorModalVisible } from "../../features/reducers/editorSlice";
 import { updateShapeColor } from "../../features/reducers/shapeSlice";
@@ -49,7 +54,7 @@ const hslToHsla = (hslColor, alpha) => {
 
 export default function ColorModal() {
   const dispatch = useDispatch();
-  const [selectMode, setSelectMode] = useState("Fill");
+  const [selectMode, setSelectMode] = useState(FILL);
   const [typedNumber, setTypedNumber] = useState("2");
   const [selectedColor, setSelectedColor] = useState(colorsArray[0]);
   const [selectedColorOpacity, setSelectedColorOpacity] = useState(1);
@@ -139,16 +144,18 @@ export default function ColorModal() {
                 <Ionicons
                   name="ios-chevron-back-sharp"
                   size={25}
-                  color="darkgray"
+                  color={SUB_GRAY_COLOR}
                 />
                 <TouchableOpacity
                   onPress={() => dispatch(handleColorModalVisible(false))}
                 >
-                  <Text style={{ color: "darkgray" }}>뒤로 가기</Text>
+                  <Text style={{ color: SUB_GRAY_COLOR }}>뒤로 가기</Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.title}>
-                <Text style={{ fontSize: 20, color: "darkgray" }}>Colors</Text>
+                <Text style={{ fontSize: 20, color: SUB_GRAY_COLOR }}>
+                  Colors
+                </Text>
               </View>
               <TouchableOpacity onPress={updateColor} style={styles.colorPick}>
                 <MaterialIcons name="colorize" size={30} color={ACTIVE_COLOR} />
@@ -166,7 +173,7 @@ export default function ColorModal() {
                     ...styles.colors,
                     backgroundColor: color,
                     borderWidth: selectedColor === color ? 2 : 0,
-                    borderColor: selectedColor === color ? "white" : null,
+                    borderColor: selectedColor === color ? EDITOR_COLOR : null,
                   }}
                 />
               ))}
@@ -199,30 +206,31 @@ export default function ColorModal() {
                 style={{
                   ...styles.selectedColor,
                   backgroundColor:
-                    selectMode === "Stroke"
-                      ? "white"
+                    selectMode === STROKE
+                      ? EDITOR_COLOR
                       : hslToHsla(selectedColor, selectedColorOpacity),
                   borderColor:
-                    selectMode === "Stroke"
+                    selectMode === STROKE
                       ? hslToHsla(selectedColor, selectedColorOpacity)
                       : null,
                 }}
               />
               {activeEditor === SHAPE &&
-              shapeElements[selectedShapeIndex]?.type !== "icon" ? (
+              shapeElements[selectedShapeIndex]?.type !== ICON ? (
                 <View style={styles.bottomRightContainer}>
                   <TouchableOpacity
-                    onPress={() => setSelectMode("Fill")}
+                    onPress={() => setSelectMode(FILL)}
                     style={{
                       ...styles.fill,
                       backgroundColor:
-                        selectMode === "Fill" ? ACTIVE_COLOR : "white",
+                        selectMode === FILL ? ACTIVE_COLOR : EDITOR_COLOR,
                     }}
                   >
                     <Text
                       style={{
                         fontSize: 24,
-                        color: selectMode === "Fill" ? "white" : "gray",
+                        color:
+                          selectMode === FILL ? EDITOR_COLOR : UNACTIVE_COLOR,
                       }}
                     >
                       Fill
@@ -230,17 +238,20 @@ export default function ColorModal() {
                   </TouchableOpacity>
                   <View style={styles.strokeContainer}>
                     <TouchableOpacity
-                      onPress={() => setSelectMode("Stroke")}
+                      onPress={() => setSelectMode(STROKE)}
                       style={{
                         ...styles.fill,
                         backgroundColor:
-                          selectMode === "Stroke" ? ACTIVE_COLOR : "white",
+                          selectMode === STROKE ? ACTIVE_COLOR : EDITOR_COLOR,
                       }}
                     >
                       <Text
                         style={{
                           fontSize: 24,
-                          color: selectMode === "Stroke" ? "white" : "gray",
+                          color:
+                            selectMode === STROKE
+                              ? EDITOR_COLOR
+                              : UNACTIVE_COLOR,
                         }}
                       >
                         Stroke
@@ -251,7 +262,7 @@ export default function ColorModal() {
                       value={typedNumber}
                       onChangeText={(value) => setTypedNumber(value)}
                       keyboardType="numeric"
-                      editable={selectMode !== "Fill"}
+                      editable={selectMode !== FILL}
                       style={{
                         paddingHorizontal: 5,
                         width: 100,
@@ -300,7 +311,7 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH * 0.8,
     height: SCREEN_HEIGHT * 0.05,
     marginVertical: 30,
-    backgroundColor: "white",
+    backgroundColor: EDITOR_COLOR,
     borderWidth: 1,
     borderRadius: 20,
   },
@@ -314,7 +325,7 @@ const styles = StyleSheet.create({
   colors: {
     width: 28,
     height: 28,
-    backgroundColor: "white",
+    backgroundColor: EDITOR_COLOR,
   },
   opacity: {
     width: SCREEN_WIDTH * 0.8,
@@ -332,7 +343,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     borderWidth: 2,
-    borderColor: "white",
+    borderColor: EDITOR_COLOR,
     left: SCREEN_WIDTH * 0.8 - 60,
   },
   border: {
@@ -352,12 +363,12 @@ const styles = StyleSheet.create({
     height: 75,
     borderWidth: 2,
     borderRadius: 15,
-    borderColor: "gray",
+    borderColor: UNACTIVE_COLOR,
   },
   bottomRightContainer: {
-    height: 90,
     justifyContent: "space-evenly",
     alignItems: "center",
+    height: 90,
   },
   fill: {
     justifyContent: "center",
@@ -366,12 +377,12 @@ const styles = StyleSheet.create({
     height: 30,
     borderWidth: 2,
     borderRadius: 25,
-    borderColor: "gray",
+    borderColor: UNACTIVE_COLOR,
   },
   strokeContainer: {
     justifyContent: "center",
-    width: 200,
     flexDirection: "row",
+    width: 200,
     gap: 10,
   },
 });

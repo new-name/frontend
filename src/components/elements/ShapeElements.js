@@ -4,7 +4,13 @@ import { Animated, PanResponder, TouchableOpacity } from "react-native";
 import Svg, { Rect, Ellipse, Line } from "react-native-svg";
 import { useDispatch, useSelector } from "react-redux";
 
-import { SHAPE_MOVE } from "../../constants/property";
+import {
+  ELLIPSE,
+  ICON,
+  LINE,
+  RECTANGLE,
+  SHAPE_MOVE,
+} from "../../constants/property";
 import {
   handleSelectIcons,
   updateIconPosition,
@@ -40,7 +46,7 @@ export default function ShapeElements() {
 
     let shapeElements;
 
-    if (element[index].type === "icon") {
+    if (element[index].type === ICON) {
       shapeElements = (
         <MaterialCommunityIcons
           name={element[index].name}
@@ -50,7 +56,7 @@ export default function ShapeElements() {
       );
     }
 
-    if (element[index].type === "RECTANGLE") {
+    if (element[index].type === RECTANGLE) {
       shapeElements = (
         <Svg height={element[index].height} width={element[index].width}>
           <Rect
@@ -64,7 +70,7 @@ export default function ShapeElements() {
       );
     }
 
-    if (element[index].type === "ELLIPSE") {
+    if (element[index].type === ELLIPSE) {
       shapeElements = (
         <Svg
           height={element[index].height * 2}
@@ -83,7 +89,7 @@ export default function ShapeElements() {
       );
     }
 
-    if (element[index].type === "LINE") {
+    if (element[index].type === LINE) {
       shapeElements = (
         <Svg height={20} width={element[index].x2}>
           <Line

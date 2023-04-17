@@ -36,6 +36,9 @@ import {
   SHAPE_RECT,
   SHAPE_CIRCLE,
   SHAPE_LINE,
+  RECTANGLE,
+  ELLIPSE,
+  LINE,
 } from "../../constants/property";
 import { APP_FOOTER_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import { handleColorModalVisible } from "../../features/reducers/editorSlice";
@@ -77,42 +80,42 @@ export default function ShapeEditor() {
       let property;
       if (selectedShapeProperty === SHAPE_RECT) {
         property = {
-          type: "RECTANGLE",
+          type: RECTANGLE,
           x: 0,
           y: 0,
           width: 200,
           height: 200,
-          stroke: "gray",
+          stroke: UNACTIVE_COLOR,
           strokeWidth: 2,
-          color: "white",
+          color: EDITOR_COLOR,
           zIndex: 0,
         };
       }
 
       if (selectedShapeProperty === SHAPE_CIRCLE) {
         property = {
-          type: "ELLIPSE",
+          type: ELLIPSE,
           x: 0,
           y: 0,
           width: 100,
           height: 100,
-          stroke: "gray",
+          stroke: UNACTIVE_COLOR,
           strokeWidth: 2,
-          color: "white",
+          color: EDITOR_COLOR,
           zIndex: 0,
         };
       }
 
       if (selectedShapeProperty === SHAPE_LINE) {
         property = {
-          type: "LINE",
+          type: LINE,
           x: 0,
           y: 0,
           x1: 0,
           y1: 20,
           x2: SCREEN_WIDTH * 0.7,
           y2: 20,
-          stroke: "gray",
+          stroke: UNACTIVE_COLOR,
           strokeWidth: 3,
           zIndex: 0,
         };
