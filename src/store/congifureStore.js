@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 import editorReducer from "../features/reducers/editorSlice";
 import gifReducer from "../features/reducers/gifSlice";
+import imageReducer from "../features/reducers/imageSlice";
 import shapeReducer from "../features/reducers/shapeSlice";
 import textReducer from "../features/reducers/textSlice";
 
@@ -10,6 +11,7 @@ const rootReducer = combineReducers({
   gifReducer,
   shapeReducer,
   textReducer,
+  imageReducer,
 });
 
 const store = configureStore({

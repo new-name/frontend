@@ -3,12 +3,14 @@ import { View, StyleSheet } from "react-native";
 
 import EditorRenderer from "../components/EditorRenderer";
 import GifElements from "../components/elements/GifElements";
+import ImageElements from "../components/elements/ImageElements";
 import ShapeElements from "../components/elements/ShapeElements";
 import TextElements from "../components/elements/TextElements";
 import ColorModal from "../components/modals/ColorModal";
 import FontModal from "../components/modals/FontModal";
 import GifModal from "../components/modals/GifModal";
 import IconModal from "../components/modals/IconModal";
+import ImageModal from "../components/modals/ImageModal";
 import { CONTENT_COLOR } from "../constants/color";
 import { CONTAINER_WIDTH } from "../constants/size";
 import AppFooter from "../layout/AppFooter";
@@ -25,10 +27,12 @@ export default function Editor() {
       </AppHeader>
       <ContentBox>
         <View style={styles.contentContainer}>
+          <ImageModal />
           <GifModal />
           <FontModal />
           <ColorModal />
           <IconModal />
+          <ImageElements />
           <GifElements />
           <TextElements />
           <ShapeElements />

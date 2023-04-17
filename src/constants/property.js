@@ -11,6 +11,8 @@ export const TEXT_STYLE = "Font Style";
 
 export const IMAGE = "Image";
 export const IMG_UNSPLASH = "Unsplash";
+export const IMG_MOVE = "Move";
+export const IMG_SIZE = "Size";
 
 export const GIF = "Gif";
 export const GIF_LIBRARY = "Library";

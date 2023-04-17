@@ -3,16 +3,15 @@ import {
   MaterialCommunityIcons,
   Ionicons,
 } from "@expo/vector-icons";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image,
-  TextInput,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   ACTIVE_COLOR,
@@ -29,115 +28,30 @@ import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from "../../constants/size";
-import api from "../../features/api";
+import {
+  handleSelectImageProperty,
+  updateImageModalState,
+} from "../../features/reducers/imageSlice";
 
 export default function ImageEditor() {
-  const [selectedProperty, setSelectedProperty] = useState("");
-  const [imageDimensions, setImageDimensions] = useState([]);
-  const [photos, setPhotos] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const dispatch = useDispatch();
+  const selectedProperty = useSelector(
+    (state) => state.imageReducer.imageProperties.selectedProperty,
+  );
 
   const handleSelectedProperty = (name) => {
-    setSelectedProperty((prevState) => (prevState === name ? "" : name));
+    const newSelectedProperty = selectedProperty === name ? "" : name;
+    dispatch(handleSelectImageProperty(newSelectedProperty));
   };
 
-  const getImageSize = (uri) => {
-    return new Promise((resolve, reject) => {
-      Image.getSize(
-        uri,
-        (width, height) => {
-          resolve({ uri, width, height });
-        },
-        (error) => {
-          reject(error);
-        },
-      );
-    });
-  };
-
-  async function fetchImageDimensions() {
-    try {
-      const dimensions = await Promise.all(
-        photos.map(async (uri) => {
-          const { width, height } = await getImageSize(uri);
-          return { uri, width, height };
-        }),
-      );
-
-      setImageDimensions(dimensions);
-    } catch (error) {
-      console.error("Error fetching image dimensions:", error);
-    }
-  }
-
-  async function handleSearch() {
-    try {
-      const response = await api.searchImages(searchQuery);
-
-      const images = response.data.results.map((item) => item.urls.small);
-      setPhotos(images);
-    } catch (error) {
-      console.error("Error searching photos:", error);
-    }
-  }
-
   useEffect(() => {
-    async function fetchPhotos() {
-      try {
-        const response = await api.getImages();
-
-        const image = response.data.map((item) => item.urls.small);
-
-        setPhotos(image);
-      } catch (error) {
-        console.error("Error fetching photos:", error);
-      }
+    if (selectedProperty === IMG_UNSPLASH) {
+      dispatch(updateImageModalState(true));
     }
-
-    fetchPhotos();
-  }, []);
-
-  useEffect(() => {
-    fetchImageDimensions();
-  }, [photos]);
+  }, [selectedProperty]);
 
   return (
     <View>
-      {selectedProperty === IMG_UNSPLASH && photos.length > 0 && (
-        <View style={styles.container}>
-          <View style={styles.paddingContainer}>
-            <TextInput
-              style={styles.searchBar}
-              onChangeText={setSearchQuery}
-              value={searchQuery}
-              onSubmitEditing={handleSearch}
-              placeholder="Search Unsplash"
-            />
-            <ScrollView
-              pagingEnabled
-              contentContainerStyle={styles.scrollViewContainer}
-            >
-              <View style={styles.gridContainer}>
-                {imageDimensions.map((item, index) => (
-                  <TouchableOpacity
-                    style={styles.gridItem}
-                    key={item.uri + index}
-                  >
-                    <Image
-                      style={{
-                        ...styles.image,
-                        width: IMAGE_WIDTH,
-                        height: (IMAGE_WIDTH * item.height) / item.width,
-                      }}
-                      source={{ uri: item.uri }}
-                    />
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </ScrollView>
-          </View>
-        </View>
-      )}
       <View style={styles.controllerContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {imageEditor.map((item) => (
@@ -240,10 +154,6 @@ const styles = StyleSheet.create({
     width: IMAGE_WIDTH,
     marginBottom: 20,
     backgroundColor: UNACTIVE_COLOR,
-  },
-  image: {
-    width: "100%",
-    height: "100%",
   },
   controllerContainer: {
     flexDirection: "row",
