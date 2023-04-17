@@ -9,7 +9,7 @@ export const editorFooter = [
   { iconName: "ios-text", text: "Text" },
   { iconName: "ios-image-outline", text: "Image" },
   { iconName: "ios-play-sharp", text: "Gif" },
-  { iconName: "ellipsis-horizontal-sharp", text: "More" },
+  { iconName: "layers", text: "Layer" },
 ];
 
 export const shapeEditor = [
@@ -26,7 +26,11 @@ export const shapeEditor = [
   },
   { icon: "Entypo", iconName: "flow-line", text: "Line" },
   { icon: "MaterialCommunityIcons", iconName: "google", text: "Icons" },
-  { icon: "FontAwesome", iconName: "text-height", text: "Size" },
+  {
+    icon: "MaterialCommunityIcons",
+    iconName: "image-size-select-large",
+    text: "Size",
+  },
   { icon: "Ionicons", iconName: "ios-color-palette-outline", text: "Color" },
   { icon: "Ionicons", iconName: "remove-circle-outline", text: "Remove" },
 ];
@@ -42,16 +46,16 @@ export const textEditor = [
 ];
 
 export const gifEditor = [
-  { icon: "MaterialCommunityIcons", iconName: "folder-image", text: "Library" },
+  { icon: "Entypo", iconName: "folder-video", text: "Library" },
   { icon: "Ionicons", iconName: "move", text: "Move" },
-  { icon: "Ionicons", iconName: "ios-shapes", text: "Size" },
+  {
+    icon: "MaterialCommunityIcons",
+    iconName: "image-size-select-large",
+    text: "Size",
+  },
   { icon: "FontAwesome", iconName: "rotate-left", text: "Left Rotate" },
   { icon: "FontAwesome", iconName: "rotate-right", text: "Right Rotate" },
-  {
-    icon: "Ionicons",
-    iconName: "ellipsis-horizontal-sharp",
-    text: "More",
-  },
+  { icon: "Ionicons", iconName: "remove-circle-outline", text: "Remove" },
 ];
 
 export const imageEditor = [
@@ -60,6 +64,7 @@ export const imageEditor = [
     iconName: "folder-image",
     text: "Unsplash",
   },
+  { icon: "Ionicons", iconName: "move", text: "Move" },
   {
     icon: "MaterialCommunityIcons",
     iconName: "image-size-select-large",
@@ -67,9 +72,5 @@ export const imageEditor = [
   },
   { icon: "FontAwesome", iconName: "rotate-left", text: "Left Rotate" },
   { icon: "FontAwesome", iconName: "rotate-right", text: "Right Rotate" },
-  {
-    icon: "Ionicons",
-    iconName: "ellipsis-horizontal-sharp",
-    text: "More",
-  },
+  { icon: "Ionicons", iconName: "remove-circle-outline", text: "Remove" },
 ];

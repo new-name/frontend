@@ -15,6 +15,7 @@ export const IMG_UNSPLASH = "Unsplash";
 export const GIF = "Gif";
 export const GIF_LIBRARY = "Library";
 export const GIF_MOVE = "Move";
+export const GIF_SIZE = "Size";
 
 export const SHAPE = "Shape";
 export const SHAPE_ICONS = "Icons";

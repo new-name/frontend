@@ -34,9 +34,9 @@ export const gifSlice = createSlice({
       state.gifProperties.selectedProperty = "";
     },
     updateGifSize: (state, action) => {
-      const { gifProperties } = state;
+      const { index, size } = action.payload;
 
-      gifProperties.selectedSize = action.payload;
+      state.elements[index].size = size;
     },
     updateGifPosition: (state, action) => {
       const { index, x, y } = action.payload;

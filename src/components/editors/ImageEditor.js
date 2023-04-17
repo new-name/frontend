@@ -139,52 +139,60 @@ export default function ImageEditor() {
         </View>
       )}
       <View style={styles.controllerContainer}>
-        {imageEditor.map((item) => (
-          <TouchableOpacity
-            onPress={() => handleSelectedProperty(item.text)}
-            key={item.iconName}
-            style={styles.iconWithText}
-          >
-            {item.icon === ICON_FONT && (
-              <FontAwesome
-                name={item.iconName}
-                size={30}
-                color={
-                  selectedProperty === item.text ? ACTIVE_COLOR : UNACTIVE_COLOR
-                }
-              />
-            )}
-            {item.icon === ICON_MATERIAL_C && (
-              <MaterialCommunityIcons
-                name={item.iconName}
-                size={30}
-                color={
-                  selectedProperty === item.text ? ACTIVE_COLOR : UNACTIVE_COLOR
-                }
-              />
-            )}
-            {item.icon === ICON_IOS && (
-              <Ionicons
-                name={item.iconName}
-                size={30}
-                color={
-                  selectedProperty === item.text ? ACTIVE_COLOR : UNACTIVE_COLOR
-                }
-              />
-            )}
-            <Text
-              style={{
-                ...styles.iconText,
-                color:
-                  selectedProperty === item.text
-                    ? ACTIVE_COLOR
-                    : UNACTIVE_COLOR,
-              }}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {imageEditor.map((item) => (
+            <TouchableOpacity
+              onPress={() => handleSelectedProperty(item.text)}
+              key={item.iconName}
+              style={styles.iconWithText}
             >
-              {item.text}
-            </Text>
-          </TouchableOpacity>
-        ))}
+              {item.icon === ICON_FONT && (
+                <FontAwesome
+                  name={item.iconName}
+                  size={30}
+                  color={
+                    selectedProperty === item.text
+                      ? ACTIVE_COLOR
+                      : UNACTIVE_COLOR
+                  }
+                />
+              )}
+              {item.icon === ICON_MATERIAL_C && (
+                <MaterialCommunityIcons
+                  name={item.iconName}
+                  size={30}
+                  color={
+                    selectedProperty === item.text
+                      ? ACTIVE_COLOR
+                      : UNACTIVE_COLOR
+                  }
+                />
+              )}
+              {item.icon === ICON_IOS && (
+                <Ionicons
+                  name={item.iconName}
+                  size={30}
+                  color={
+                    selectedProperty === item.text
+                      ? ACTIVE_COLOR
+                      : UNACTIVE_COLOR
+                  }
+                />
+              )}
+              <Text
+                style={{
+                  ...styles.iconText,
+                  color:
+                    selectedProperty === item.text
+                      ? ACTIVE_COLOR
+                      : UNACTIVE_COLOR,
+                }}
+              >
+                {item.text}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
       </View>
     </View>
   );
@@ -255,6 +263,7 @@ const styles = StyleSheet.create({
   iconWithText: {
     flex: 1,
     alignItems: "center",
+    width: SCREEN_WIDTH * 0.185,
   },
   iconText: {
     marginTop: 5,

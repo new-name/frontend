@@ -2,6 +2,7 @@ import {
   FontAwesome,
   MaterialCommunityIcons,
   Ionicons,
+  Entypo,
 } from "@expo/vector-icons";
 import { useEffect } from "react";
 import {
@@ -20,7 +21,12 @@ import {
   UNACTIVE_COLOR,
 } from "../../constants/color";
 import { gifEditor } from "../../constants/footerItems";
-import { ICON_FONT, ICON_IOS, ICON_MATERIAL_C } from "../../constants/icon";
+import {
+  ICON_FONT,
+  ICON_IOS,
+  ICON_MATERIAL_C,
+  ICON_ENTYPO,
+} from "../../constants/icon";
 import { GIF_LIBRARY } from "../../constants/property";
 import {
   APP_FOOTER_HEIGHT,
@@ -83,6 +89,17 @@ export default function GifEditor() {
               )}
               {item.icon === ICON_IOS && (
                 <Ionicons
+                  name={item.iconName}
+                  size={30}
+                  color={
+                    selectedProperty === item.text
+                      ? ACTIVE_COLOR
+                      : UNACTIVE_COLOR
+                  }
+                />
+              )}
+              {item.icon === ICON_ENTYPO && (
+                <Entypo
                   name={item.iconName}
                   size={30}
                   color={

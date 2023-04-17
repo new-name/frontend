@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Animated, PanResponder, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { GIF_MOVE } from "../../constants/property";
+import { GIF_MOVE, GIF_SIZE } from "../../constants/property";
 import {
   handleSelectGif,
   updateGifPosition,
@@ -19,14 +19,24 @@ export default function GifElements() {
     (state) => state.gifReducer.gifProperties.selectedIndex,
   );
 
+  const animationRefs = useRef({});
   const [moveResponder, setMoveResponder] = useState({});
   const selectedIndexRef = useRef(null);
   const positionRef = useRef({ x: 0, y: 0 });
   const movePan = useRef(new Animated.ValueXY()).current;
 
+  const [resizeResponder, setResizeResponder] = useState({});
+  const sizeRef = useRef(null);
+
   const handleSelect = (index) => {
     selectedIndexRef.current = index;
     dispatch(handleSelectGif(index));
+  };
+
+  const getDistance = (touch1, touch2) => {
+    const dx = touch1.pageX - touch2.pageX;
+    const dy = touch1.pageY - touch2.pageY;
+    return Math.sqrt(dx * dx + dy * dy);
   };
 
   const renderGifElements = (element, index) => {
@@ -39,6 +49,8 @@ export default function GifElements() {
 
     const gifElements = (
       <Lottie
+        ref={(element) => (animationRefs.current[index] = element)}
+        onLayout={() => animationRefs.current[index]?.play()}
         style={{ width: element[index].size }}
         source={element[index].source}
         autoPlay
