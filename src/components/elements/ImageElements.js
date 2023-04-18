@@ -1,11 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  Animated,
-  Image,
-  PanResponder,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Animated, Image, PanResponder, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 import { IMG_MOVE, IMG_SIZE } from "../../constants/property";
@@ -44,6 +38,7 @@ export default function ImageElements() {
   const getDistance = (touch1, touch2) => {
     const dx = touch1.pageX - touch2.pageX;
     const dy = touch1.pageY - touch2.pageY;
+
     return Math.sqrt(dx * dx + dy * dy);
   };
 

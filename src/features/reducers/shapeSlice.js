@@ -1,6 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { STROKE } from "../../constants/property";
+import { ICON, STROKE, LINE } from "../../constants/property";
+import {
+  MAX_ICON_SIZE,
+  MAX_LINE_SIZE,
+  MIN_ICON_SIZE,
+  MIN_LINE_SIZE,
+  SCROLL_HANDLE_HEIGHT,
+} from "../../constants/size";
 
 const shapeProperties = {
   selectedProperty: "",
@@ -59,6 +66,34 @@ export const shapeSlice = createSlice({
         state.elements[index].color = selectedColor;
       }
     },
+    updateShapeSize: (state, action) => {
+      const index = state.shapeProperties.selectedIndex;
+      const { width, height, handlerPositionOfY, scrollHeight } =
+        action.payload;
+
+      if (state.elements[index].type === ICON) {
+        const iconSize =
+          MIN_ICON_SIZE +
+          ((scrollHeight - SCROLL_HANDLE_HEIGHT - handlerPositionOfY) /
+            (scrollHeight - SCROLL_HANDLE_HEIGHT)) *
+            (MAX_ICON_SIZE - MIN_ICON_SIZE);
+
+        state.elements[index].size = iconSize;
+      }
+
+      if (state.elements[index].type === LINE) {
+        const lineSize =
+          MIN_LINE_SIZE +
+          ((scrollHeight - SCROLL_HANDLE_HEIGHT - handlerPositionOfY) /
+            (scrollHeight - SCROLL_HANDLE_HEIGHT)) *
+            (MAX_LINE_SIZE - MIN_LINE_SIZE);
+
+        state.elements[index].x2 = lineSize;
+      }
+
+      state.elements[index].width = width;
+      state.elements[index].height = height;
+    },
     updateIconModalState: (state, action) => {
       state.isIconModalVisible = action.payload;
 
@@ -75,5 +110,6 @@ export const {
   updateShapePosition,
   updateShapeColor,
   handleRenderShapes,
+  updateShapeSize,
 } = shapeSlice.actions;
 export default shapeSlice.reducer;

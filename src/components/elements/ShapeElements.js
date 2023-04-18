@@ -10,10 +10,12 @@ import {
   LINE,
   RECTANGLE,
   SHAPE_MOVE,
+  SHAPE_SIZE,
 } from "../../constants/property";
 import {
   handleSelectShape,
   updateShapePosition,
+  updateShapeSize,
 } from "../../features/reducers/shapeSlice";
 
 export default function ShapeElements() {
@@ -31,8 +33,21 @@ export default function ShapeElements() {
   const positionRef = useRef({ x: 0, y: 0 });
   const movePan = useRef(new Animated.ValueXY()).current;
 
+  const [resizeResponder, setResizeResponder] = useState({});
+  const shapeRef = useRef({});
+  const scaleRef = useRef(new Animated.Value(1)).current;
+  const sizePositionRef = useRef(0);
+
+  const getDistance = (touch1, touch2) => {
+    const dx = touch1.pageX - touch2.pageX;
+    const dy = touch1.pageY - touch2.pageY;
+
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
   const handleSelect = (index) => {
     selectedIndexRef.current = index;
+    shapeRef.current = shapeElements;
     dispatch(handleSelectShape(index));
   };
 
@@ -104,6 +119,19 @@ export default function ShapeElements() {
       );
     }
 
+    if (isSelected && selectedShapeProperty === SHAPE_SIZE) {
+      return (
+        <Animated.View
+          key={Date.now() + index}
+          onPress={() => handleSelect(index)}
+          style={[positionStyle, { transform: [{ scale: scaleRef }] }]}
+          {...resizeResponder.panHandlers}
+        >
+          <TouchableOpacity>{shapeElements}</TouchableOpacity>
+        </Animated.View>
+      );
+    }
+
     if (isSelected && selectedShapeProperty === SHAPE_MOVE) {
       return (
         <Animated.View
@@ -132,6 +160,58 @@ export default function ShapeElements() {
       </TouchableOpacity>
     );
   };
+
+  useEffect(() => {
+    setResizeResponder(
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderGrant: ({ nativeEvent }) => {
+          const { touches } = nativeEvent;
+          if (selectedIndexRef.current === null || touches.length !== 2) return;
+
+          if (touches.length === 2) {
+            const [touch1, touch2] = touches;
+            const distance = getDistance(touch1, touch2);
+
+            sizePositionRef.current = distance;
+            scaleRef._startingDistance = distance;
+          }
+        },
+        onPanResponderMove: ({ nativeEvent }) => {
+          const { touches } = nativeEvent;
+          if (selectedIndexRef.current === null || touches.length !== 2) return;
+
+          if (touches.length === 2) {
+            const [touch1, touch2] = touches;
+            const distance = getDistance(touch1, touch2);
+
+            const scaleFactor = distance / scaleRef._startingDistance;
+            scaleRef.setValue(scaleFactor);
+          }
+        },
+        onPanResponderRelease: ({ nativeEvent }) => {
+          if (selectedIndexRef.current === null) return;
+
+          const newWidth =
+            shapeRef.current[selectedIndexRef.current]?.width * scaleRef._value;
+          const newHeight =
+            shapeRef.current[selectedIndexRef.current]?.height *
+            scaleRef._value;
+
+          dispatch(
+            updateShapeSize({
+              index: selectedIndexRef.current,
+              width: newWidth,
+              height: newHeight,
+            }),
+          );
+
+          scaleRef.setValue(1);
+        },
+      }),
+    );
+  }, [scaleRef]);
 
   useEffect(() => {
     setMoveResponder(

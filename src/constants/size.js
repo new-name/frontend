@@ -13,6 +13,9 @@ export const EDIT_WIDTH = screenWidth * 0.8;
 
 export const MIN_TEXT_SIZE = 10;
 export const MAX_TEXT_SIZE = 100;
-
 export const MIN_GIF_SIZE = 30;
 export const MAX_GIF_SIZE = 420;
+export const MIN_ICON_SIZE = 30;
+export const MAX_ICON_SIZE = 120;
+export const MIN_LINE_SIZE = 30;
+export const MAX_LINE_SIZE = 360;

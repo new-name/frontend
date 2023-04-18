@@ -19,7 +19,7 @@ import {
   UNACTIVE_COLOR,
   SHADOW_COLOR,
 } from "../../constants/color";
-import { imageEditor } from "../../constants/footerItems";
+import { imageFooter } from "../../constants/footerItems";
 import { ICON_FONT, ICON_IOS, ICON_MATERIAL_C } from "../../constants/icon";
 import { IMG_UNSPLASH } from "../../constants/property";
 import {
@@ -54,7 +54,7 @@ export default function ImageEditor() {
     <View>
       <View style={styles.controllerContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {imageEditor.map((item) => (
+          {imageFooter.map((item) => (
             <TouchableOpacity
               onPress={() => handleSelectedProperty(item.text)}
               key={item.iconName}

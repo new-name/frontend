@@ -12,7 +12,7 @@ export const editorFooter = [
   { iconName: "layers", text: "Layer" },
 ];
 
-export const shapeEditor = [
+export const shapeFooter = [
   { icon: "Ionicons", iconName: "move", text: "Move" },
   {
     icon: "MaterialCommunityIcons",
@@ -35,7 +35,7 @@ export const shapeEditor = [
   { icon: "Ionicons", iconName: "remove-circle-outline", text: "Remove" },
 ];
 
-export const textEditor = [
+export const textFooter = [
   { icon: "Ionicons", iconName: "move", text: "Move" },
   { icon: "Ionicons", iconName: "add", text: "Add" },
   { icon: "MaterialIcons", iconName: "edit", text: "Edit" },
@@ -45,7 +45,7 @@ export const textEditor = [
   { icon: "Ionicons", iconName: "remove-circle-outline", text: "Remove" },
 ];
 
-export const gifEditor = [
+export const gifFooter = [
   { icon: "Entypo", iconName: "folder-video", text: "Library" },
   { icon: "Ionicons", iconName: "move", text: "Move" },
   {
@@ -58,7 +58,7 @@ export const gifEditor = [
   { icon: "Ionicons", iconName: "remove-circle-outline", text: "Remove" },
 ];
 
-export const imageEditor = [
+export const imageFooter = [
   {
     icon: "MaterialCommunityIcons",
     iconName: "folder-image",

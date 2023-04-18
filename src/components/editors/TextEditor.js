@@ -18,7 +18,7 @@ import {
   SHADOW_COLOR,
   UNACTIVE_COLOR,
 } from "../../constants/color";
-import { textEditor } from "../../constants/footerItems";
+import { textFooter } from "../../constants/footerItems";
 import { ICON_FONT, ICON_MATERIAL, ICON_IOS } from "../../constants/icon";
 import {
   TEXT_ADD,
@@ -225,7 +225,7 @@ export default function TextEditor() {
         </View>
       )}
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {textEditor.map((item) => (
+        {textFooter.map((item) => (
           <TouchableOpacity
             onPress={() => handleSelectTextEditorProperty(item.text)}
             key={item.iconName}

@@ -22,7 +22,7 @@ import {
   SHADOW_COLOR,
   UNACTIVE_COLOR,
 } from "../../constants/color";
-import { gifEditor } from "../../constants/footerItems";
+import { gifFooter } from "../../constants/footerItems";
 import {
   ICON_FONT,
   ICON_IOS,
@@ -61,12 +61,12 @@ export default function GifEditor() {
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderMove: (event, gestureState) => {
-        handleResizeOfText(gestureState.moveY);
+        handleResize(gestureState.moveY);
       },
     }),
   ).current;
 
-  const handleResizeOfText = async (y) => {
+  const handleResize = async (y) => {
     if (!customScrollbarRef.current) return;
 
     customScrollbarRef.current.measure((fx, fy, width, height, px, py) => {
@@ -117,7 +117,7 @@ export default function GifEditor() {
           </View>
         )}
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {gifEditor.map((item) => (
+          {gifFooter.map((item) => (
             <TouchableOpacity
               onPress={() => handleSelectedProperty(item.text)}
               key={item.iconName}
