@@ -17,19 +17,20 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   ACTIVE_COLOR,
-  EDITOR_COLOR,
+  WHITE_COLOR,
   SCROLLBAR_COLOR,
   SHADOW_COLOR,
   UNACTIVE_COLOR,
 } from "../../constants/color";
 import { gifFooter } from "../../constants/footerItems";
 import {
+  GIF_LIBRARY,
+  GIF_SIZE,
   ICON_FONT,
   ICON_IOS,
   ICON_MATERIAL_C,
   ICON_ENTYPO,
-} from "../../constants/icon";
-import { GIF_LIBRARY, GIF_SIZE } from "../../constants/property";
+} from "../../constants/property";
 import {
   APP_FOOTER_HEIGHT,
   MAX_GIF_SIZE,
@@ -192,7 +193,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: SCREEN_WIDTH,
     height: (SCREEN_HEIGHT * 2) / 3,
-    backgroundColor: EDITOR_COLOR,
+    backgroundColor: WHITE_COLOR,
     shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: SCREEN_WIDTH,
     height: APP_FOOTER_HEIGHT,
-    backgroundColor: EDITOR_COLOR,
+    backgroundColor: WHITE_COLOR,
     shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,

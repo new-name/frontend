@@ -19,19 +19,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   ACTIVE_COLOR,
-  EDITOR_COLOR,
+  WHITE_COLOR,
   SCROLLBAR_COLOR,
   SHADOW_COLOR,
   UNACTIVE_COLOR,
 } from "../../constants/color";
 import { shapeFooter } from "../../constants/footerItems";
-import {
-  ICON_ENTYPO,
-  ICON_FONT,
-  ICON_IOS,
-  ICON_MATERIAL,
-  ICON_MATERIAL_C,
-} from "../../constants/icon";
 import {
   SHAPE_COLOR,
   SHAPE_ICONS,
@@ -43,6 +36,11 @@ import {
   LINE,
   SHAPE_SIZE,
   ICON,
+  ICON_ENTYPO,
+  ICON_FONT,
+  ICON_IOS,
+  ICON_MATERIAL,
+  ICON_MATERIAL_C,
 } from "../../constants/property";
 import {
   APP_FOOTER_HEIGHT,
@@ -115,7 +113,7 @@ export default function ShapeEditor() {
           height: 200,
           stroke: UNACTIVE_COLOR,
           strokeWidth: 2,
-          color: EDITOR_COLOR,
+          color: WHITE_COLOR,
           zIndex: 0,
         };
       }
@@ -129,7 +127,7 @@ export default function ShapeEditor() {
           height: 100,
           stroke: UNACTIVE_COLOR,
           strokeWidth: 2,
-          color: EDITOR_COLOR,
+          color: WHITE_COLOR,
           zIndex: 0,
         };
       }
@@ -279,7 +277,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: SCREEN_WIDTH,
     height: APP_FOOTER_HEIGHT,
-    backgroundColor: EDITOR_COLOR,
+    backgroundColor: WHITE_COLOR,
     shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,
@@ -294,7 +292,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: SCREEN_WIDTH,
     height: APP_FOOTER_HEIGHT,
-    backgroundColor: EDITOR_COLOR,
+    backgroundColor: WHITE_COLOR,
     shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,

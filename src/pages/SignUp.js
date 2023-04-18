@@ -12,7 +12,7 @@ import {
 } from "react-native";
 
 import Logo from "../components/Logo";
-import { CONTENT_COLOR, UNACTIVE_COLOR } from "../constants/color";
+import { WHITE_COLOR, UNACTIVE_COLOR } from "../constants/color";
 import { CONTAINER_WIDTH, SCREEN_HEIGHT } from "../constants/size";
 import api from "../features/api";
 import Layout from "../layout/Layout";
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: UNACTIVE_COLOR,
     borderRadius: 5,
-    backgroundColor: CONTENT_COLOR,
+    backgroundColor: WHITE_COLOR,
   },
   registerButton: {
     justifyContent: "center",

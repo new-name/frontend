@@ -14,10 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   ACTIVE_COLOR,
-  CONTENT_COLOR,
-  EDITOR_COLOR,
+  WHITE_COLOR,
   SUB_GRAY_COLOR,
-  UNACTIVE_COLOR,
 } from "../../constants/color";
 import { IMAGE_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import api from "../../features/api";
@@ -209,7 +207,7 @@ const styles = StyleSheet.create({
   searchBar: {
     width: SCREEN_WIDTH * 0.9,
     height: SCREEN_HEIGHT * 0.05,
-    backgroundColor: EDITOR_COLOR,
+    backgroundColor: WHITE_COLOR,
     paddingHorizontal: 10,
     borderWidth: 2,
     borderRadius: 10,

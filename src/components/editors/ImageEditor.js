@@ -3,7 +3,7 @@ import {
   MaterialCommunityIcons,
   Ionicons,
 } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   View,
   Text,
@@ -15,13 +15,17 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   ACTIVE_COLOR,
-  EDITOR_COLOR,
+  WHITE_COLOR,
   UNACTIVE_COLOR,
   SHADOW_COLOR,
 } from "../../constants/color";
 import { imageFooter } from "../../constants/footerItems";
-import { ICON_FONT, ICON_IOS, ICON_MATERIAL_C } from "../../constants/icon";
-import { IMG_UNSPLASH } from "../../constants/property";
+import {
+  IMG_UNSPLASH,
+  ICON_FONT,
+  ICON_IOS,
+  ICON_MATERIAL_C,
+} from "../../constants/property";
 import {
   APP_FOOTER_HEIGHT,
   IMAGE_WIDTH,
@@ -118,7 +122,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: SCREEN_WIDTH,
     height: (SCREEN_HEIGHT * 2) / 3,
-    backgroundColor: EDITOR_COLOR,
+    backgroundColor: WHITE_COLOR,
     shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,
@@ -136,7 +140,7 @@ const styles = StyleSheet.create({
   searchBar: {
     width: IMAGE_WIDTH,
     height: SCREEN_HEIGHT * 0.05,
-    backgroundColor: EDITOR_COLOR,
+    backgroundColor: WHITE_COLOR,
     paddingHorizontal: 10,
     borderWidth: 2,
     borderRadius: 10,
@@ -161,7 +165,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: SCREEN_WIDTH,
     height: APP_FOOTER_HEIGHT,
-    backgroundColor: EDITOR_COLOR,
+    backgroundColor: WHITE_COLOR,
     shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,

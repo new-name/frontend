@@ -15,11 +15,7 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  ACTIVE_COLOR,
-  CONTENT_COLOR,
-  EDITOR_COLOR,
-} from "../../constants/color";
+import { ACTIVE_COLOR, WHITE_COLOR } from "../../constants/color";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import {
   handleRenderIcons,
@@ -166,7 +162,7 @@ const styles = StyleSheet.create({
   searchBar: {
     width: SCREEN_WIDTH * 0.9,
     height: SCREEN_HEIGHT * 0.05,
-    backgroundColor: EDITOR_COLOR,
+    backgroundColor: WHITE_COLOR,
     paddingHorizontal: 10,
     borderWidth: 2,
     borderRadius: 10,
@@ -183,7 +179,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderWidth: 1,
     borderRadius: 10,
-    backgroundColor: CONTENT_COLOR,
+    backgroundColor: WHITE_COLOR,
   },
   iconProperty: {
     justifyContent: "center",

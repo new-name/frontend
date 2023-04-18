@@ -13,13 +13,12 @@ import { useSelector, useDispatch } from "react-redux";
 
 import {
   ACTIVE_COLOR,
-  EDITOR_COLOR,
+  WHITE_COLOR,
   SCROLLBAR_COLOR,
   SHADOW_COLOR,
   UNACTIVE_COLOR,
 } from "../../constants/color";
 import { textFooter } from "../../constants/footerItems";
-import { ICON_FONT, ICON_MATERIAL, ICON_IOS } from "../../constants/icon";
 import {
   TEXT_ADD,
   TEXT_COLOR,
@@ -27,6 +26,9 @@ import {
   TEXT_REMOVE,
   TEXT_SIZE,
   TEXT_STYLE,
+  ICON_FONT,
+  ICON_MATERIAL,
+  ICON_IOS,
 } from "../../constants/property";
 import {
   APP_FOOTER_HEIGHT,
@@ -283,7 +285,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: SCREEN_WIDTH,
     height: APP_FOOTER_HEIGHT,
-    backgroundColor: EDITOR_COLOR,
+    backgroundColor: WHITE_COLOR,
     shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,

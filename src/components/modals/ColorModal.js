@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   ACTIVE_COLOR,
-  EDITOR_COLOR,
+  WHITE_COLOR,
   SUB_GRAY_COLOR,
   UNACTIVE_COLOR,
 } from "../../constants/color";
@@ -173,7 +173,7 @@ export default function ColorModal() {
                     ...styles.colors,
                     backgroundColor: color,
                     borderWidth: selectedColor === color ? 2 : 0,
-                    borderColor: selectedColor === color ? EDITOR_COLOR : null,
+                    borderColor: selectedColor === color ? WHITE_COLOR : null,
                   }}
                 />
               ))}
@@ -207,7 +207,7 @@ export default function ColorModal() {
                   ...styles.selectedColor,
                   backgroundColor:
                     selectedMode === STROKE
-                      ? EDITOR_COLOR
+                      ? WHITE_COLOR
                       : hslToHsla(selectedColor, selectedColorOpacity),
                   borderColor:
                     selectedMode === STROKE
@@ -223,14 +223,14 @@ export default function ColorModal() {
                     style={{
                       ...styles.fill,
                       backgroundColor:
-                        selectedMode === FILL ? ACTIVE_COLOR : EDITOR_COLOR,
+                        selectedMode === FILL ? ACTIVE_COLOR : WHITE_COLOR,
                     }}
                   >
                     <Text
                       style={{
                         fontSize: 24,
                         color:
-                          selectedMode === FILL ? EDITOR_COLOR : UNACTIVE_COLOR,
+                          selectedMode === FILL ? WHITE_COLOR : UNACTIVE_COLOR,
                       }}
                     >
                       Fill
@@ -242,7 +242,7 @@ export default function ColorModal() {
                       style={{
                         ...styles.fill,
                         backgroundColor:
-                          selectedMode === STROKE ? ACTIVE_COLOR : EDITOR_COLOR,
+                          selectedMode === STROKE ? ACTIVE_COLOR : WHITE_COLOR,
                       }}
                     >
                       <Text
@@ -250,7 +250,7 @@ export default function ColorModal() {
                           fontSize: 24,
                           color:
                             selectedMode === STROKE
-                              ? EDITOR_COLOR
+                              ? WHITE_COLOR
                               : UNACTIVE_COLOR,
                         }}
                       >
@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH * 0.8,
     height: SCREEN_HEIGHT * 0.05,
     marginVertical: 30,
-    backgroundColor: EDITOR_COLOR,
+    backgroundColor: WHITE_COLOR,
     borderWidth: 1,
     borderRadius: 20,
   },
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
   colors: {
     width: 28,
     height: 28,
-    backgroundColor: EDITOR_COLOR,
+    backgroundColor: WHITE_COLOR,
   },
   opacity: {
     width: SCREEN_WIDTH * 0.8,
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     borderWidth: 2,
-    borderColor: EDITOR_COLOR,
+    borderColor: WHITE_COLOR,
     left: SCREEN_WIDTH * 0.8 - 60,
   },
   border: {

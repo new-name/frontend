@@ -13,10 +13,10 @@ import {
 
 import Logo from "../components/Logo";
 import {
-  CONTENT_COLOR,
-  LOGIN_BUTTON_COLOR,
+  WHITE_COLOR,
   SUB_GRAY_COLOR,
   UNACTIVE_COLOR,
+  ACTIVE_COLOR,
 } from "../constants/color";
 import {
   CONTAINER_WIDTH,
@@ -93,7 +93,7 @@ export default function SignIn({ navigation }) {
             style={styles.loginButton}
             onPress={handleSignInPress}
           >
-            <Text style={{ fontSize: 20, color: CONTENT_COLOR }}>로그인</Text>
+            <Text style={{ fontSize: 20, color: WHITE_COLOR }}>로그인</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.bottomContainer}>
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: UNACTIVE_COLOR,
     borderRadius: 5,
-    backgroundColor: CONTENT_COLOR,
+    backgroundColor: WHITE_COLOR,
   },
   loginButton: {
     justifyContent: "center",
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     marginTop: SCREEN_HEIGHT * 0.02,
     fontSize: 20,
     borderRadius: 10,
-    backgroundColor: LOGIN_BUTTON_COLOR,
+    backgroundColor: ACTIVE_COLOR,
   },
   bottomContainer: {
     flex: 1.5,
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: SUB_GRAY_COLOR,
     borderRadius: 10,
-    backgroundColor: CONTENT_COLOR,
+    backgroundColor: WHITE_COLOR,
   },
   bottomLogo: {
     margin: 40,
@@ -180,6 +180,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: SUB_GRAY_COLOR,
     borderRadius: 5,
-    backgroundColor: CONTENT_COLOR,
+    backgroundColor: WHITE_COLOR,
   },
 });

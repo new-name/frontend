@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   ACTIVE_COLOR,
-  CONTENT_COLOR,
+  WHITE_COLOR,
   SUB_GRAY_COLOR,
   UNACTIVE_COLOR,
 } from "../../constants/color";
@@ -190,6 +190,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: SCREEN_WIDTH * 0.4,
     borderRadius: 10,
-    backgroundColor: CONTENT_COLOR,
+    backgroundColor: WHITE_COLOR,
   },
 });

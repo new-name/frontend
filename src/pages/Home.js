@@ -11,11 +11,7 @@ import {
 } from "react-native";
 
 import Logo from "../components/Logo";
-import {
-  CONTENT_COLOR,
-  SHADOW_COLOR,
-  UNACTIVE_COLOR,
-} from "../constants/color";
+import { WHITE_COLOR, SHADOW_COLOR, UNACTIVE_COLOR } from "../constants/color";
 import { homeFooter } from "../constants/footerItems";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/size";
 import AppFooter from "../layout/AppFooter";
@@ -115,7 +111,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: CONTENT_COLOR,
+    backgroundColor: WHITE_COLOR,
   },
   header: {
     flex: 1,
@@ -153,7 +149,7 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH * 0.35,
     height: SCREEN_HEIGHT * 0.29,
     margin: 5,
-    backgroundColor: CONTENT_COLOR,
+    backgroundColor: WHITE_COLOR,
     shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,
