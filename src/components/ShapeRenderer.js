@@ -6,7 +6,7 @@ import Svg, { Rect, Ellipse, Line } from "react-native-svg";
 import { ACTIVE_COLOR } from "../constants/color";
 import { ICON, RECTANGLE, ELLIPSE, LINE } from "../constants/property";
 
-export default function ShapeRenderer({ element, isSelected }) {
+export default function ShapeRenderer({ element, isSelected, sizeProperty }) {
   const selectedBorderStyle = isSelected
     ? {
         borderWidth: 2,
@@ -15,12 +15,12 @@ export default function ShapeRenderer({ element, isSelected }) {
       }
     : {};
 
-  switch (element.type) {
+  switch (element.shapeType) {
     case ICON:
       return (
         <MaterialCommunityIcons
           name={element.name}
-          size={element.size}
+          size={sizeProperty || element.size}
           color={element.color}
           style={selectedBorderStyle}
           width={element.size}
@@ -29,13 +29,13 @@ export default function ShapeRenderer({ element, isSelected }) {
     case RECTANGLE:
       return (
         <Svg
-          width={element.width}
-          height={element.height}
+          width={sizeProperty * 1.5 || element.width}
+          height={sizeProperty * 1.5 || element.height}
           style={selectedBorderStyle}
         >
           <Rect
-            width={element.width}
-            height={element.height}
+            width={sizeProperty * 1.5 || element.width}
+            height={sizeProperty * 1.5 || element.height}
             stroke={element.stroke}
             strokeWidth={element.strokeWidth}
             fill={element.color}
@@ -45,15 +45,15 @@ export default function ShapeRenderer({ element, isSelected }) {
     case ELLIPSE:
       return (
         <Svg
-          height={element.height * 2}
-          width={element.width * 2}
+          height={sizeProperty * 2 || element.height * 2}
+          width={sizeProperty * 2 || element.width * 2}
           style={selectedBorderStyle}
         >
           <Ellipse
-            cx={element.width}
-            cy={element.height}
-            rx={element.width * 0.98}
-            ry={element.height * 0.98}
+            cx={sizeProperty || element.width}
+            cy={sizeProperty || element.height}
+            rx={sizeProperty * 0.98 || element.width * 0.98}
+            ry={sizeProperty * 0.98 || element.height * 0.98}
             stroke={element.stroke}
             strokeWidth={element.strokeWidth}
             fill={element.color}
@@ -62,11 +62,15 @@ export default function ShapeRenderer({ element, isSelected }) {
       );
     case LINE:
       return (
-        <Svg height={20} width={element.x2} style={selectedBorderStyle}>
+        <Svg
+          height={20}
+          width={sizeProperty * 3 || element.x2}
+          style={selectedBorderStyle}
+        >
           <Line
             x1={element.x1}
             y1={element.y1}
-            x2={element.x2}
+            x2={sizeProperty * 3 || element.x2}
             y2={element.y2}
             stroke={element.stroke}
             strokeWidth={element.strokeWidth}
@@ -81,4 +85,7 @@ export default function ShapeRenderer({ element, isSelected }) {
 ShapeRenderer.propTypes = {
   element: PropTypes.object.isRequired,
   isSelected: PropTypes.bool.isRequired,
+  sizeProperty: PropTypes.number,
+  circSizeProperty: PropTypes.number,
+  lineSizeProperty: PropTypes.number,
 };

@@ -15,7 +15,12 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { ACTIVE_COLOR, WHITE_COLOR } from "../../constants/color";
+import {
+  ACTIVE_COLOR,
+  UNACTIVE_COLOR,
+  WHITE_COLOR,
+} from "../../constants/color";
+import { ICON, SHAPE } from "../../constants/property";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import {
   handleRenderIcons,
@@ -40,10 +45,11 @@ export default function IconModal() {
     const layerNumber = Object.keys(allElements).length;
     const nextIndex = Object.keys(shapeElements).length;
     const property = {
-      type: "icon",
+      type: SHAPE,
+      shapeType: ICON,
       name: selectedIcon,
       size: 30,
-      color: "gray",
+      color: UNACTIVE_COLOR,
       x: 0,
       y: 0,
       zIndex: layerNumber,

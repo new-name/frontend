@@ -34,8 +34,6 @@ export const editorSlice = createSlice({
         state.allElements[allElements[lastObject].zIndex] =
           allElements[lastObject];
       }
-
-      console.log(state.allElements, "why?");
     },
   },
 });

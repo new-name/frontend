@@ -5,6 +5,7 @@ import {
   MIN_TEXT_SIZE,
   SCROLL_HANDLE_HEIGHT,
 } from "../../constants/size";
+import { TEXT } from "../../constants/property";
 
 const textProperties = {
   selectedProperty: "",
@@ -64,6 +65,7 @@ export const textSlice = createSlice({
       const { layerNumber } = action.payload;
       const nextIndex = Object.keys(state.elements).length;
       const newTextModel = {
+        type: TEXT,
         text: "Sample Text",
         x: 0,
         y: 0,

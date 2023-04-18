@@ -17,6 +17,7 @@ import {
   SUB_GRAY_COLOR,
   UNACTIVE_COLOR,
 } from "../../constants/color";
+import { GIF } from "../../constants/property";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import api from "../../features/api";
 import {
@@ -44,7 +45,7 @@ export default function GifModal() {
     const layerNumber = Object.keys(allElements).length;
     const nextIndex = Object.keys(gifElements).length;
     const property = {
-      type: "gif",
+      type: GIF,
       x: 0,
       y: 0,
       source: selected,

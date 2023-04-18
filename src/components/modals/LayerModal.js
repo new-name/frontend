@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import Lottie from "lottie-react-native";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   Image,
   Modal,
@@ -32,6 +32,10 @@ export default function LayerModal() {
   const animationRefs = useRef({});
   const allElements = useSelector((state) => state.editorReducer.allElements);
 
+  const sortedElements = Object.keys(allElements)
+    .sort((a, b) => allElements[b].zIndex - allElements[a].zIndex)
+    .map((key) => allElements[key]);
+
   const updateLayers = () => {
     console.log("update layer");
   };
@@ -45,13 +49,19 @@ export default function LayerModal() {
           </View>
         );
       case SHAPE:
-        return <ShapeRenderer element={element[index]} isSelected={false} />;
+        return (
+          <ShapeRenderer
+            sizeProperty={40}
+            element={element[index]}
+            isSelected={false}
+          />
+        );
       case IMAGE:
         return (
           <Image
             style={{
-              width: element[index]?.width,
-              height: element[index]?.height,
+              width: element[index].width * 0.2,
+              height: element[index].width * 0.2,
             }}
             source={{ uri: element[index]?.uri }}
           />
@@ -61,7 +71,7 @@ export default function LayerModal() {
           <Lottie
             ref={(element) => (animationRefs.current[index] = element)}
             onLayout={() => animationRefs.current[index]?.play()}
-            style={{ width: element[index]?.size }}
+            style={{ width: element[index]?.size * 0.5 }}
             source={element[index]?.source}
             autoPlay
             loop
@@ -101,21 +111,29 @@ export default function LayerModal() {
         </AppHeader>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <View>
-            <TouchableOpacity style={styles.layer}>
-              <View style={styles.contents}>
-                {Object.keys(allElements).map((element, index) => {
-                  renderElements(allElements, index);
-                })}
-              </View>
-              <TouchableOpacity style={styles.property}>
-                <Ionicons name="lock-closed" size={30} color={UNACTIVE_COLOR} />
-                <Ionicons
-                  name="ios-checkmark-circle-outline"
-                  size={30}
-                  color={ACTIVE_GREEN}
-                />
+            {sortedElements.map((element, index) => (
+              <TouchableOpacity
+                key={sortedElements[index].x + index}
+                style={styles.layer}
+              >
+                <Text>{`Layer ${element.zIndex}`}</Text>
+                <View style={styles.contents}>
+                  {renderElements(sortedElements, index)}
+                </View>
+                <TouchableOpacity style={styles.property}>
+                  <Ionicons
+                    name="lock-closed"
+                    size={30}
+                    color={UNACTIVE_COLOR}
+                  />
+                  <Ionicons
+                    name="ios-checkmark-circle-outline"
+                    size={30}
+                    color={ACTIVE_GREEN}
+                  />
+                </TouchableOpacity>
               </TouchableOpacity>
-            </TouchableOpacity>
+            ))}
           </View>
         </ScrollView>
       </View>
@@ -153,7 +171,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     width: SCREEN_WIDTH * 0.9,
-    height: SCREEN_HEIGHT * 0.1,
+    height: SCREEN_HEIGHT * 0.125,
     paddingHorizontal: 10,
     borderBottomWidth: 1,
     borderBottomColor: UNACTIVE_COLOR,

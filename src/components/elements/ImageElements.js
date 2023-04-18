@@ -54,6 +54,7 @@ export default function ImageElements() {
     const positionStyle = {
       left: element[index]?.x,
       top: element[index]?.y,
+      zIndex: element[index]?.zIndex,
     };
 
     const selectedBorderStyle = isSelected

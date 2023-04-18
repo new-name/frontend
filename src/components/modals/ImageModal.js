@@ -24,6 +24,7 @@ import {
   updateImageModalState,
 } from "../../features/reducers/imageSlice";
 import AppHeader from "../../layout/AppHeader";
+import { IMAGE } from "../../constants/property";
 
 export default function ImageModal() {
   const dispatch = useDispatch();
@@ -44,7 +45,7 @@ export default function ImageModal() {
     const nextIndex = Object.keys(imageElements).length;
     const property = {
       ...selected,
-      type: "image",
+      type: IMAGE,
       x: 0,
       y: 0,
       zIndex: layerNumber,

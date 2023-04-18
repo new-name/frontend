@@ -8,6 +8,7 @@ import {
   RECTANGLE,
   CIRCLE,
   ELLIPSE,
+  SHAPE,
 } from "../../constants/property";
 import {
   MAX_ICON_SIZE,
@@ -44,7 +45,8 @@ export const shapeSlice = createSlice({
       let property;
       if (selectedShapeProperty === RECTANGLE) {
         property = {
-          type: RECTANGLE,
+          type: SHAPE,
+          shapeType: RECTANGLE,
           x: 0,
           y: 0,
           width: 200,
@@ -59,7 +61,8 @@ export const shapeSlice = createSlice({
 
       if (selectedShapeProperty === CIRCLE) {
         property = {
-          type: ELLIPSE,
+          type: SHAPE,
+          shapeType: ELLIPSE,
           x: 0,
           y: 0,
           width: 100,
@@ -74,7 +77,8 @@ export const shapeSlice = createSlice({
 
       if (selectedShapeProperty === LINE) {
         property = {
-          type: LINE,
+          type: SHAPE,
+          shapeType: LINE,
           x: 0,
           y: 0,
           x1: 0,
