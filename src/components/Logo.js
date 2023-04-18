@@ -14,10 +14,10 @@ Logo.propTypes = {
 const styles = (fontSize) =>
   StyleSheet.create({
     container: {
+      justifyContent: "center",
+      alignItems: "center",
       fontSize,
       fontWeight: 600,
-      alignItems: "center",
-      justifyContent: "center",
       color: LOGO,
       letterSpacing: 5,
     },

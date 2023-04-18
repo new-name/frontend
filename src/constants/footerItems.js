@@ -38,7 +38,7 @@ export const shapeFooter = [
 export const textFooter = [
   { icon: "Ionicons", iconName: "move", text: "Move" },
   { icon: "Ionicons", iconName: "add", text: "Add" },
-  { icon: "MaterialIcons", iconName: "edit", text: "Edit" },
+  { icon: "FontAwesome", iconName: "edit", text: "Edit" },
   { icon: "FontAwesome", iconName: "text-height", text: "Size" },
   { icon: "Ionicons", iconName: "ios-color-palette-outline", text: "Color" },
   { icon: "FontAwesome", iconName: "font", text: "Font Style" },

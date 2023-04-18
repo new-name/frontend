@@ -1,22 +1,14 @@
-import { FontAwesome, MaterialIcons, Ionicons } from "@expo/vector-icons";
 import { useState, useEffect, useRef } from "react";
 import {
   View,
-  Text,
   StyleSheet,
-  TouchableOpacity,
   PanResponder,
   ScrollView,
   Alert,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
-import {
-  ACTIVE_COLOR,
-  WHITE_COLOR,
-  SHADOW_COLOR,
-  UNACTIVE_COLOR,
-} from "../../constants/color";
+import { WHITE_COLOR, SHADOW_COLOR } from "../../constants/color";
 import { textFooter } from "../../constants/footerItems";
 import {
   ADD,
@@ -25,9 +17,6 @@ import {
   REMOVE,
   SIZE,
   FONT_STYLE,
-  ICON_FONT,
-  ICON_MATERIAL,
-  ICON_IOS,
 } from "../../constants/property";
 import {
   APP_FOOTER_HEIGHT,
@@ -44,6 +33,7 @@ import {
   updateFontContainerVisible,
 } from "../../features/reducers/textSlice";
 import { handleResize } from "../../utils/handleResize";
+import IconRenderer from "../IconRenderer";
 import SizeSlider from "../SizeSlider";
 
 export default function TextEditor() {
@@ -73,7 +63,7 @@ export default function TextEditor() {
     }),
   ).current;
 
-  const handleSelectTextEditorProperty = (name) => {
+  const handleSelectedProperty = (name) => {
     const newSelectedProperty = selectedProperty === name ? "" : name;
     dispatch(selectText(newSelectedProperty));
   };
@@ -160,50 +150,12 @@ export default function TextEditor() {
       )}
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {textFooter.map((item) => (
-          <TouchableOpacity
-            onPress={() => handleSelectTextEditorProperty(item.text)}
+          <IconRenderer
+            element={item}
+            selectedProperty={selectedProperty}
+            handleSelectedProperty={handleSelectedProperty}
             key={item.iconName}
-            style={styles.iconContainer}
-          >
-            {item.icon === ICON_FONT && (
-              <FontAwesome
-                name={item.iconName}
-                size={30}
-                color={
-                  selectedProperty === item.text ? ACTIVE_COLOR : UNACTIVE_COLOR
-                }
-              />
-            )}
-            {item.icon === ICON_MATERIAL && (
-              <MaterialIcons
-                name={item.iconName}
-                size={30}
-                color={
-                  selectedProperty === item.text ? ACTIVE_COLOR : UNACTIVE_COLOR
-                }
-              />
-            )}
-            {item.icon === ICON_IOS && (
-              <Ionicons
-                name={item.iconName}
-                size={30}
-                color={
-                  selectedProperty === item.text ? ACTIVE_COLOR : UNACTIVE_COLOR
-                }
-              />
-            )}
-            <Text
-              style={{
-                ...styles.iconText,
-                color:
-                  selectedProperty === item.text
-                    ? ACTIVE_COLOR
-                    : UNACTIVE_COLOR,
-              }}
-            >
-              {item.text}
-            </Text>
-          </TouchableOpacity>
+          />
         ))}
       </ScrollView>
     </View>
@@ -225,14 +177,5 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3,
-  },
-  iconContainer: {
-    width: SCREEN_WIDTH * 0.185,
-    alignItems: "center",
-  },
-  iconText: {
-    marginTop: 5,
-    fontSize: 12,
-    color: UNACTIVE_COLOR,
   },
 });

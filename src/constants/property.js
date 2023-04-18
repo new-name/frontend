@@ -1,18 +1,20 @@
-export const MORE = "More";
 export const ADD = "Add";
 export const SIZE = "Size";
 export const COLOR = "Color";
 export const MOVE = "Move";
 export const REMOVE = "Remove";
-export const LIBRARY = "Library";
-export const EDIT = "Edit";
 export const FONT_STYLE = "Font Style";
+export const EDIT = "Edit";
+export const LIBRARY = "Library";
 export const UNSPLASH = "Unsplash";
-export const IMAGE = "Image";
-export const TEXT = "Text";
-export const GIF = "Gif";
+
 export const SHAPE = "Shape";
+export const TEXT = "Text";
+export const IMAGE = "Image";
+export const GIF = "Gif";
 export const ICONS = "Icons";
+export const MORE = "More";
+
 export const CIRCLE = "Circle";
 export const RECTANGLE = "Rectangle";
 export const ELLIPSE = "Ellipse";

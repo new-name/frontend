@@ -60,63 +60,63 @@ export default function ShapeElements() {
     };
 
     let shapeElements;
-
-    if (element[index].type === ICON) {
-      shapeElements = (
-        <MaterialCommunityIcons
-          name={element[index].name}
-          size={element[index].size}
-          color={element[index].color}
-        />
-      );
-    }
-
-    if (element[index].type === RECTANGLE) {
-      shapeElements = (
-        <Svg height={element[index].height} width={element[index].width}>
-          <Rect
-            width={element[index].width}
-            height={element[index].height}
-            stroke={element[index].stroke}
-            strokeWidth={element[index].strokeWidth}
-            fill={element[index].color}
+    switch (element[index].type) {
+      case ICON:
+        shapeElements = (
+          <MaterialCommunityIcons
+            name={element[index].name}
+            size={element[index].size}
+            color={element[index].color}
           />
-        </Svg>
-      );
-    }
-
-    if (element[index].type === ELLIPSE) {
-      shapeElements = (
-        <Svg
-          height={element[index].height * 2}
-          width={element[index].width * 2}
-        >
-          <Ellipse
-            cx={element[index].width}
-            cy={element[index].height}
-            rx={element[index].width * 0.98}
-            ry={element[index].height * 0.98}
-            stroke={element[index].stroke}
-            strokeWidth={element[index].strokeWidth}
-            fill={element[index].color}
-          />
-        </Svg>
-      );
-    }
-
-    if (element[index].type === LINE) {
-      shapeElements = (
-        <Svg height={20} width={element[index].x2}>
-          <Line
-            x1={element[index].x1}
-            y1={element[index].y1}
-            x2={element[index].x2}
-            y2={element[index].y2}
-            stroke={element[index].stroke}
-            strokeWidth={element[index].strokeWidth}
-          />
-        </Svg>
-      );
+        );
+        break;
+      case RECTANGLE:
+        shapeElements = (
+          <Svg height={element[index].height} width={element[index].width}>
+            <Rect
+              width={element[index].width}
+              height={element[index].height}
+              stroke={element[index].stroke}
+              strokeWidth={element[index].strokeWidth}
+              fill={element[index].color}
+            />
+          </Svg>
+        );
+        break;
+      case ELLIPSE:
+        shapeElements = (
+          <Svg
+            height={element[index].height * 2}
+            width={element[index].width * 2}
+          >
+            <Ellipse
+              cx={element[index].width}
+              cy={element[index].height}
+              rx={element[index].width * 0.98}
+              ry={element[index].height * 0.98}
+              stroke={element[index].stroke}
+              strokeWidth={element[index].strokeWidth}
+              fill={element[index].color}
+            />
+          </Svg>
+        );
+        break;
+      case LINE:
+        shapeElements = (
+          <Svg height={20} width={element[index].x2}>
+            <Line
+              x1={element[index].x1}
+              y1={element[index].y1}
+              x2={element[index].x2}
+              y2={element[index].y2}
+              stroke={element[index].stroke}
+              strokeWidth={element[index].strokeWidth}
+            />
+          </Svg>
+        );
+        break;
+      default:
+        break;
     }
 
     if (isSelected && selectedShapeProperty === SIZE) {
