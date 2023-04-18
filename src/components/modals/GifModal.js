@@ -32,6 +32,7 @@ export default function GifModal() {
   const [animationData, setAnimationData] = useState([]);
 
   const gifElements = useSelector((state) => state.gifReducer.elements);
+  const allElements = useSelector((state) => state.editorReducer.allElements);
 
   const animationRefs = useRef([]);
 
@@ -40,6 +41,7 @@ export default function GifModal() {
   );
 
   const updateGifs = () => {
+    const layerNumber = Object.keys(allElements).length;
     const nextIndex = Object.keys(gifElements).length;
     const property = {
       type: "gif",
@@ -47,7 +49,7 @@ export default function GifModal() {
       y: 0,
       source: selected,
       size: SCREEN_WIDTH * 0.4,
-      zIndex: 0,
+      zIndex: layerNumber,
     };
 
     const updatedElements = {

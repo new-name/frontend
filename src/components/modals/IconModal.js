@@ -30,12 +30,14 @@ export default function IconModal() {
   const iconNames = Object.keys(MaterialCommunityIcons.glyphMap).slice(0, 50);
   const [filteredIconNames, setFilteredIconNames] = useState(iconNames);
   const shapeElements = useSelector((state) => state.shapeReducer.elements);
+  const allElements = useSelector((state) => state.editorReducer.allElements);
 
   const isIconModalVisible = useSelector(
     (state) => state.shapeReducer.isIconModalVisible,
   );
 
   const updateIcons = () => {
+    const layerNumber = Object.keys(allElements).length;
     const nextIndex = Object.keys(shapeElements).length;
     const property = {
       type: "icon",
@@ -44,7 +46,7 @@ export default function IconModal() {
       color: "gray",
       x: 0,
       y: 0,
-      zIndex: 0,
+      zIndex: layerNumber,
     };
 
     const updatedShapeElements = {

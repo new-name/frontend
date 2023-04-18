@@ -11,6 +11,7 @@ import FontModal from "../components/modals/FontModal";
 import GifModal from "../components/modals/GifModal";
 import IconModal from "../components/modals/IconModal";
 import ImageModal from "../components/modals/ImageModal";
+import LayerModal from "../components/modals/LayerModal";
 import { CONTENT_COLOR } from "../constants/color";
 import { CONTAINER_WIDTH } from "../constants/size";
 import AppFooter from "../layout/AppFooter";
@@ -27,6 +28,7 @@ export default function Editor() {
       </AppHeader>
       <ContentBox>
         <View style={styles.contentContainer}>
+          <LayerModal />
           <ImageModal />
           <GifModal />
           <FontModal />

@@ -37,6 +37,7 @@ export const shapeSlice = createSlice({
   initialState,
   reducers: {
     renderNewShapes: (state, action) => {
+      const { layerNumber } = action.payload;
       const nextIndex = Object.keys(state.elements).length;
       const selectedShapeProperty = state.shapeProperties.selectedProperty;
 
@@ -52,7 +53,7 @@ export const shapeSlice = createSlice({
           strokeWidth: 3,
           color: WHITE_COLOR,
           rotation: 0,
-          zIndex: 0,
+          zIndex: layerNumber,
         };
       }
 
@@ -67,7 +68,7 @@ export const shapeSlice = createSlice({
           strokeWidth: 2,
           color: WHITE_COLOR,
           rotation: 0,
-          zIndex: 0,
+          zIndex: layerNumber,
         };
       }
 
@@ -83,7 +84,7 @@ export const shapeSlice = createSlice({
           stroke: UNACTIVE_COLOR,
           strokeWidth: 2,
           rotation: 0,
-          zIndex: 0,
+          zIndex: layerNumber,
         };
       }
 

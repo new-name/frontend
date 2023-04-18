@@ -42,6 +42,7 @@ export default function GifElements() {
     const positionStyle = {
       left: element[index]?.x,
       top: element[index]?.y,
+      zIndex: element[index].zIndex,
     };
 
     const selectedBorderStyle = isSelected

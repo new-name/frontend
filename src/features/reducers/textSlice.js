@@ -60,7 +60,8 @@ export const textSlice = createSlice({
 
       state.textProperties.selectedProperty = "";
     },
-    renderNewTextElement: (state) => {
+    renderNewTextElement: (state, action) => {
+      const { layerNumber } = action.payload;
       const nextIndex = Object.keys(state.elements).length;
       const newTextModel = {
         text: "Sample Text",
@@ -70,7 +71,7 @@ export const textSlice = createSlice({
         color: "black",
         fontStyle: "",
         rotate: 0,
-        zIndex: 0,
+        zIndex: layerNumber,
       };
 
       const updatedTextElements = {

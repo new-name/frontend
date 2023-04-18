@@ -33,19 +33,21 @@ export default function ImageModal() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const imageElements = useSelector((state) => state.imageReducer.elements);
+  const allElements = useSelector((state) => state.editorReducer.allElements);
 
   const isModalVisible = useSelector(
     (state) => state.imageReducer.imageModalVisible,
   );
 
   const updateImages = () => {
+    const layerNumber = Object.keys(allElements).length;
     const nextIndex = Object.keys(imageElements).length;
     const property = {
       ...selected,
       type: "image",
       x: 0,
       y: 0,
-      zIndex: 0,
+      zIndex: layerNumber,
     };
 
     const updatedElements = {
@@ -135,7 +137,7 @@ export default function ImageModal() {
             <Text style={{ fontSize: 20, color: SUB_GRAY_COLOR }}>Images</Text>
           </View>
           <TouchableOpacity onPress={updateImages} style={styles.selectIcon}>
-            <Ionicons name="ios-play-sharp" size={30} color={ACTIVE_COLOR} />
+            <Ionicons name="image" size={30} color={ACTIVE_COLOR} />
           </TouchableOpacity>
         </AppHeader>
         <TextInput

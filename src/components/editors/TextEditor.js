@@ -46,6 +46,7 @@ export default function TextEditor() {
     (state) => state.textReducer.textProperties.selectedIndex,
   );
   const textElements = useSelector((state) => state.textReducer.elements);
+  const allElements = useSelector((state) => state.editorReducer.allElements);
 
   const customScrollbarRef = useRef(null);
   const sizeResponder = useRef(
@@ -69,8 +70,10 @@ export default function TextEditor() {
   };
 
   useEffect(() => {
+    const layerNumber = Object.keys(allElements).length;
+
     if (selectedProperty === ADD) {
-      dispatch(renderNewTextElement());
+      dispatch(renderNewTextElement({ layerNumber }));
     }
 
     if (selectedProperty === REMOVE) {

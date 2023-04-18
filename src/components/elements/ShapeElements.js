@@ -1,26 +1,15 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import { Animated, PanResponder, TouchableOpacity } from "react-native";
-import Svg, { Rect, Ellipse, Line } from "react-native-svg";
 import { useDispatch, useSelector } from "react-redux";
 
-import { ACTIVE_COLOR } from "../../constants/color";
-import {
-  ELLIPSE,
-  ICON,
-  LINE,
-  RECTANGLE,
-  MOVE,
-  SIZE,
-  SHAPE,
-  ROTATE,
-} from "../../constants/property";
+import { MOVE, SIZE, SHAPE, ROTATE } from "../../constants/property";
 import {
   handleSelectShape,
   updateShapePosition,
   updateShapeRotation,
   updateShapeSize,
 } from "../../features/reducers/shapeSlice";
+import ShapeRenderer from "../ShapeRenderer";
 
 export default function ShapeElements() {
   const dispatch = useDispatch();
@@ -74,6 +63,7 @@ export default function ShapeElements() {
     const positionStyle = {
       left: element[index]?.x,
       top: element[index]?.y,
+      zIndex: element[index]?.zIndex,
     };
 
     const rotationStyle = {
@@ -86,84 +76,9 @@ export default function ShapeElements() {
       ],
     };
 
-    const selectedBorderStyle = isSelected
-      ? {
-          borderWidth: 2,
-          borderColor: ACTIVE_COLOR,
-          borderRadius: 10,
-        }
-      : {};
-
-    let shapeElements;
-    switch (element[index].type) {
-      case ICON:
-        shapeElements = (
-          <MaterialCommunityIcons
-            name={element[index].name}
-            size={element[index].size}
-            color={element[index].color}
-            style={selectedBorderStyle}
-            width={element[index].size}
-          />
-        );
-        break;
-      case RECTANGLE:
-        shapeElements = (
-          <Svg
-            width={element[index].width}
-            height={element[index].height}
-            style={selectedBorderStyle}
-          >
-            <Rect
-              width={element[index].width}
-              height={element[index].height}
-              stroke={element[index].stroke}
-              strokeWidth={element[index].strokeWidth}
-              fill={element[index].color}
-            />
-          </Svg>
-        );
-        break;
-      case ELLIPSE:
-        shapeElements = (
-          <Svg
-            height={element[index].height * 2}
-            width={element[index].width * 2}
-            style={selectedBorderStyle}
-          >
-            <Ellipse
-              cx={element[index].width}
-              cy={element[index].height}
-              rx={element[index].width * 0.98}
-              ry={element[index].height * 0.98}
-              stroke={element[index].stroke}
-              strokeWidth={element[index].strokeWidth}
-              fill={element[index].color}
-            />
-          </Svg>
-        );
-        break;
-      case LINE:
-        shapeElements = (
-          <Svg
-            height={20}
-            width={element[index].x2}
-            style={selectedBorderStyle}
-          >
-            <Line
-              x1={element[index].x1}
-              y1={element[index].y1}
-              x2={element[index].x2}
-              y2={element[index].y2}
-              stroke={element[index].stroke}
-              strokeWidth={element[index].strokeWidth}
-            />
-          </Svg>
-        );
-        break;
-      default:
-        break;
-    }
+    const shapeElements = (
+      <ShapeRenderer element={element[index]} isSelected={isSelected} />
+    );
 
     if (isSelected && selectedShapeProperty === ROTATE) {
       return (
@@ -274,7 +189,7 @@ export default function ShapeElements() {
           const snappedRotation = Math.round(angle / 45) * 45;
           rotation.setValue(snappedRotation);
         },
-        onPanResponderRelease: (_, gestureState) => {
+        onPanResponderRelease: () => {
           if (selectedIndexRef.current === null) return;
 
           dispatch(

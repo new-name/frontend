@@ -47,6 +47,8 @@ export default function ShapeEditor() {
   const dispatch = useDispatch();
   const [scrollPosition, setScrollPosition] = useState(SCREEN_HEIGHT * 0.15);
   const shapeElements = useSelector((state) => state.shapeReducer.elements);
+  const allElements = useSelector((state) => state.editorReducer.allElements);
+
   const selectedShapeProperty = useSelector(
     (state) => state.shapeReducer.shapeProperties.selectedProperty,
   );
@@ -88,7 +90,9 @@ export default function ShapeEditor() {
       selectedShapeProperty === CIRCLE ||
       selectedShapeProperty === LINE
     ) {
-      dispatch(renderNewShapes());
+      const layerNumber = Object.keys(allElements).length;
+
+      dispatch(renderNewShapes({ layerNumber }));
     }
   }, [selectedShapeProperty]);
 

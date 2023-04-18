@@ -14,7 +14,7 @@ export const TEXT = "Text";
 export const IMAGE = "Image";
 export const GIF = "Gif";
 export const ICONS = "Icons";
-export const MORE = "More";
+export const LAYER = "Layer";
 
 export const CIRCLE = "Circle";
 export const RECTANGLE = "Rectangle";

@@ -11,26 +11,44 @@ export default function EditorHeader() {
   return (
     <>
       <View style={styles.header}>
-        <Ionicons
-          name="ios-chevron-back-sharp"
-          size={25}
-          color={UNACTIVE_COLOR}
-        />
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+          <Ionicons
+            name="ios-chevron-back-sharp"
+            size={25}
+            color={UNACTIVE_COLOR}
+          />
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <Text>뒤로 가기</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.undo}>
-        <MaterialCommunityIcons name="undo" size={30} color={UNACTIVE_COLOR} />
-        <MaterialCommunityIcons name="redo" size={30} color={UNACTIVE_COLOR} />
+        <TouchableOpacity>
+          <MaterialCommunityIcons
+            name="undo"
+            size={30}
+            color={UNACTIVE_COLOR}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <MaterialCommunityIcons
+            name="redo"
+            size={30}
+            color={UNACTIVE_COLOR}
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.download}>
-        <Ionicons
-          name="ios-download-outline"
-          size={30}
-          color={UNACTIVE_COLOR}
-        />
-        <Ionicons name="ios-share-outline" size={30} color={UNACTIVE_COLOR} />
+        <TouchableOpacity onPress={() => console.log("save")}>
+          <Ionicons
+            name="ios-download-outline"
+            size={30}
+            color={UNACTIVE_COLOR}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => console.log("upload")}>
+          <Ionicons name="ios-share-outline" size={30} color={UNACTIVE_COLOR} />
+        </TouchableOpacity>
       </View>
     </>
   );
