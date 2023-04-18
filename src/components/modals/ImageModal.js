@@ -202,7 +202,6 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     paddingHorizontal: 20,
-    paddingTop: 30,
   },
   searchBar: {
     width: SCREEN_WIDTH * 0.9,

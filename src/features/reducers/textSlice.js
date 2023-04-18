@@ -23,7 +23,7 @@ export const textSlice = createSlice({
   name: "text",
   initialState,
   reducers: {
-    selectText: (state, action) => {
+    handleSelectTextProperty: (state, action) => {
       const { textProperties } = state;
 
       textProperties.selectedProperty = action.payload;
@@ -122,7 +122,7 @@ export const textSlice = createSlice({
 });
 
 export const {
-  selectText,
+  handleSelectTextProperty,
   selectTextIndex,
   selectTextContents,
   updateTextSize,

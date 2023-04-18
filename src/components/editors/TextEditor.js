@@ -28,7 +28,7 @@ import {
   renderNewTextElement,
   updateTextSize,
   removeTextElements,
-  selectText,
+  handleSelectTextProperty,
   selectTextContents,
   updateFontContainerVisible,
 } from "../../features/reducers/textSlice";
@@ -65,7 +65,7 @@ export default function TextEditor() {
 
   const handleSelectedProperty = (name) => {
     const newSelectedProperty = selectedProperty === name ? "" : name;
-    dispatch(selectText(newSelectedProperty));
+    dispatch(handleSelectTextProperty(newSelectedProperty));
   };
 
   useEffect(() => {
@@ -76,7 +76,7 @@ export default function TextEditor() {
     if (selectedProperty === REMOVE) {
       if (selectedTextIndex === null) {
         Alert.alert("제거를 원하는 텍스트를 선택해주세요.");
-        dispatch(selectText(""));
+        dispatch(handleSelectTextProperty(""));
       }
 
       if (selectedTextIndex !== null) {
@@ -86,7 +86,7 @@ export default function TextEditor() {
           [
             {
               text: "Cancel",
-              onPress: () => dispatch(selectText("")),
+              onPress: () => dispatch(handleSelectTextProperty("")),
               style: "cancel",
             },
             {
@@ -109,7 +109,7 @@ export default function TextEditor() {
         dispatch(handleColorModalVisible(true));
       }
 
-      dispatch(selectText(""));
+      dispatch(handleSelectTextProperty(""));
     }
   }, [selectedProperty]);
 
@@ -117,7 +117,7 @@ export default function TextEditor() {
     if (selectedProperty === EDIT) {
       if (selectedTextIndex === null) {
         Alert.alert("원하는 텍스트를 선택해주세요.");
-        dispatch(selectText(""));
+        dispatch(handleSelectTextProperty(""));
       }
 
       if (selectedTextIndex !== null) {
@@ -130,7 +130,7 @@ export default function TextEditor() {
     if (selectedProperty === FONT_STYLE) {
       if (selectedTextIndex === null) {
         Alert.alert("원하는 텍스트를 선택해주세요.");
-        dispatch(selectText(""));
+        dispatch(handleSelectTextProperty(""));
       }
 
       if (selectedTextIndex !== null) {

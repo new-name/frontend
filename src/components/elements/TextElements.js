@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { EDIT, MOVE } from "../../constants/property";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import {
-  selectText,
+  handleSelectTextProperty,
   selectTextContents,
   selectTextIndex,
   updateTextContents,
@@ -125,7 +125,7 @@ export default function TextElements() {
               <TouchableOpacity
                 onPress={() => {
                   Keyboard.dismiss();
-                  dispatch(selectText(""));
+                  dispatch(handleSelectTextProperty(""));
                 }}
                 style={{ padding: 10, paddingHorizontal: 20 }}
               >

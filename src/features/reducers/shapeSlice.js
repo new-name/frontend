@@ -92,7 +92,7 @@ export const shapeSlice = createSlice({
 
       state.shapeProperties.selectedProperty = "";
     },
-    handleSelectProperty: (state, action) => {
+    handleSelectShapeProperty: (state, action) => {
       const { shapeProperties } = state;
 
       shapeProperties.selectedProperty = action.payload;
@@ -164,7 +164,7 @@ export const shapeSlice = createSlice({
 
 export const {
   renderNewShapes,
-  handleSelectProperty,
+  handleSelectShapeProperty,
   handleSelectShape,
   handleRenderIcons,
   updateIconModalState,

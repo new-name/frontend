@@ -27,7 +27,7 @@ import {
 import { handleColorModalVisible } from "../../features/reducers/editorSlice";
 import {
   renderNewShapes,
-  handleSelectProperty,
+  handleSelectShapeProperty,
   updateIconModalState,
   updateShapeSize,
 } from "../../features/reducers/shapeSlice";
@@ -48,7 +48,7 @@ export default function ShapeEditor() {
 
   const handleSelectedProperty = (name) => {
     const newSelectedProperty = selectedShapeProperty === name ? "" : name;
-    dispatch(handleSelectProperty(newSelectedProperty));
+    dispatch(handleSelectShapeProperty(newSelectedProperty));
   };
 
   const customScrollbarRef = useRef(null);
@@ -89,7 +89,7 @@ export default function ShapeEditor() {
         dispatch(handleColorModalVisible(true));
       }
 
-      dispatch(handleSelectProperty(""));
+      dispatch(handleSelectShapeProperty(""));
     }
   }, [selectedShapeProperty]);
 
