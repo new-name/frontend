@@ -33,6 +33,12 @@ export const gifSlice = createSlice({
 
       gifProperties.selectedIndex = action.payload;
     },
+    handleResetGif: (state) => {
+      const { gifProperties } = state;
+
+      gifProperties.selectedIndex = null;
+      gifProperties.selectedProperty = "";
+    },
     updateGifModalState: (state, action) => {
       state.gifModalVisible = action.payload;
 
@@ -71,5 +77,6 @@ export const {
   updateGifSize,
   updateGifPosition,
   updateGifModalState,
+  handleResetGif,
 } = gifSlice.actions;
 export default gifSlice.reducer;

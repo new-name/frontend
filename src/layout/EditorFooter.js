@@ -8,10 +8,10 @@ import { editorFooter } from "../constants/footerItems";
 import { GIF, IMAGE, SHAPE, TEXT } from "../constants/property";
 import { SCREEN_WIDTH } from "../constants/size";
 import { handleActiveEditor } from "../features/reducers/editorSlice";
-import { handleSelectGifProperty } from "../features/reducers/gifSlice";
-import { handleSelectImageProperty } from "../features/reducers/imageSlice";
-import { handleSelectShapeProperty } from "../features/reducers/shapeSlice";
-import { handleSelectTextProperty } from "../features/reducers/textSlice";
+import { handleResetGif } from "../features/reducers/gifSlice";
+import { handleResetImage } from "../features/reducers/imageSlice";
+import { handleResetShape } from "../features/reducers/shapeSlice";
+import { handleResetText } from "../features/reducers/textSlice";
 
 export default function EditorFooter() {
   const dispatch = useDispatch();
@@ -26,15 +26,15 @@ export default function EditorFooter() {
 
   const dispatchPropertyReset = (propertyType, resetAction) => {
     if (activeEditor !== propertyType) {
-      dispatch(resetAction(""));
+      dispatch(resetAction());
     }
   };
 
   useEffect(() => {
-    dispatchPropertyReset(GIF, handleSelectGifProperty);
-    dispatchPropertyReset(SHAPE, handleSelectShapeProperty);
-    dispatchPropertyReset(IMAGE, handleSelectImageProperty);
-    dispatchPropertyReset(TEXT, handleSelectTextProperty);
+    dispatchPropertyReset(GIF, handleResetGif);
+    dispatchPropertyReset(SHAPE, handleResetShape);
+    dispatchPropertyReset(IMAGE, handleResetImage);
+    dispatchPropertyReset(TEXT, handleResetText);
   }, [activeEditor]);
 
   return (

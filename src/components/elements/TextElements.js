@@ -14,8 +14,9 @@ import {
 import { KeyboardAccessoryView } from "react-native-keyboard-accessory";
 import { useDispatch, useSelector } from "react-redux";
 
-import { EDIT, MOVE } from "../../constants/property";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
+import { HEADER, ACTIVE_COLOR } from "../../constants/color";
+import { TEXT, EDIT, MOVE } from "../../constants/property";
+import { SCREEN_HEIGHT, SCREEN_WIDTH, Z_INDEX_100 } from "../../constants/size";
 import {
   handleSelectTextProperty,
   selectTextContents,
@@ -26,6 +27,9 @@ import {
 
 export default function TextElements() {
   const dispatch = useDispatch();
+  const activeEditor = useSelector(
+    (state) => state.editorReducer.selectedProperty,
+  );
   const [moveResponder, setMoveResponder] = useState({});
   const selectedTextProperty = useSelector(
     (state) => state.textReducer.textProperties.selectedProperty,
@@ -40,6 +44,8 @@ export default function TextElements() {
   const movePan = useRef(new Animated.ValueXY()).current;
 
   const handleSelectText = (index) => {
+    if (activeEditor !== TEXT) return;
+
     selectedIndexRef.current = index;
     dispatch(selectTextIndex(index));
   };
@@ -53,13 +59,24 @@ export default function TextElements() {
       top: element[index]?.y,
     };
 
+    const selectedBorderStyle = isSelected
+      ? {
+          borderWidth: 1,
+          borderColor: ACTIVE_COLOR,
+          borderRadius: 10,
+        }
+      : {};
+
     const textElement = (
       <Text
-        style={{
-          fontSize: element[index]?.size,
-          color: element[index]?.color,
-          fontFamily: element[index]?.fontFamily,
-        }}
+        style={[
+          selectedBorderStyle,
+          {
+            fontSize: element[index]?.size,
+            color: element[index]?.color,
+            fontFamily: element[index]?.fontFamily,
+          },
+        ]}
       >
         {element[index]?.text}
       </Text>
@@ -86,7 +103,7 @@ export default function TextElements() {
     if (isSelected && selectedTextProperty === EDIT && isEditable) {
       return (
         <KeyboardAvoidingView
-          style={{ flex: 1 }}
+          style={{ flex: 1, zIndex: Z_INDEX_100 }}
           behavior={Platform.OS === "ios" ? "padding" : null}
           key={element[index]?.x + element[index].y}
         >
@@ -96,11 +113,14 @@ export default function TextElements() {
           >
             <TextInput
               multiline
-              style={{
-                fontSize: element[index]?.size,
-                color: element[index]?.color,
-                fontFamily: element[index]?.fontFamily,
-              }}
+              style={[
+                {
+                  fontSize: element[index]?.size,
+                  color: element[index]?.color,
+                  fontFamily: element[index]?.fontFamily,
+                },
+                selectedBorderStyle,
+              ]}
               value={element[index]?.text}
               onChangeText={(newText) => {
                 dispatch(
@@ -129,7 +149,7 @@ export default function TextElements() {
                 }}
                 style={{ padding: 10, paddingHorizontal: 20 }}
               >
-                <Text style={{ fontSize: 16 }}>Done</Text>
+                <Text style={{ fontSize: 16, color: ACTIVE_COLOR }}>Done</Text>
               </TouchableOpacity>
             </View>
           </KeyboardAccessoryView>
@@ -202,8 +222,6 @@ const styles = StyleSheet.create({
     top: SCREEN_HEIGHT * 0.795,
     marginLeft: -SCREEN_WIDTH * 0.05,
     width: SCREEN_WIDTH,
-    borderTopWidth: 1,
-    borderColor: "#e5e5e5",
-    backgroundColor: "#f5f5f5",
+    backgroundColor: HEADER,
   },
 });

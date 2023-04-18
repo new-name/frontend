@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Animated, Image, PanResponder, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { MOVE, SIZE } from "../../constants/property";
+import { ACTIVE_COLOR } from "../../constants/color";
+import { IMAGE, MOVE, SIZE } from "../../constants/property";
 import {
   handleSelectImage,
   updateImagePosition,
@@ -11,6 +12,9 @@ import {
 
 export default function ImageElements() {
   const dispatch = useDispatch();
+  const activeEditor = useSelector(
+    (state) => state.editorReducer.selectedProperty,
+  );
   const imageElements = useSelector((state) => state.imageReducer.elements);
   const selectedImageProperty = useSelector(
     (state) => state.imageReducer.imageProperties.selectedProperty,
@@ -25,6 +29,8 @@ export default function ImageElements() {
   const movePan = useRef(new Animated.ValueXY()).current;
 
   const handleSelect = (index) => {
+    if (activeEditor !== IMAGE) return;
+
     selectedIndexRef.current = index;
     imageRef.current = imageElements;
     dispatch(handleSelectImage(index));
@@ -50,12 +56,23 @@ export default function ImageElements() {
       top: element[index]?.y,
     };
 
+    const selectedBorderStyle = isSelected
+      ? {
+          borderWidth: 2,
+          borderColor: ACTIVE_COLOR,
+          borderRadius: 10,
+        }
+      : {};
+
     const imageElements = (
       <Image
-        style={{
-          width: element[index]?.width,
-          height: element[index]?.height,
-        }}
+        style={[
+          {
+            width: element[index]?.width,
+            height: element[index]?.height,
+          },
+          selectedBorderStyle,
+        ]}
         source={{ uri: element[index]?.uri }}
       />
     );
@@ -63,7 +80,7 @@ export default function ImageElements() {
     if (isSelected && selectedImageProperty === SIZE) {
       return (
         <Animated.View
-          key={Date.now() + index}
+          key={index}
           style={[positionStyle, { transform: [{ scale: scaleRef }] }]}
           {...resizeResponder.panHandlers}
         >
@@ -77,7 +94,7 @@ export default function ImageElements() {
     if (isSelected && selectedImageProperty === MOVE) {
       return (
         <Animated.View
-          key={Date.now() + index}
+          key={index}
           onPress={() => handleSelect(index)}
           style={[
             positionStyle,

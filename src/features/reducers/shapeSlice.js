@@ -74,11 +74,11 @@ export const shapeSlice = createSlice({
           x: 0,
           y: 0,
           x1: 0,
-          y1: 20,
+          y1: 10,
           x2: SCREEN_WIDTH * 0.7,
-          y2: 20,
+          y2: 10,
           stroke: UNACTIVE_COLOR,
-          strokeWidth: 3,
+          strokeWidth: 2,
           zIndex: 0,
         };
       }
@@ -106,6 +106,12 @@ export const shapeSlice = createSlice({
       const { shapeProperties } = state;
 
       shapeProperties.selectedIndex = action.payload;
+    },
+    handleResetShape: (state) => {
+      const { shapeProperties } = state;
+
+      shapeProperties.selectedIndex = null;
+      shapeProperties.selectedProperty = "";
     },
     updateShapePosition: (state, action) => {
       const { index } = action.payload;
@@ -171,5 +177,6 @@ export const {
   updateShapePosition,
   updateShapeColor,
   updateShapeSize,
+  handleResetShape,
 } = shapeSlice.actions;
 export default shapeSlice.reducer;

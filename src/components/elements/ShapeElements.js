@@ -4,6 +4,7 @@ import { Animated, PanResponder, TouchableOpacity } from "react-native";
 import Svg, { Rect, Ellipse, Line } from "react-native-svg";
 import { useDispatch, useSelector } from "react-redux";
 
+import { ACTIVE_COLOR } from "../../constants/color";
 import {
   ELLIPSE,
   ICON,
@@ -11,6 +12,7 @@ import {
   RECTANGLE,
   MOVE,
   SIZE,
+  SHAPE,
 } from "../../constants/property";
 import {
   handleSelectShape,
@@ -20,6 +22,9 @@ import {
 
 export default function ShapeElements() {
   const dispatch = useDispatch();
+  const activeEditor = useSelector(
+    (state) => state.editorReducer.selectedProperty,
+  );
   const shapeElements = useSelector((state) => state.shapeReducer.elements);
   const selectedShapeProperty = useSelector(
     (state) => state.shapeReducer.shapeProperties.selectedProperty,
@@ -46,6 +51,8 @@ export default function ShapeElements() {
   };
 
   const handleSelect = (index) => {
+    if (activeEditor !== SHAPE) return;
+
     selectedIndexRef.current = index;
     shapeRef.current = shapeElements;
     dispatch(handleSelectShape(index));
@@ -59,6 +66,14 @@ export default function ShapeElements() {
       top: element[index]?.y,
     };
 
+    const selectedBorderStyle = isSelected
+      ? {
+          borderWidth: 2,
+          borderColor: ACTIVE_COLOR,
+          borderRadius: 10,
+        }
+      : {};
+
     let shapeElements;
     switch (element[index].type) {
       case ICON:
@@ -67,12 +82,18 @@ export default function ShapeElements() {
             name={element[index].name}
             size={element[index].size}
             color={element[index].color}
+            style={selectedBorderStyle}
+            width={element[index].size}
           />
         );
         break;
       case RECTANGLE:
         shapeElements = (
-          <Svg height={element[index].height} width={element[index].width}>
+          <Svg
+            height={element[index].height}
+            width={element[index].width}
+            style={selectedBorderStyle}
+          >
             <Rect
               width={element[index].width}
               height={element[index].height}
@@ -88,6 +109,7 @@ export default function ShapeElements() {
           <Svg
             height={element[index].height * 2}
             width={element[index].width * 2}
+            style={selectedBorderStyle}
           >
             <Ellipse
               cx={element[index].width}
@@ -103,7 +125,11 @@ export default function ShapeElements() {
         break;
       case LINE:
         shapeElements = (
-          <Svg height={20} width={element[index].x2}>
+          <Svg
+            height={20}
+            width={element[index].x2}
+            style={selectedBorderStyle}
+          >
             <Line
               x1={element[index].x1}
               y1={element[index].y1}

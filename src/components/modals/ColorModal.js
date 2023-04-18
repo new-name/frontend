@@ -12,7 +12,6 @@ import {
   TextInput,
   Keyboard,
   TouchableWithoutFeedback,
-  ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -136,149 +135,145 @@ export default function ColorModal() {
 
   return (
     <Modal visible={isColorPickerVisible} animationType="slide">
-      <ScrollView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.container}>
-            <AppHeader>
-              <View style={styles.leftHeader}>
-                <Ionicons
-                  name="ios-chevron-back-sharp"
-                  size={25}
-                  color={SUB_GRAY_COLOR}
-                />
-                <TouchableOpacity
-                  onPress={() => dispatch(handleColorModalVisible(false))}
-                >
-                  <Text style={{ color: SUB_GRAY_COLOR }}>뒤로 가기</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.title}>
-                <Text style={{ fontSize: 20, color: SUB_GRAY_COLOR }}>
-                  Colors
-                </Text>
-              </View>
-              <TouchableOpacity onPress={updateColor} style={styles.colorPick}>
-                <MaterialIcons name="colorize" size={30} color={ACTIVE_COLOR} />
-              </TouchableOpacity>
-            </AppHeader>
-            <View style={styles.gridText}>
-              <Text style={{ fontSize: 26 }}>Grid</Text>
-            </View>
-            <View style={styles.colorTable}>
-              {colorsArray.map((color) => (
-                <TouchableOpacity
-                  key={color}
-                  onPress={() => setSelectedColor(color)}
-                  style={{
-                    ...styles.colors,
-                    backgroundColor: color,
-                    borderWidth: selectedColor === color ? 2 : 0,
-                    borderColor: selectedColor === color ? WHITE_COLOR : null,
-                  }}
-                />
-              ))}
-            </View>
-            <View style={styles.opacity}>
-              <Text style={{ fontSize: 18, color: UNACTIVE_COLOR }}>
-                OPACITY
-              </Text>
-              <LinearGradient
-                colors={[
-                  hslToHsla(selectedColor, 0),
-                  hslToHsla(selectedColor, 1),
-                ]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.opacityHandlerContainer}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <AppHeader>
+            <View style={styles.leftHeader}>
+              <Ionicons
+                name="ios-chevron-back-sharp"
+                size={25}
+                color={SUB_GRAY_COLOR}
+              />
+              <TouchableOpacity
+                onPress={() => dispatch(handleColorModalVisible(false))}
               >
-                <Animated.View
-                  style={{
-                    ...styles.opacityScrollHandler,
-                    left: opacityPan,
-                  }}
-                  {...opacityResponder.panHandlers}
-                />
-              </LinearGradient>
+                <Text style={{ color: SUB_GRAY_COLOR }}>뒤로 가기</Text>
+              </TouchableOpacity>
             </View>
-            <View style={styles.border} />
-            <View style={styles.bottom}>
-              <View
+            <View style={styles.title}>
+              <Text style={{ fontSize: 20, color: SUB_GRAY_COLOR }}>
+                Colors
+              </Text>
+            </View>
+            <TouchableOpacity onPress={updateColor} style={styles.colorPick}>
+              <MaterialIcons name="colorize" size={30} color={ACTIVE_COLOR} />
+            </TouchableOpacity>
+          </AppHeader>
+          <View style={styles.gridText}>
+            <Text style={{ fontSize: 26 }}>Grid</Text>
+          </View>
+          <View style={styles.colorTable}>
+            {colorsArray.map((color) => (
+              <TouchableOpacity
+                key={color}
+                onPress={() => setSelectedColor(color)}
                 style={{
-                  ...styles.selectedColor,
-                  backgroundColor:
-                    selectedMode === STROKE
-                      ? WHITE_COLOR
-                      : hslToHsla(selectedColor, selectedColorOpacity),
-                  borderColor:
-                    selectedMode === STROKE
-                      ? hslToHsla(selectedColor, selectedColorOpacity)
-                      : null,
+                  ...styles.colors,
+                  backgroundColor: color,
+                  borderWidth: selectedColor === color ? 2 : 0,
+                  borderColor: selectedColor === color ? WHITE_COLOR : null,
                 }}
               />
-              {activeEditor === SHAPE &&
-              shapeElements[selectedShapeIndex]?.type !== ICON ? (
-                <View style={styles.bottomRightContainer}>
+            ))}
+          </View>
+          <View style={styles.opacity}>
+            <Text style={{ fontSize: 18, color: UNACTIVE_COLOR }}>OPACITY</Text>
+            <LinearGradient
+              colors={[
+                hslToHsla(selectedColor, 0),
+                hslToHsla(selectedColor, 1),
+              ]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.opacityHandlerContainer}
+            >
+              <Animated.View
+                style={{
+                  ...styles.opacityScrollHandler,
+                  left: opacityPan,
+                }}
+                {...opacityResponder.panHandlers}
+              />
+            </LinearGradient>
+          </View>
+          <View style={styles.border} />
+          <View style={styles.bottom}>
+            <View
+              style={{
+                ...styles.selectedColor,
+                backgroundColor:
+                  selectedMode === STROKE
+                    ? WHITE_COLOR
+                    : hslToHsla(selectedColor, selectedColorOpacity),
+                borderColor:
+                  selectedMode === STROKE
+                    ? hslToHsla(selectedColor, selectedColorOpacity)
+                    : null,
+              }}
+            />
+            {activeEditor === SHAPE &&
+            shapeElements[selectedShapeIndex]?.type !== ICON ? (
+              <View style={styles.bottomRightContainer}>
+                <TouchableOpacity
+                  onPress={() => setSelectedMode(FILL)}
+                  style={{
+                    ...styles.fill,
+                    backgroundColor:
+                      selectedMode === FILL ? ACTIVE_COLOR : WHITE_COLOR,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 24,
+                      color:
+                        selectedMode === FILL ? WHITE_COLOR : UNACTIVE_COLOR,
+                    }}
+                  >
+                    Fill
+                  </Text>
+                </TouchableOpacity>
+                <View style={styles.strokeContainer}>
                   <TouchableOpacity
-                    onPress={() => setSelectedMode(FILL)}
+                    onPress={() => setSelectedMode(STROKE)}
                     style={{
                       ...styles.fill,
                       backgroundColor:
-                        selectedMode === FILL ? ACTIVE_COLOR : WHITE_COLOR,
+                        selectedMode === STROKE ? ACTIVE_COLOR : WHITE_COLOR,
                     }}
                   >
                     <Text
                       style={{
                         fontSize: 24,
                         color:
-                          selectedMode === FILL ? WHITE_COLOR : UNACTIVE_COLOR,
+                          selectedMode === STROKE
+                            ? WHITE_COLOR
+                            : UNACTIVE_COLOR,
                       }}
                     >
-                      Fill
+                      Stroke
                     </Text>
                   </TouchableOpacity>
-                  <View style={styles.strokeContainer}>
-                    <TouchableOpacity
-                      onPress={() => setSelectedMode(STROKE)}
-                      style={{
-                        ...styles.fill,
-                        backgroundColor:
-                          selectedMode === STROKE ? ACTIVE_COLOR : WHITE_COLOR,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 24,
-                          color:
-                            selectedMode === STROKE
-                              ? WHITE_COLOR
-                              : UNACTIVE_COLOR,
-                        }}
-                      >
-                        Stroke
-                      </Text>
-                    </TouchableOpacity>
-                    <TextInput
-                      placeholder="Stroke Width"
-                      value={typedNumber}
-                      onChangeText={(value) => setTypedNumber(value)}
-                      keyboardType="numeric"
-                      editable={selectedMode !== FILL}
-                      style={{
-                        paddingHorizontal: 5,
-                        width: 100,
-                        borderWidth: 2,
-                        borderRadius: 10,
-                      }}
-                    />
-                  </View>
+                  <TextInput
+                    placeholder="Stroke Width"
+                    value={typedNumber}
+                    onChangeText={(value) => setTypedNumber(value)}
+                    keyboardType="numeric"
+                    editable={selectedMode !== FILL}
+                    style={{
+                      paddingHorizontal: 5,
+                      width: 100,
+                      borderWidth: 2,
+                      borderRadius: 10,
+                    }}
+                  />
                 </View>
-              ) : (
-                <Text style={{ fontSize: 20 }}>The color you selected</Text>
-              )}
-            </View>
+              </View>
+            ) : (
+              <Text style={{ fontSize: 20 }}>The color you selected</Text>
+            )}
           </View>
-        </TouchableWithoutFeedback>
-      </ScrollView>
+        </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 }

@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { Animated, PanResponder, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { MOVE } from "../../constants/property";
+import { ACTIVE_COLOR } from "../../constants/color";
+import { GIF, MOVE } from "../../constants/property";
 import {
   handleSelectGif,
   updateGifPosition,
@@ -11,6 +12,9 @@ import {
 
 export default function GifElements() {
   const dispatch = useDispatch();
+  const activeEditor = useSelector(
+    (state) => state.editorReducer.selectedProperty,
+  );
   const gifElements = useSelector((state) => state.gifReducer.elements);
   const selectedGifProperty = useSelector(
     (state) => state.gifReducer.gifProperties.selectedProperty,
@@ -26,27 +30,11 @@ export default function GifElements() {
   const movePan = useRef(new Animated.ValueXY()).current;
 
   const handleSelect = (index) => {
+    if (activeEditor !== GIF) return;
+
     selectedIndexRef.current = index;
     dispatch(handleSelectGif(index));
   };
-
-  // const [resizeResponder, setResizeResponder] = useState({});
-  // const sizePositionRef = useRef(0);
-  // const scaleRef = useRef(new Animated.Value(1)).current;
-
-  // const handleResizeOfGif = (scaleFactor) => {
-  //   if (selectedIndexRef.current === null) return;
-
-  //   const newSize = gifElements[selectedGifIndex]?.size * scaleFactor;
-
-  //   dispatch(updateGifSize(newSize));
-  // };
-
-  // const getDistance = (touch1, touch2) => {
-  //   const dx = touch1.pageX - touch2.pageX;
-  //   const dy = touch1.pageY - touch2.pageY;
-  //   return Math.sqrt(dx * dx + dy * dy);
-  // };
 
   const renderGifElements = (element, index) => {
     const isSelected = index === selectedGifIndex;
@@ -56,33 +44,24 @@ export default function GifElements() {
       top: element[index]?.y,
     };
 
+    const selectedBorderStyle = isSelected
+      ? {
+          borderWidth: 1,
+          borderColor: ACTIVE_COLOR,
+          borderRadius: 10,
+        }
+      : {};
+
     const gifElements = (
       <Lottie
         ref={(element) => (animationRefs.current[index] = element)}
         onLayout={() => animationRefs.current[index]?.play()}
-        style={{ width: element[index].size }}
+        style={[selectedBorderStyle, { width: element[index].size }]}
         source={element[index].source}
         autoPlay
         loop
       />
     );
-
-    // if (isSelected && selectedGifProperty === SIZE) {
-    //   return (
-    //     <Animated.View
-    //       key={Date.now() + index}
-    //       style={[positionStyle, { transform: [{ scale: scaleRef }] }]}
-    //       {...resizeResponder.panHandlers}
-    //     >
-    //       <TouchableOpacity
-    //         key={Date.now() + index}
-    //         onPress={() => handleSelect(index)}
-    //       >
-    //         {gifElements}
-    //       </TouchableOpacity>
-    //     </Animated.View>
-    //   );
-    // }
 
     if (isSelected && selectedGifProperty === MOVE) {
       return (
@@ -106,48 +85,12 @@ export default function GifElements() {
       <TouchableOpacity
         key={Date.now() + index}
         onPress={() => handleSelect(index)}
-        style={[{ position: "absolute" }, positionStyle]}
+        style={[{ position: "absolute" }, positionStyle, selectedBorderStyle]}
       >
         {gifElements}
       </TouchableOpacity>
     );
   };
-
-  // useEffect(() => {
-  //   setResizeResponder(
-  //     PanResponder.create({
-  //       onStartShouldSetPanResponder: () => true,
-  //       onMoveShouldSetPanResponder: () => true,
-  //       onPanResponderGrant: ({ nativeEvent }) => {
-  //         const { touches } = nativeEvent;
-
-  //         if (touches.length === 2) {
-  //           const [touch1, touch2] = touches;
-  //           const distance = getDistance(touch1, touch2);
-
-  //           sizePositionRef.current = distance;
-  //         }
-  //       },
-  //       onPanResponderMove: ({ nativeEvent }) => {
-  //         if (selectedIndexRef.current === null) return;
-  //         const { touches } = nativeEvent;
-
-  //         if (touches.length === 2) {
-  //           const [touch1, touch2] = touches;
-  //           const distance = getDistance(touch1, touch2);
-
-  //           const scaleFactor = distance / sizePositionRef?.current;
-
-  //           handleResizeOfGif(scaleFactor);
-  //         }
-  //       },
-  //       onPanResponderRelease: ({ nativeEvent }) => {
-  //         sizePositionRef.initialDistance = null;
-  //         scaleRef.setValue(1);
-  //       },
-  //     }),
-  //   );
-  // }, [scaleRef]);
 
   useEffect(() => {
     setMoveResponder(

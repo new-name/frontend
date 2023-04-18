@@ -11,7 +11,7 @@ import FontModal from "../components/modals/FontModal";
 import GifModal from "../components/modals/GifModal";
 import IconModal from "../components/modals/IconModal";
 import ImageModal from "../components/modals/ImageModal";
-import { WHITE_COLOR } from "../constants/color";
+import { CONTENT_COLOR } from "../constants/color";
 import { CONTAINER_WIDTH } from "../constants/size";
 import AppFooter from "../layout/AppFooter";
 import AppHeader from "../layout/AppHeader";
@@ -32,9 +32,9 @@ export default function Editor() {
           <FontModal />
           <ColorModal />
           <IconModal />
+          <TextElements />
           <ImageElements />
           <GifElements />
-          <TextElements />
           <ShapeElements />
         </View>
       </ContentBox>
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: WHITE_COLOR,
+    backgroundColor: CONTENT_COLOR,
   },
   contentContainer: {
     width: CONTAINER_WIDTH,

@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 import { WHITE_COLOR, SHADOW_COLOR } from "../../constants/color";
 import { imageFooter } from "../../constants/footerItems";
-import { UNSPLASH } from "../../constants/property";
+import { SIZE, UNSPLASH } from "../../constants/property";
 import { APP_FOOTER_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import {
   handleSelectImageProperty,
@@ -17,6 +17,9 @@ export default function ImageEditor() {
   const selectedProperty = useSelector(
     (state) => state.imageReducer.imageProperties.selectedProperty,
   );
+  const selectedImageIndex = useSelector(
+    (state) => state.imageReducer.imageProperties.selectedIndex,
+  );
 
   const handleSelectedProperty = (name) => {
     const newSelectedProperty = selectedProperty === name ? "" : name;
@@ -26,6 +29,13 @@ export default function ImageEditor() {
   useEffect(() => {
     if (selectedProperty === UNSPLASH) {
       dispatch(updateImageModalState(true));
+    }
+  }, [selectedProperty]);
+
+  useEffect(() => {
+    if (selectedProperty === SIZE && selectedImageIndex === null) {
+      Alert.alert("이미지를 선택해 주세요.");
+      dispatch(handleSelectImageProperty(""));
     }
   }, [selectedProperty]);
 

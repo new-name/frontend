@@ -19,3 +19,5 @@ export const MIN_ICON_SIZE = 30;
 export const MAX_ICON_SIZE = 120;
 export const MIN_LINE_SIZE = 30;
 export const MAX_LINE_SIZE = 360;
+
+export const Z_INDEX_100 = 100;

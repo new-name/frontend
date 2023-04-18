@@ -216,7 +216,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    marginBottom: 20,
+    borderColor: "transparent",
+    borderWidth: 2,
+    borderRadius: 10,
+    paddingVertical: 20,
   },
   image: {
     width: "100%",

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { WHITE_COLOR, SHADOW_COLOR } from "../../constants/color";
 import { gifFooter } from "../../constants/footerItems";
-import { GIF, LIBRARY, SIZE } from "../../constants/property";
+import { LIBRARY, SIZE } from "../../constants/property";
 import {
   APP_FOOTER_HEIGHT,
   SCREEN_HEIGHT,

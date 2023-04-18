@@ -28,6 +28,12 @@ export const textSlice = createSlice({
 
       textProperties.selectedProperty = action.payload;
     },
+    handleResetText: (state) => {
+      const { textProperties } = state;
+
+      textProperties.selectedIndex = null;
+      textProperties.selectedProperty = "";
+    },
     selectTextIndex: (state, action) => {
       const { textProperties } = state;
 
@@ -134,5 +140,6 @@ export const {
   updateTextContents,
   updateFontContainerVisible,
   updateTextFontStyle,
+  handleResetText,
 } = textSlice.actions;
 export default textSlice.reducer;
