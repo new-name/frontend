@@ -82,6 +82,13 @@ export default function ShapeEditor() {
   }, [selectedShapeProperty]);
 
   useEffect(() => {
+    if (selectedShapeProperty === SIZE && selectedShapeIndex === null) {
+      Alert.alert("원하는 아이콘 또는 모양을 선택해주세요.");
+      dispatch(handleSelectShapeProperty(""));
+    }
+  }, [selectedShapeProperty]);
+
+  useEffect(() => {
     if (selectedShapeProperty === COLOR) {
       if (selectedShapeIndex === null) {
         Alert.alert("원하는 아이콘 또는 모양을 선택해주세요.");

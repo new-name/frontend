@@ -48,8 +48,9 @@ export const shapeSlice = createSlice({
           width: 200,
           height: 200,
           stroke: UNACTIVE_COLOR,
-          strokeWidth: 2,
+          strokeWidth: 3,
           color: WHITE_COLOR,
+          rotation: 0,
           zIndex: 0,
         };
       }
@@ -64,6 +65,7 @@ export const shapeSlice = createSlice({
           stroke: UNACTIVE_COLOR,
           strokeWidth: 2,
           color: WHITE_COLOR,
+          rotation: 0,
           zIndex: 0,
         };
       }
@@ -79,6 +81,7 @@ export const shapeSlice = createSlice({
           y2: 10,
           stroke: UNACTIVE_COLOR,
           strokeWidth: 2,
+          rotation: 0,
           zIndex: 0,
         };
       }
@@ -145,6 +148,7 @@ export const shapeSlice = createSlice({
             (MAX_ICON_SIZE - MIN_ICON_SIZE);
 
         state.elements[index].size = iconSize;
+        return;
       }
 
       if (state.elements[index].type === LINE) {
@@ -155,10 +159,16 @@ export const shapeSlice = createSlice({
             (MAX_LINE_SIZE - MIN_LINE_SIZE);
 
         state.elements[index].x2 = lineSize;
+        return;
       }
 
       state.elements[index].width = width;
       state.elements[index].height = height;
+      state.shapeProperties.selectedIndex = null;
+    },
+    updateShapeRotation: (state, action) => {
+      const { index, rotation } = action.payload;
+      state.elements[index].rotation = rotation;
     },
     updateIconModalState: (state, action) => {
       state.isIconModalVisible = action.payload;
@@ -177,6 +187,7 @@ export const {
   updateShapePosition,
   updateShapeColor,
   updateShapeSize,
+  updateShapeRotation,
   handleResetShape,
 } = shapeSlice.actions;
 export default shapeSlice.reducer;

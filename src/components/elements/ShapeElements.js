@@ -17,6 +17,7 @@ import {
 import {
   handleSelectShape,
   updateShapePosition,
+  updateShapeRotation,
   updateShapeSize,
 } from "../../features/reducers/shapeSlice";
 
@@ -38,18 +39,6 @@ export default function ShapeElements() {
   const positionRef = useRef({ x: 0, y: 0 });
   const movePan = useRef(new Animated.ValueXY()).current;
 
-  const [resizeResponder, setResizeResponder] = useState({});
-  const shapeRef = useRef({});
-  const scaleRef = useRef(new Animated.Value(1)).current;
-  const sizePositionRef = useRef(0);
-
-  const getDistance = (touch1, touch2) => {
-    const dx = touch1.pageX - touch2.pageX;
-    const dy = touch1.pageY - touch2.pageY;
-
-    return Math.sqrt(dx * dx + dy * dy);
-  };
-
   const handleSelect = (index) => {
     if (activeEditor !== SHAPE) return;
 
@@ -58,12 +47,38 @@ export default function ShapeElements() {
     dispatch(handleSelectShape(index));
   };
 
+  const [resizeResponder, setResizeResponder] = useState({});
+  const shapeRef = useRef({});
+  const scaleRef = useRef(new Animated.Value(1)).current;
+  const sizePositionRef = useRef(0);
+
+  const rotationRef = useRef(0);
+  const rotation = useRef(new Animated.Value(0)).current;
+  const [rotateResponder, setRotateResponder] = useState({});
+
+  const getDistance = (touch1, touch2) => {
+    const dx = touch1.pageX - touch2.pageX;
+    const dy = touch1.pageY - touch2.pageY;
+
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
   const renderShapeElements = (element, index) => {
     const isSelected = index === selectedShapeIndex;
 
     const positionStyle = {
       left: element[index]?.x,
       top: element[index]?.y,
+    };
+
+    const rotationStyle = {
+      transform: [
+        {
+          rotate: element[index]?.rotation
+            ? `${element[index].rotation}deg`
+            : "0deg",
+        },
+      ],
     };
 
     const selectedBorderStyle = isSelected
@@ -145,12 +160,47 @@ export default function ShapeElements() {
         break;
     }
 
+    if (isSelected && selectedShapeProperty === "Rotate") {
+      return (
+        <Animated.View
+          key={index}
+          onPress={() => handleSelect(index)}
+          style={[
+            { position: "absolute" },
+            positionStyle,
+            {
+              transform: [
+                {
+                  rotate: rotation.interpolate({
+                    inputRange: [0, 360],
+                    outputRange: ["0deg", "360deg"],
+                  }),
+                },
+              ],
+            },
+          ]}
+          {...rotateResponder.panHandlers}
+        >
+          <TouchableOpacity>{shapeElements}</TouchableOpacity>
+        </Animated.View>
+      );
+    }
+
     if (isSelected && selectedShapeProperty === SIZE) {
       return (
         <Animated.View
-          key={Date.now() + index}
+          key={index}
           onPress={() => handleSelect(index)}
-          style={[positionStyle, { transform: [{ scale: scaleRef }] }]}
+          style={[
+            { position: "absolute" },
+            positionStyle,
+            {
+              transform: [
+                { scale: scaleRef },
+                { rotate: `${element[index].rotation}deg` },
+              ],
+            },
+          ]}
           {...resizeResponder.panHandlers}
         >
           <TouchableOpacity>{shapeElements}</TouchableOpacity>
@@ -164,9 +214,14 @@ export default function ShapeElements() {
           key={Date.now() + index}
           onPress={() => handleSelect(index)}
           style={[
+            { position: "absolute" },
             positionStyle,
             {
-              transform: [{ translateX: movePan.x }, { translateY: movePan.y }],
+              transform: [
+                { translateX: movePan.x },
+                { translateY: movePan.y },
+                { rotate: `${element[index].rotation}deg` },
+              ],
             },
           ]}
           {...moveResponder.panHandlers}
@@ -180,12 +235,53 @@ export default function ShapeElements() {
       <TouchableOpacity
         key={Date.now() + index}
         onPress={() => handleSelect(index)}
-        style={[{ position: "absolute" }, positionStyle]}
+        style={[{ position: "absolute" }, positionStyle, rotationStyle]}
       >
         {shapeElements}
       </TouchableOpacity>
     );
   };
+
+  useEffect(() => {
+    setRotateResponder(
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderGrant: ({ nativeEvent }) => {
+          const { touches } = nativeEvent;
+          if (selectedIndexRef.current === null || touches.length !== 2) return;
+
+          if (touches.length === 2) {
+            const [touch1, touch2] = touches;
+            const angle = Math.atan2(
+              touch2.pageY - touch1.pageY,
+              touch2.pageX - touch1.pageX,
+            );
+
+            rotationRef.current = rotation._value;
+            rotationRef.startingAngle = angle;
+          }
+        },
+        onPanResponderMove: (_, gestureState) => {
+          const angle =
+            Math.atan2(gestureState.dy, gestureState.dx) * (180 / Math.PI);
+
+          const snappedRotation = Math.round(angle / 45) * 45;
+          rotation.setValue(snappedRotation);
+        },
+        onPanResponderRelease: (_, gestureState) => {
+          if (selectedIndexRef.current === null) return;
+
+          dispatch(
+            updateShapeRotation({
+              index: selectedIndexRef.current,
+              rotation: rotation._value,
+            }),
+          );
+        },
+      }),
+    );
+  }, [rotation]);
 
   useEffect(() => {
     setResizeResponder(

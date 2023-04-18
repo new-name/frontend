@@ -36,8 +36,8 @@ export default function ImageElements() {
     dispatch(handleSelectImage(index));
   };
 
-  const imageRef = useRef({});
   const [resizeResponder, setResizeResponder] = useState({});
+  const imageRef = useRef({});
   const scaleRef = useRef(new Animated.Value(1)).current;
   const sizePositionRef = useRef(0);
 
