@@ -5,10 +5,17 @@ import {
   ScrollView,
   Alert,
   PanResponder,
+  TouchableOpacity,
+  Text,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { WHITE_COLOR, SHADOW_COLOR } from "../../constants/color";
+import {
+  WHITE_COLOR,
+  SHADOW_COLOR,
+  ACTIVE_COLOR,
+  UNACTIVE_COLOR,
+} from "../../constants/color";
 import { shapeFooter } from "../../constants/footerItems";
 import {
   COLOR,
@@ -30,6 +37,7 @@ import {
   handleSelectShapeProperty,
   updateIconModalState,
   updateShapeSize,
+  updateSizeProportionMode,
 } from "../../features/reducers/shapeSlice";
 import { handleResize } from "../../utils/handleResize";
 import IconRenderer from "../IconRenderer";
@@ -44,6 +52,9 @@ export default function ShapeEditor() {
   );
   const selectedShapeIndex = useSelector(
     (state) => state.shapeReducer.shapeProperties.selectedIndex,
+  );
+  const sizeProportionMode = useSelector(
+    (state) => state.shapeReducer.isSizeProportionMode,
   );
 
   const handleSelectedProperty = (name) => {
@@ -111,6 +122,26 @@ export default function ShapeEditor() {
             scrollPosition={scrollPosition}
           />
         )}
+      {selectedShapeProperty === SIZE &&
+        shapeElements[selectedShapeIndex]?.type !== ICON && (
+          <TouchableOpacity
+            onPress={() =>
+              dispatch(updateSizeProportionMode(!sizeProportionMode))
+            }
+            style={{
+              ...styles.sizeMode,
+              borderColor: sizeProportionMode ? ACTIVE_COLOR : UNACTIVE_COLOR,
+            }}
+          >
+            <Text
+              style={{
+                color: sizeProportionMode ? ACTIVE_COLOR : UNACTIVE_COLOR,
+              }}
+            >
+              Proportional
+            </Text>
+          </TouchableOpacity>
+        )}
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {shapeFooter.map((item) => (
           <IconRenderer
@@ -155,5 +186,13 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3,
+  },
+  sizeMode: {
+    position: "absolute",
+    top: -SCREEN_HEIGHT * 0.065,
+    left: SCREEN_WIDTH * 0.365,
+    borderWidth: 2,
+    borderRadius: 20,
+    padding: 10,
   },
 });

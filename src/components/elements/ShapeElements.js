@@ -13,6 +13,7 @@ import {
   MOVE,
   SIZE,
   SHAPE,
+  ROTATE,
 } from "../../constants/property";
 import {
   handleSelectShape,
@@ -33,6 +34,9 @@ export default function ShapeElements() {
   const selectedShapeIndex = useSelector(
     (state) => state.shapeReducer.shapeProperties.selectedIndex,
   );
+  const sizeProportionMode = useSelector(
+    (state) => state.shapeReducer.isSizeProportionMode,
+  );
 
   const [moveResponder, setMoveResponder] = useState({});
   const selectedIndexRef = useRef(null);
@@ -49,7 +53,8 @@ export default function ShapeElements() {
 
   const [resizeResponder, setResizeResponder] = useState({});
   const shapeRef = useRef({});
-  const scaleRef = useRef(new Animated.Value(1)).current;
+  const scaleRef = useRef(new Animated.ValueXY({ x: 1, y: 1 })).current;
+  const scaleRefXY = useRef(new Animated.Value(1)).current;
   const sizePositionRef = useRef(0);
 
   const rotationRef = useRef(0);
@@ -105,8 +110,8 @@ export default function ShapeElements() {
       case RECTANGLE:
         shapeElements = (
           <Svg
-            height={element[index].height}
             width={element[index].width}
+            height={element[index].height}
             style={selectedBorderStyle}
           >
             <Rect
@@ -160,7 +165,7 @@ export default function ShapeElements() {
         break;
     }
 
-    if (isSelected && selectedShapeProperty === "Rotate") {
+    if (isSelected && selectedShapeProperty === ROTATE) {
       return (
         <Animated.View
           key={index}
@@ -187,20 +192,20 @@ export default function ShapeElements() {
     }
 
     if (isSelected && selectedShapeProperty === SIZE) {
+      const transform = [{ rotate: `${element[index].rotation}deg` }];
+
+      if (sizeProportionMode) {
+        transform.push({ scale: scaleRefXY });
+      } else {
+        transform.push({ scaleX: scaleRef.x });
+        transform.push({ scaleY: scaleRef.y });
+      }
+
       return (
         <Animated.View
           key={index}
           onPress={() => handleSelect(index)}
-          style={[
-            { position: "absolute" },
-            positionStyle,
-            {
-              transform: [
-                { scale: scaleRef },
-                { rotate: `${element[index].rotation}deg` },
-              ],
-            },
-          ]}
+          style={[{ position: "absolute" }, positionStyle, { transform }]}
           {...resizeResponder.panHandlers}
         >
           <TouchableOpacity>{shapeElements}</TouchableOpacity>
@@ -295,9 +300,20 @@ export default function ShapeElements() {
           if (touches.length === 2) {
             const [touch1, touch2] = touches;
             const distance = getDistance(touch1, touch2);
+            const distanceX = Math.abs(touch1.pageX - touch2.pageX);
+            const distanceY = Math.abs(touch1.pageY - touch2.pageY);
 
-            sizePositionRef.current = distance;
-            scaleRef._startingDistance = distance;
+            sizePositionRef.current = {
+              xy: distance,
+              x: distanceX,
+              y: distanceY,
+            };
+
+            scaleRef._startingDistance = {
+              x: distanceX,
+              y: distanceY,
+            };
+            scaleRefXY._startingDistance = distance;
           }
         },
         onPanResponderMove: ({ nativeEvent }) => {
@@ -307,29 +323,59 @@ export default function ShapeElements() {
           if (touches.length === 2) {
             const [touch1, touch2] = touches;
             const distance = getDistance(touch1, touch2);
+            const distanceX = Math.abs(touch1.pageX - touch2.pageX);
+            const distanceY = Math.abs(touch1.pageY - touch2.pageY);
 
-            const scaleFactor = distance / scaleRef._startingDistance;
-            scaleRef.setValue(scaleFactor);
+            const scaleFactorAll = distance / scaleRefXY._startingDistance;
+            const scaleFactorX = distanceX / scaleRef._startingDistance.x;
+            const scaleFactorY = distanceY / scaleRef._startingDistance.y;
+
+            scaleRefXY.setValue(scaleFactorAll);
+
+            if (scaleFactorX > scaleFactorY && !sizeProportionMode) {
+              scaleRef.setValue({
+                x: scaleFactorX,
+                y: 1,
+              });
+            }
+
+            if (scaleFactorX < scaleFactorY && !sizeProportionMode) {
+              scaleRef.setValue({
+                x: 1,
+                y: scaleFactorY,
+              });
+            }
           }
         },
         onPanResponderRelease: ({ nativeEvent }) => {
           if (selectedIndexRef.current === null) return;
 
-          const newWidth =
-            shapeRef.current[selectedIndexRef.current]?.width * scaleRef._value;
-          const newHeight =
+          const newWidthX =
+            shapeRef.current[selectedIndexRef.current]?.width *
+            scaleRef.x._value;
+          const newHeightY =
             shapeRef.current[selectedIndexRef.current]?.height *
-            scaleRef._value;
+            scaleRef.y._value;
+
+          const proportionX =
+            shapeRef.current[selectedIndexRef.current]?.width *
+            scaleRefXY._value;
+          const proportionY =
+            shapeRef.current[selectedIndexRef.current]?.height *
+            scaleRefXY._value;
 
           dispatch(
             updateShapeSize({
               index: selectedIndexRef.current,
-              width: newWidth,
-              height: newHeight,
+              width: newWidthX,
+              height: newHeightY,
+              proportionX,
+              proportionY,
             }),
           );
 
-          scaleRef.setValue(1);
+          scaleRef.setValue({ x: 1, y: 1 });
+          scaleRefXY.setValue(1);
         },
       }),
     );

@@ -29,6 +29,7 @@ const initialState = {
   shapeProperties,
   elements,
   isIconModalVisible: false,
+  isSizeProportionMode: false,
 };
 
 export const shapeSlice = createSlice({
@@ -137,8 +138,14 @@ export const shapeSlice = createSlice({
     },
     updateShapeSize: (state, action) => {
       const index = state.shapeProperties.selectedIndex;
-      const { width, height, handlerPositionOfY, scrollHeight } =
-        action.payload;
+      const {
+        width,
+        height,
+        handlerPositionOfY,
+        scrollHeight,
+        proportionX,
+        proportionY,
+      } = action.payload;
 
       if (state.elements[index].type === ICON) {
         const iconSize =
@@ -162,8 +169,14 @@ export const shapeSlice = createSlice({
         return;
       }
 
-      state.elements[index].width = width;
-      state.elements[index].height = height;
+      if (state.isSizeProportionMode) {
+        state.elements[index].width = proportionX;
+        state.elements[index].height = proportionY;
+      } else {
+        state.elements[index].width = width;
+        state.elements[index].height = height;
+      }
+
       state.shapeProperties.selectedIndex = null;
     },
     updateShapeRotation: (state, action) => {
@@ -174,6 +187,9 @@ export const shapeSlice = createSlice({
       state.isIconModalVisible = action.payload;
 
       state.shapeProperties.selectedProperty = "";
+    },
+    updateSizeProportionMode: (state, action) => {
+      state.isSizeProportionMode = action.payload;
     },
   },
 });
@@ -189,5 +205,6 @@ export const {
   updateShapeSize,
   updateShapeRotation,
   handleResetShape,
+  updateSizeProportionMode,
 } = shapeSlice.actions;
 export default shapeSlice.reducer;
