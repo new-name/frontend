@@ -21,7 +21,7 @@ import {
 } from "../../constants/color";
 import { imageFooter } from "../../constants/footerItems";
 import {
-  IMG_UNSPLASH,
+  UNSPLASH,
   ICON_FONT,
   ICON_IOS,
   ICON_MATERIAL_C,
@@ -49,7 +49,7 @@ export default function ImageEditor() {
   };
 
   useEffect(() => {
-    if (selectedProperty === IMG_UNSPLASH) {
+    if (selectedProperty === UNSPLASH) {
       dispatch(updateImageModalState(true));
     }
   }, [selectedProperty]);

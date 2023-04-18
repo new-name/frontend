@@ -1,9 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import {
+  MAX_GIF_SIZE,
+  MIN_GIF_SIZE,
+  SCROLL_HANDLE_HEIGHT,
+} from "../../constants/size";
+
 const gifProperties = {
   selectedProperty: "",
   selectedIndex: null,
-  selectedSize: 0,
 };
 
 const elements = {};
@@ -33,10 +38,22 @@ export const gifSlice = createSlice({
 
       state.gifProperties.selectedProperty = "";
     },
+    handleRenderGif: (state, action) => {
+      state.elements = action.payload;
+
+      state.gifModalVisible = false;
+    },
     updateGifSize: (state, action) => {
       const index = state.gifProperties.selectedIndex;
+      const { handlerPositionOfY, scrollHeight } = action.payload;
 
-      state.elements[index].size = action.payload;
+      const updatedSize =
+        MIN_GIF_SIZE +
+        ((scrollHeight - SCROLL_HANDLE_HEIGHT - handlerPositionOfY) /
+          (scrollHeight - SCROLL_HANDLE_HEIGHT)) *
+          (MAX_GIF_SIZE - MIN_GIF_SIZE);
+
+      state.elements[index].size = updatedSize;
     },
     updateGifPosition: (state, action) => {
       const { index, x, y } = action.payload;
@@ -44,26 +61,15 @@ export const gifSlice = createSlice({
       state.elements[index].x += x;
       state.elements[index].y += y;
     },
-    updateGifElements: (state, action) => {
-      state.elements = action.payload.reduce((acc, el, index) => {
-        return { ...acc, [index]: el };
-      }, {});
-    },
-    handleRenderGif: (state, action) => {
-      state.elements = action.payload;
-
-      state.gifModalVisible = false;
-    },
   },
 });
 
 export const {
   handleSelectGifProperty,
   handleSelectGif,
+  handleRenderGif,
   updateGifSize,
   updateGifPosition,
   updateGifModalState,
-  handleRenderGif,
-  updateGifElements,
 } = gifSlice.actions;
 export default gifSlice.reducer;

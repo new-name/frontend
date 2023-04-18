@@ -14,7 +14,7 @@ import {
 import { KeyboardAccessoryView } from "react-native-keyboard-accessory";
 import { useDispatch, useSelector } from "react-redux";
 
-import { TEXT_EDIT, TEXT_MOVE } from "../../constants/property";
+import { EDIT, MOVE } from "../../constants/property";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import {
   selectText,
@@ -65,7 +65,7 @@ export default function TextElements() {
       </Text>
     );
 
-    if (isSelected && selectedTextProperty === TEXT_MOVE) {
+    if (isSelected && selectedTextProperty === MOVE) {
       return (
         <Animated.View
           key={Date.now() + index}
@@ -83,7 +83,7 @@ export default function TextElements() {
       );
     }
 
-    if (isSelected && selectedTextProperty === TEXT_EDIT && isEditable) {
+    if (isSelected && selectedTextProperty === EDIT && isEditable) {
       return (
         <KeyboardAvoidingView
           style={{ flex: 1 }}

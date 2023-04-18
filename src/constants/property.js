@@ -1,41 +1,25 @@
 export const MORE = "More";
-
-export const TEXT = "Text";
-export const TEXT_ADD = "Add";
-export const TEXT_REMOVE = "Remove";
-export const TEXT_COLOR = "Color";
-export const TEXT_SIZE = "Size";
-export const TEXT_MOVE = "Move";
-export const TEXT_EDIT = "Edit";
-export const TEXT_STYLE = "Font Style";
-
+export const ADD = "Add";
+export const SIZE = "Size";
+export const COLOR = "Color";
+export const MOVE = "Move";
+export const REMOVE = "Remove";
+export const LIBRARY = "Library";
+export const EDIT = "Edit";
+export const FONT_STYLE = "Font Style";
+export const UNSPLASH = "Unsplash";
 export const IMAGE = "Image";
-export const IMG_UNSPLASH = "Unsplash";
-export const IMG_MOVE = "Move";
-export const IMG_SIZE = "Size";
-
+export const TEXT = "Text";
 export const GIF = "Gif";
-export const GIF_LIBRARY = "Library";
-export const GIF_MOVE = "Move";
-export const GIF_SIZE = "Size";
-
 export const SHAPE = "Shape";
-export const SHAPE_ICONS = "Icons";
-export const SHAPE_MOVE = "Move";
-export const SHAPE_COLOR = "Color";
-export const SHAPE_RECT = "Rectangle";
-export const SHAPE_CIRCLE = "Circle";
-export const SHAPE_LINE = "Line";
-export const SHAPE_SIZE = "Size";
-
-export const RECTANGLE = "RECTANGLE";
-export const ELLIPSE = "ELLIPSE";
-export const LINE = "LINE";
+export const ICONS = "Icons";
+export const CIRCLE = "Circle";
+export const RECTANGLE = "Rectangle";
+export const ELLIPSE = "Ellipse";
+export const LINE = "Line";
 export const ICON = "icon";
-
 export const STROKE = "Stroke";
 export const FILL = "Fill";
-
 export const ICON_FONT = "FontAwesome";
 export const ICON_MATERIAL = "MaterialIcons";
 export const ICON_IOS = "Ionicons";

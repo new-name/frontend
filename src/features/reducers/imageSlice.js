@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const imageProperties = {
   selectedProperty: "",
   selectedIndex: null,
-  selectedSize: 0,
 };
 
 const elements = {};

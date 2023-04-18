@@ -14,18 +14,17 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   ACTIVE_COLOR,
   WHITE_COLOR,
-  SCROLLBAR_COLOR,
   SHADOW_COLOR,
   UNACTIVE_COLOR,
 } from "../../constants/color";
 import { textFooter } from "../../constants/footerItems";
 import {
-  TEXT_ADD,
-  TEXT_COLOR,
-  TEXT_EDIT,
-  TEXT_REMOVE,
-  TEXT_SIZE,
-  TEXT_STYLE,
+  ADD,
+  COLOR,
+  EDIT,
+  REMOVE,
+  SIZE,
+  FONT_STYLE,
   ICON_FONT,
   ICON_MATERIAL,
   ICON_IOS,
@@ -34,20 +33,18 @@ import {
   APP_FOOTER_HEIGHT,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
-  SCROLL_HANDLE_HEIGHT,
-  MIN_TEXT_SIZE,
-  MAX_TEXT_SIZE,
 } from "../../constants/size";
 import { handleColorModalVisible } from "../../features/reducers/editorSlice";
 import {
-  addTextElements,
-  changeTextElements,
-  changeTextSize,
+  renderNewTextElement,
+  updateTextSize,
   removeTextElements,
   selectText,
   selectTextContents,
   updateFontContainerVisible,
 } from "../../features/reducers/textSlice";
+import { handleResize } from "../../utils/handleResize";
+import SizeSlider from "../SizeSlider";
 
 export default function TextEditor() {
   const dispatch = useDispatch();
@@ -58,9 +55,6 @@ export default function TextEditor() {
   const selectedTextIndex = useSelector(
     (state) => state.textReducer.textProperties.selectedIndex,
   );
-  const selectedTextSize = useSelector(
-    (state) => state.textReducer.textProperties.selectedSize,
-  );
   const textElements = useSelector((state) => state.textReducer.elements);
 
   const customScrollbarRef = useRef(null);
@@ -68,35 +62,16 @@ export default function TextEditor() {
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderMove: (event, gestureState) => {
-        handleResizeOfText(gestureState.moveY);
+        handleResize(
+          gestureState.moveY,
+          customScrollbarRef,
+          setScrollPosition,
+          dispatch,
+          updateTextSize,
+        );
       },
     }),
   ).current;
-
-  const handleResizeOfText = async (y) => {
-    if (!customScrollbarRef.current) return;
-
-    customScrollbarRef.current.measure((fx, fy, width, height, px, py) => {
-      const handlerPositionOfY = Math.max(
-        0,
-        Math.min(
-          y - py - SCROLL_HANDLE_HEIGHT / 2,
-          height - SCROLL_HANDLE_HEIGHT,
-        ),
-      );
-
-      if (isNaN(handlerPositionOfY)) return;
-      setScrollPosition(handlerPositionOfY);
-
-      const textSize =
-        MIN_TEXT_SIZE +
-        ((height - SCROLL_HANDLE_HEIGHT - handlerPositionOfY) /
-          (height - SCROLL_HANDLE_HEIGHT)) *
-          (MAX_TEXT_SIZE - MIN_TEXT_SIZE);
-
-      dispatch(changeTextSize(textSize));
-    });
-  };
 
   const handleSelectTextEditorProperty = (name) => {
     const newSelectedProperty = selectedProperty === name ? "" : name;
@@ -104,45 +79,11 @@ export default function TextEditor() {
   };
 
   useEffect(() => {
-    if (selectedProperty === TEXT_SIZE && selectedTextIndex !== null) {
-      const updatedTextElements = Object.keys(textElements).map(
-        (element, index) => {
-          if (index === selectedTextIndex) {
-            return { ...textElements[element], size: selectedTextSize };
-          }
-          return textElements[element];
-        },
-      );
-
-      dispatch(changeTextElements(updatedTextElements));
+    if (selectedProperty === ADD) {
+      dispatch(renderNewTextElement());
     }
-  }, [selectedTextIndex, selectedTextSize]);
 
-  useEffect(() => {
-    if (selectedProperty === TEXT_ADD) {
-      const nextIndex = Object.keys(textElements).length;
-      const newTextModel = {
-        text: "Sample Text",
-        x: 0,
-        y: 0,
-        size: 20,
-        color: "black",
-        fontStyle: "",
-        rotate: 0,
-        zIndex: 0,
-      };
-
-      const updatedTextElements = {
-        ...textElements,
-        [nextIndex]: newTextModel,
-      };
-
-      dispatch(addTextElements(updatedTextElements));
-    }
-  }, [selectedProperty]);
-
-  useEffect(() => {
-    if (selectedProperty === TEXT_REMOVE) {
+    if (selectedProperty === REMOVE) {
       if (selectedTextIndex === null) {
         Alert.alert("제거를 원하는 텍스트를 선택해주세요.");
         dispatch(selectText(""));
@@ -169,7 +110,7 @@ export default function TextEditor() {
   }, [selectedProperty]);
 
   useEffect(() => {
-    if (selectedProperty === TEXT_COLOR) {
+    if (selectedProperty === COLOR) {
       if (selectedTextIndex === null) {
         Alert.alert("원하는 텍스트를 선택해주세요.");
       }
@@ -183,7 +124,7 @@ export default function TextEditor() {
   }, [selectedProperty]);
 
   useEffect(() => {
-    if (selectedProperty === TEXT_EDIT) {
+    if (selectedProperty === EDIT) {
       if (selectedTextIndex === null) {
         Alert.alert("원하는 텍스트를 선택해주세요.");
         dispatch(selectText(""));
@@ -196,7 +137,7 @@ export default function TextEditor() {
   }, [selectedProperty]);
 
   useEffect(() => {
-    if (selectedProperty === TEXT_STYLE) {
+    if (selectedProperty === FONT_STYLE) {
       if (selectedTextIndex === null) {
         Alert.alert("원하는 텍스트를 선택해주세요.");
         dispatch(selectText(""));
@@ -210,28 +151,19 @@ export default function TextEditor() {
 
   return (
     <View style={styles.container}>
-      {selectedProperty === TEXT_SIZE && (
-        <View style={styles.size}>
-          <View
-            ref={customScrollbarRef}
-            style={styles.customScrollbar}
-            {...sizeResponder.panHandlers}
-          >
-            <View
-              style={[
-                styles.scrollHandle,
-                { top: scrollPosition - styles.scrollHandle.height / 2 },
-              ]}
-            />
-          </View>
-        </View>
+      {selectedProperty === SIZE && (
+        <SizeSlider
+          scrollbarRef={customScrollbarRef}
+          sizeResponder={sizeResponder}
+          scrollPosition={scrollPosition}
+        />
       )}
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {textFooter.map((item) => (
           <TouchableOpacity
             onPress={() => handleSelectTextEditorProperty(item.text)}
             key={item.iconName}
-            style={styles.iconWithText}
+            style={styles.iconContainer}
           >
             {item.icon === ICON_FONT && (
               <FontAwesome
@@ -294,7 +226,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3,
   },
-  iconWithText: {
+  iconContainer: {
     width: SCREEN_WIDTH * 0.185,
     alignItems: "center",
   },
@@ -302,27 +234,5 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 12,
     color: UNACTIVE_COLOR,
-  },
-  size: {
-    position: "absolute",
-    bottom: SCREEN_HEIGHT * 0.55,
-    left: 20,
-  },
-  customScrollbar: {
-    position: "absolute",
-    justifyContent: "center",
-    alignItems: "center",
-    width: 30,
-    height: SCREEN_HEIGHT * 0.3,
-    borderRadius: 15,
-    backgroundColor: SCROLLBAR_COLOR,
-    left: 20,
-  },
-  scrollHandle: {
-    position: "absolute",
-    width: 20,
-    height: SCROLL_HANDLE_HEIGHT,
-    borderRadius: 10,
-    backgroundColor: UNACTIVE_COLOR,
   },
 });

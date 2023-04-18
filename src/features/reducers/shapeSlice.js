@@ -1,18 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { ICON, STROKE, LINE } from "../../constants/property";
+import { UNACTIVE_COLOR, WHITE_COLOR } from "../../constants/color";
+import {
+  ICON,
+  STROKE,
+  LINE,
+  RECTANGLE,
+  CIRCLE,
+  ELLIPSE,
+} from "../../constants/property";
 import {
   MAX_ICON_SIZE,
   MAX_LINE_SIZE,
   MIN_ICON_SIZE,
   MIN_LINE_SIZE,
+  SCREEN_WIDTH,
   SCROLL_HANDLE_HEIGHT,
 } from "../../constants/size";
 
 const shapeProperties = {
   selectedProperty: "",
   selectedIndex: null,
-  selectedSize: 0,
 };
 
 const elements = {};
@@ -27,6 +35,63 @@ export const shapeSlice = createSlice({
   name: "shape",
   initialState,
   reducers: {
+    renderNewShapes: (state, action) => {
+      const nextIndex = Object.keys(state.elements).length;
+      const selectedShapeProperty = state.shapeProperties.selectedProperty;
+
+      let property;
+      if (selectedShapeProperty === RECTANGLE) {
+        property = {
+          type: RECTANGLE,
+          x: 0,
+          y: 0,
+          width: 200,
+          height: 200,
+          stroke: UNACTIVE_COLOR,
+          strokeWidth: 2,
+          color: WHITE_COLOR,
+          zIndex: 0,
+        };
+      }
+
+      if (selectedShapeProperty === CIRCLE) {
+        property = {
+          type: ELLIPSE,
+          x: 0,
+          y: 0,
+          width: 100,
+          height: 100,
+          stroke: UNACTIVE_COLOR,
+          strokeWidth: 2,
+          color: WHITE_COLOR,
+          zIndex: 0,
+        };
+      }
+
+      if (selectedShapeProperty === LINE) {
+        property = {
+          type: LINE,
+          x: 0,
+          y: 0,
+          x1: 0,
+          y1: 20,
+          x2: SCREEN_WIDTH * 0.7,
+          y2: 20,
+          stroke: UNACTIVE_COLOR,
+          strokeWidth: 3,
+          zIndex: 0,
+        };
+      }
+
+      const updatedShapeElements = {
+        ...state.elements,
+        [nextIndex]: property,
+      };
+
+      state.elements = updatedShapeElements;
+
+      state.shapeProperties.selectedProperty = "";
+    },
     handleSelectProperty: (state, action) => {
       const { shapeProperties } = state;
 
@@ -36,11 +101,6 @@ export const shapeSlice = createSlice({
       state.elements = action.payload;
 
       state.isIconModalVisible = false;
-    },
-    handleRenderShapes: (state, action) => {
-      state.elements = action.payload;
-
-      state.shapeProperties.selectedProperty = "";
     },
     handleSelectShape: (state, action) => {
       const { shapeProperties } = state;
@@ -103,13 +163,13 @@ export const shapeSlice = createSlice({
 });
 
 export const {
+  renderNewShapes,
   handleSelectProperty,
   handleSelectShape,
   handleRenderIcons,
   updateIconModalState,
   updateShapePosition,
   updateShapeColor,
-  handleRenderShapes,
   updateShapeSize,
 } = shapeSlice.actions;
 export default shapeSlice.reducer;

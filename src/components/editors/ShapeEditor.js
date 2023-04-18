@@ -26,15 +26,12 @@ import {
 } from "../../constants/color";
 import { shapeFooter } from "../../constants/footerItems";
 import {
-  SHAPE_COLOR,
-  SHAPE_ICONS,
-  SHAPE_RECT,
-  SHAPE_CIRCLE,
-  SHAPE_LINE,
+  COLOR,
+  ICONS,
   RECTANGLE,
-  ELLIPSE,
+  CIRCLE,
   LINE,
-  SHAPE_SIZE,
+  SIZE,
   ICON,
   ICON_ENTYPO,
   ICON_FONT,
@@ -50,12 +47,13 @@ import {
 } from "../../constants/size";
 import { handleColorModalVisible } from "../../features/reducers/editorSlice";
 import {
-  handleRenderShapes,
+  renderNewShapes,
   handleSelectProperty,
   updateIconModalState,
   updateShapeSize,
 } from "../../features/reducers/shapeSlice";
 import { handleResize } from "../../utils/handleResize";
+import SizeSlider from "../SizeSlider";
 
 export default function ShapeEditor() {
   const dispatch = useDispatch();
@@ -90,79 +88,24 @@ export default function ShapeEditor() {
   ).current;
 
   useEffect(() => {
-    if (selectedShapeProperty === SHAPE_ICONS) {
+    if (selectedShapeProperty === ICONS) {
       dispatch(updateIconModalState(true));
     }
-  }, [selectedShapeProperty]);
 
-  useEffect(() => {
     if (
-      selectedShapeProperty === SHAPE_RECT ||
-      selectedShapeProperty === SHAPE_CIRCLE ||
-      selectedShapeProperty === SHAPE_LINE
+      selectedShapeProperty === RECTANGLE ||
+      selectedShapeProperty === CIRCLE ||
+      selectedShapeProperty === LINE
     ) {
-      const nextIndex = Object.keys(shapeElements).length;
-
-      let property;
-      if (selectedShapeProperty === SHAPE_RECT) {
-        property = {
-          type: RECTANGLE,
-          x: 0,
-          y: 0,
-          width: 200,
-          height: 200,
-          stroke: UNACTIVE_COLOR,
-          strokeWidth: 2,
-          color: WHITE_COLOR,
-          zIndex: 0,
-        };
-      }
-
-      if (selectedShapeProperty === SHAPE_CIRCLE) {
-        property = {
-          type: ELLIPSE,
-          x: 0,
-          y: 0,
-          width: 100,
-          height: 100,
-          stroke: UNACTIVE_COLOR,
-          strokeWidth: 2,
-          color: WHITE_COLOR,
-          zIndex: 0,
-        };
-      }
-
-      if (selectedShapeProperty === SHAPE_LINE) {
-        property = {
-          type: LINE,
-          x: 0,
-          y: 0,
-          x1: 0,
-          y1: 20,
-          x2: SCREEN_WIDTH * 0.7,
-          y2: 20,
-          stroke: UNACTIVE_COLOR,
-          strokeWidth: 3,
-          zIndex: 0,
-        };
-      }
-
-      const updatedShapeElements = {
-        ...shapeElements,
-        [nextIndex]: property,
-      };
-
-      dispatch(handleRenderShapes(updatedShapeElements));
+      dispatch(renderNewShapes());
     }
   }, [selectedShapeProperty]);
 
   useEffect(() => {
-    if (selectedShapeProperty === SHAPE_COLOR) {
+    if (selectedShapeProperty === COLOR) {
       if (selectedShapeIndex === null) {
         Alert.alert("원하는 아이콘 또는 모양을 선택해주세요.");
-      }
-
-      if (selectedShapeIndex !== null) {
+      } else {
         dispatch(handleColorModalVisible(true));
       }
 
@@ -172,23 +115,14 @@ export default function ShapeEditor() {
 
   return (
     <View style={styles.container}>
-      {selectedShapeProperty === SHAPE_SIZE &&
+      {selectedShapeProperty === SIZE &&
         (shapeElements[selectedShapeIndex]?.type === ICON ||
           shapeElements[selectedShapeIndex]?.type === LINE) && (
-          <View style={styles.size}>
-            <View
-              ref={customScrollbarRef}
-              style={styles.customScrollbar}
-              {...sizeResponder.panHandlers}
-            >
-              <View
-                style={[
-                  styles.scrollHandle,
-                  { top: scrollPosition - styles.scrollHandle.height / 2 },
-                ]}
-              />
-            </View>
-          </View>
+          <SizeSlider
+            scrollbarRef={customScrollbarRef}
+            sizeResponder={sizeResponder}
+            scrollPosition={scrollPosition}
+          />
         )}
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {shapeFooter.map((item) => (

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Animated, PanResponder, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { GIF_MOVE } from "../../constants/property";
+import { MOVE } from "../../constants/property";
 import {
   handleSelectGif,
   updateGifPosition,
@@ -67,7 +67,7 @@ export default function GifElements() {
       />
     );
 
-    // if (isSelected && selectedGifProperty === GIF_SIZE) {
+    // if (isSelected && selectedGifProperty === SIZE) {
     //   return (
     //     <Animated.View
     //       key={Date.now() + index}
@@ -84,7 +84,7 @@ export default function GifElements() {
     //   );
     // }
 
-    if (isSelected && selectedGifProperty === GIF_MOVE) {
+    if (isSelected && selectedGifProperty === MOVE) {
       return (
         <Animated.View
           key={Date.now() + index}

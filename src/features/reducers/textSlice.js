@@ -1,9 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import {
+  MAX_TEXT_SIZE,
+  MIN_TEXT_SIZE,
+  SCROLL_HANDLE_HEIGHT,
+} from "../../constants/size";
+
 const textProperties = {
   selectedProperty: "",
   selectedIndex: null,
-  selectedSize: 0,
 };
 
 const elements = {};
@@ -33,16 +38,6 @@ export const textSlice = createSlice({
 
       state.elements[index].isEditable = value;
     },
-    changeTextSize: (state, action) => {
-      const { textProperties } = state;
-
-      textProperties.selectedSize = action.payload;
-    },
-    addTextElements: (state, action) => {
-      state.elements = action.payload;
-
-      state.textProperties.selectedProperty = "";
-    },
     removeTextElements: (state, action) => {
       const selectedTextIndex = String(action.payload);
 
@@ -57,12 +52,29 @@ export const textSlice = createSlice({
 
       state.elements = newElements;
 
-      textProperties.selectedProperty = "";
+      state.textProperties.selectedProperty = "";
     },
-    changeTextElements: (state, action) => {
-      state.elements = action.payload.reduce((acc, el, index) => {
-        return { ...acc, [index]: el };
-      }, {});
+    renderNewTextElement: (state) => {
+      const nextIndex = Object.keys(state.elements).length;
+      const newTextModel = {
+        text: "Sample Text",
+        x: 0,
+        y: 0,
+        size: 20,
+        color: "black",
+        fontStyle: "",
+        rotate: 0,
+        zIndex: 0,
+      };
+
+      const updatedTextElements = {
+        ...state.elements,
+        [nextIndex]: newTextModel,
+      };
+
+      state.elements = updatedTextElements;
+
+      state.textProperties.selectedProperty = "";
     },
     updateTextPosition: (state, action) => {
       const { index } = action.payload;
@@ -70,6 +82,18 @@ export const textSlice = createSlice({
 
       state.elements[index].x += x;
       state.elements[index].y += y;
+    },
+    updateTextSize: (state, action) => {
+      const index = state.textProperties.selectedIndex;
+      const { handlerPositionOfY, scrollHeight } = action.payload;
+
+      const updatedSize =
+        MIN_TEXT_SIZE +
+        ((scrollHeight - SCROLL_HANDLE_HEIGHT - handlerPositionOfY) /
+          (scrollHeight - SCROLL_HANDLE_HEIGHT)) *
+          (MAX_TEXT_SIZE - MIN_TEXT_SIZE);
+
+      state.elements[index].size = updatedSize;
     },
     updateTextColor: (state, action) => {
       const { index, selectedColor } = action.payload;
@@ -101,10 +125,10 @@ export const {
   selectText,
   selectTextIndex,
   selectTextContents,
-  changeTextSize,
+  updateTextSize,
   changeTextElements,
   updateTextPosition,
-  addTextElements,
+  renderNewTextElement,
   removeTextElements,
   updateTextColor,
   updateTextContents,

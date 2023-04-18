@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Animated, Image, PanResponder, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { IMG_MOVE, IMG_SIZE } from "../../constants/property";
+import { MOVE, SIZE } from "../../constants/property";
 import {
   handleSelectImage,
   updateImagePosition,
@@ -60,7 +60,7 @@ export default function ImageElements() {
       />
     );
 
-    if (isSelected && selectedImageProperty === IMG_SIZE) {
+    if (isSelected && selectedImageProperty === SIZE) {
       return (
         <Animated.View
           key={Date.now() + index}
@@ -74,7 +74,7 @@ export default function ImageElements() {
       );
     }
 
-    if (isSelected && selectedImageProperty === IMG_MOVE) {
+    if (isSelected && selectedImageProperty === MOVE) {
       return (
         <Animated.View
           key={Date.now() + index}

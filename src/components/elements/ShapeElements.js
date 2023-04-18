@@ -9,8 +9,8 @@ import {
   ICON,
   LINE,
   RECTANGLE,
-  SHAPE_MOVE,
-  SHAPE_SIZE,
+  MOVE,
+  SIZE,
 } from "../../constants/property";
 import {
   handleSelectShape,
@@ -119,7 +119,7 @@ export default function ShapeElements() {
       );
     }
 
-    if (isSelected && selectedShapeProperty === SHAPE_SIZE) {
+    if (isSelected && selectedShapeProperty === SIZE) {
       return (
         <Animated.View
           key={Date.now() + index}
@@ -132,7 +132,7 @@ export default function ShapeElements() {
       );
     }
 
-    if (isSelected && selectedShapeProperty === SHAPE_MOVE) {
+    if (isSelected && selectedShapeProperty === MOVE) {
       return (
         <Animated.View
           key={Date.now() + index}

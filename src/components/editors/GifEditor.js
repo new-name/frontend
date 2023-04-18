@@ -18,14 +18,13 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   ACTIVE_COLOR,
   WHITE_COLOR,
-  SCROLLBAR_COLOR,
   SHADOW_COLOR,
   UNACTIVE_COLOR,
 } from "../../constants/color";
 import { gifFooter } from "../../constants/footerItems";
 import {
-  GIF_LIBRARY,
-  GIF_SIZE,
+  LIBRARY,
+  SIZE,
   ICON_FONT,
   ICON_IOS,
   ICON_MATERIAL_C,
@@ -33,17 +32,16 @@ import {
 } from "../../constants/property";
 import {
   APP_FOOTER_HEIGHT,
-  MAX_GIF_SIZE,
-  MIN_GIF_SIZE,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
-  SCROLL_HANDLE_HEIGHT,
 } from "../../constants/size";
 import {
   handleSelectGifProperty,
   updateGifModalState,
   updateGifSize,
 } from "../../features/reducers/gifSlice";
+import { handleResize } from "../../utils/handleResize";
+import SizeSlider from "../SizeSlider";
 
 export default function GifEditor() {
   const dispatch = useDispatch();
@@ -62,38 +60,19 @@ export default function GifEditor() {
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderMove: (event, gestureState) => {
-        handleResize(gestureState.moveY);
+        handleResize(
+          gestureState.moveY,
+          customScrollbarRef,
+          setScrollPosition,
+          dispatch,
+          updateGifSize,
+        );
       },
     }),
   ).current;
 
-  const handleResize = async (y) => {
-    if (!customScrollbarRef.current) return;
-
-    customScrollbarRef.current.measure((fx, fy, width, height, px, py) => {
-      const handlerPositionOfY = Math.max(
-        0,
-        Math.min(
-          y - py - SCROLL_HANDLE_HEIGHT / 2,
-          height - SCROLL_HANDLE_HEIGHT,
-        ),
-      );
-
-      if (isNaN(handlerPositionOfY)) return;
-      setScrollPosition(handlerPositionOfY);
-
-      const newSize =
-        MIN_GIF_SIZE +
-        ((height - SCROLL_HANDLE_HEIGHT - handlerPositionOfY) /
-          (height - SCROLL_HANDLE_HEIGHT)) *
-          (MAX_GIF_SIZE - MIN_GIF_SIZE);
-
-      dispatch(updateGifSize(newSize));
-    });
-  };
-
   useEffect(() => {
-    if (selectedProperty === GIF_LIBRARY) {
+    if (selectedProperty === LIBRARY) {
       dispatch(updateGifModalState(true));
     }
   }, [selectedProperty]);
@@ -101,21 +80,12 @@ export default function GifEditor() {
   return (
     <View>
       <View style={styles.controllerContainer}>
-        {selectedProperty === GIF_SIZE && (
-          <View style={styles.size}>
-            <View
-              ref={customScrollbarRef}
-              style={styles.customScrollbar}
-              {...sizeResponder.panHandlers}
-            >
-              <View
-                style={[
-                  styles.scrollHandle,
-                  { top: scrollPosition - styles.scrollHandle.height / 2 },
-                ]}
-              />
-            </View>
-          </View>
+        {selectedProperty === SIZE && (
+          <SizeSlider
+            scrollbarRef={customScrollbarRef}
+            sizeResponder={sizeResponder}
+            scrollPosition={scrollPosition}
+          />
         )}
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {gifFooter.map((item) => (
@@ -228,27 +198,5 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 12,
     color: UNACTIVE_COLOR,
-  },
-  size: {
-    position: "absolute",
-    bottom: SCREEN_HEIGHT * 0.55,
-    left: 20,
-  },
-  customScrollbar: {
-    position: "absolute",
-    justifyContent: "center",
-    alignItems: "center",
-    width: 30,
-    height: SCREEN_HEIGHT * 0.3,
-    borderRadius: 15,
-    backgroundColor: SCROLLBAR_COLOR,
-    left: 20,
-  },
-  scrollHandle: {
-    position: "absolute",
-    width: 20,
-    height: SCROLL_HANDLE_HEIGHT,
-    borderRadius: 10,
-    backgroundColor: UNACTIVE_COLOR,
   },
 });
