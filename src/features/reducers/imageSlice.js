@@ -48,6 +48,7 @@ export const imageSlice = createSlice({
     },
     updateImagePosition: (state, action) => {
       const { index, x, y } = action.payload;
+      if (isNaN(x) || isNaN(y)) return;
 
       state.elements[index].x += x;
       state.elements[index].y += y;

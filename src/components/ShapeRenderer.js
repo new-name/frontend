@@ -6,7 +6,12 @@ import Svg, { Rect, Ellipse, Line } from "react-native-svg";
 import { ACTIVE_COLOR } from "../constants/color";
 import { ICON, RECTANGLE, ELLIPSE, LINE } from "../constants/property";
 
-export default function ShapeRenderer({ element, isSelected, sizeProperty }) {
+export default function ShapeRenderer({
+  element,
+  isSelected,
+  sizeProperty,
+  color,
+}) {
   const selectedBorderStyle = isSelected
     ? {
         borderWidth: 2,
@@ -38,7 +43,7 @@ export default function ShapeRenderer({ element, isSelected, sizeProperty }) {
             height={sizeProperty * 1.5 || element.height}
             stroke={element.stroke}
             strokeWidth={element.strokeWidth}
-            fill={element.color}
+            fill={color || element.color}
           />
         </Svg>
       );
@@ -56,7 +61,7 @@ export default function ShapeRenderer({ element, isSelected, sizeProperty }) {
             ry={sizeProperty * 0.98 || element.height * 0.98}
             stroke={element.stroke}
             strokeWidth={element.strokeWidth}
-            fill={element.color}
+            fill={color || element.color}
           />
         </Svg>
       );
@@ -86,6 +91,5 @@ ShapeRenderer.propTypes = {
   element: PropTypes.object.isRequired,
   isSelected: PropTypes.bool.isRequired,
   sizeProperty: PropTypes.number,
-  circSizeProperty: PropTypes.number,
-  lineSizeProperty: PropTypes.number,
+  color: PropTypes.string,
 };

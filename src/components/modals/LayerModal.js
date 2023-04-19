@@ -6,6 +6,7 @@ import {
   Image,
   Modal,
   PanResponder,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -42,15 +43,25 @@ export default function LayerModal() {
   const selectedLayerIndex = useRef(null);
   const movePan = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
   const positionRef = useRef({ x: 0, y: 0 });
+  const draggingRef = useRef(false);
 
   const updateLayers = () => {
     console.log("update layer");
   };
 
   const handleSelect = (index) => {
-    selectedLayerIndex.current = index;
+    const newSelectedIndex = selectedLayer === index ? null : index;
+    selectedLayerIndex.current = newSelectedIndex;
     layerRef.current = sortedElements;
-    setSelectedLayer(index);
+    setSelectedLayer(newSelectedIndex);
+
+    if (newSelectedIndex !== null) {
+      draggingRef.current = true;
+    }
+
+    if (newSelectedIndex === null) {
+      draggingRef.current = false;
+    }
   };
 
   const renderElements = (element, index) => {
@@ -68,6 +79,7 @@ export default function LayerModal() {
           <ShapeRenderer
             sizeProperty={40}
             element={element[index]}
+            color={element[index].color}
             isSelected={false}
           />
         );
@@ -113,6 +125,7 @@ export default function LayerModal() {
       PanResponder.create({
         onMoveShouldSetPanResponder: () => true,
         onPanResponderGrant: (_, gestureState) => {
+          if (selectedLayerIndex.current === null) return;
           positionRef.current = {
             x: gestureState.dx,
             y: gestureState.dy,
@@ -126,6 +139,7 @@ export default function LayerModal() {
         ),
         onPanResponderRelease: (_, gestureState) => {
           if (selectedLayerIndex.current === null) return;
+          draggingRef.current = false;
           const currentElements = layerRef.current;
           const currentIndex = selectedLayerIndex.current;
 
@@ -200,7 +214,13 @@ export default function LayerModal() {
             <Ionicons name="layers" size={30} color={ACTIVE_COLOR} />
           </TouchableOpacity>
         </AppHeader>
-        <View style={styles.scrollContainer}>
+        <ScrollView
+          scrollEnabled={!draggingRef.current}
+          contentContainerStyle={{
+            ...styles.scrollContainer,
+            height: SCREEN_HEIGHT * sortedElements.length * 0.125,
+          }}
+        >
           <View>
             {sortedElements.map((element, index) => (
               <Animated.View
@@ -252,7 +272,7 @@ export default function LayerModal() {
               </Animated.View>
             ))}
           </View>
-        </View>
+        </ScrollView>
       </View>
     </Modal>
   );
@@ -281,8 +301,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   scrollContainer: {
-    flex: 1,
     width: SCREEN_WIDTH * 0.9,
+    paddingBottom: 20,
   },
   layer: {
     flexDirection: "row",

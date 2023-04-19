@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: SCREEN_WIDTH,
-    height: APP_FOOTER_HEIGHT + APP_FOOTER_HEIGHT * 0.65,
+    height: APP_FOOTER_HEIGHT * 1.65,
     paddingTop: APP_FOOTER_HEIGHT * 0.9,
     paddingHorizontal: 10,
     backgroundColor: HEADER,
