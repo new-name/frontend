@@ -23,7 +23,7 @@ export const editorSlice = createSlice({
       state.layerModalVisible = action.payload;
       state.selectedProperty = "";
     },
-    updateAllElements: (state, action) => {
+    updateNewElements: (state, action) => {
       const elements = action.payload;
       const allElements = Object.keys(elements).map(
         (value, index) => elements[value],
@@ -35,6 +35,16 @@ export const editorSlice = createSlice({
           allElements[lastObject];
       }
     },
+    updateAllElements: (state, action) => {
+      const updatedArray = action.payload;
+
+      const newElements = updatedArray.reduce((acc, element, index) => {
+        acc[index] = { ...element };
+        return acc;
+      }, {});
+
+      state.allElements = newElements;
+    },
   },
 });
 
@@ -42,6 +52,7 @@ export const {
   handleActiveEditor,
   handleColorModalVisible,
   handleLayerModalVisible,
+  updateNewElements,
   updateAllElements,
 } = editorSlice.actions;
 export default editorSlice.reducer;

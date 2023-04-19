@@ -10,7 +10,7 @@ import { GIF, IMAGE, LAYER, SHAPE, TEXT } from "../constants/property";
 import { APP_FOOTER_HEIGHT } from "../constants/size";
 import {
   handleLayerModalVisible,
-  updateAllElements,
+  updateNewElements,
 } from "../features/reducers/editorSlice";
 
 export default function EditorRenderer() {
@@ -25,19 +25,19 @@ export default function EditorRenderer() {
   const textElements = useSelector((state) => state.textReducer.elements);
 
   useEffect(() => {
-    dispatch(updateAllElements(textElements));
+    dispatch(updateNewElements(textElements));
   }, [textElements]);
 
   useEffect(() => {
-    dispatch(updateAllElements(gifElements));
+    dispatch(updateNewElements(gifElements));
   }, [gifElements]);
 
   useEffect(() => {
-    dispatch(updateAllElements(imageElements));
+    dispatch(updateNewElements(imageElements));
   }, [imageElements]);
 
   useEffect(() => {
-    dispatch(updateAllElements(shapeElements));
+    dispatch(updateNewElements(shapeElements));
   }, [shapeElements]);
 
   useEffect(() => {
