@@ -25,6 +25,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import {
   handleLayerModalVisible,
   updateAllElements,
+  updateLayer,
 } from "../../features/reducers/editorSlice";
 import AppHeader from "../../layout/AppHeader";
 import ShapeRenderer from "../ShapeRenderer";
@@ -46,7 +47,7 @@ export default function LayerModal() {
   const draggingRef = useRef(false);
 
   const updateLayers = () => {
-    console.log("update layer");
+    dispatch(updateLayer(sortedElements));
   };
 
   const handleSelect = (index) => {
@@ -192,18 +193,14 @@ export default function LayerModal() {
       <View style={styles.container}>
         <AppHeader>
           <View style={styles.leftHeader}>
-            <TouchableOpacity
-              onPress={() => dispatch(handleLayerModalVisible(false))}
-            >
+            <TouchableOpacity onPress={updateLayers}>
               <Ionicons
                 name="ios-chevron-back-sharp"
                 size={25}
                 color={SUB_GRAY_COLOR}
               />
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => dispatch(handleLayerModalVisible(false))}
-            >
+            <TouchableOpacity onPress={updateLayers}>
               <Text style={{ color: SUB_GRAY_COLOR }}>뒤로 가기</Text>
             </TouchableOpacity>
           </View>

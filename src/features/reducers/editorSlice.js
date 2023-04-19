@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const allElements = {};
+const layerElements = {};
 
 const initialState = {
   allElements,
+  layerElements,
   selectedProperty: "",
   colorPickerVisible: false,
   layerModalVisible: false,
@@ -25,15 +27,11 @@ export const editorSlice = createSlice({
     },
     updateNewElements: (state, action) => {
       const elements = action.payload;
-      const allElements = Object.keys(elements).map(
-        (value, index) => elements[value],
-      );
-      const lastObject = allElements.length - 1;
 
-      if (allElements[lastObject]) {
-        state.allElements[allElements[lastObject].zIndex] =
-          allElements[lastObject];
-      }
+      Object.keys(elements).forEach((key) => {
+        const element = elements[key];
+        state.allElements[element.zIndex] = element;
+      });
     },
     updateAllElements: (state, action) => {
       const updatedArray = action.payload;
@@ -45,6 +43,16 @@ export const editorSlice = createSlice({
 
       state.allElements = newElements;
     },
+    updateLayer: (state, action) => {
+      const updatedArray = action.payload;
+      const newElements = updatedArray.reduce((acc, element, index) => {
+        acc[index] = { ...element };
+        return acc;
+      }, {});
+
+      state.layerElements = newElements;
+      state.layerModalVisible = false;
+    },
   },
 });
 
@@ -54,5 +62,6 @@ export const {
   handleLayerModalVisible,
   updateNewElements,
   updateAllElements,
+  updateLayer,
 } = editorSlice.actions;
 export default editorSlice.reducer;

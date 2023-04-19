@@ -127,11 +127,22 @@ export const textSlice = createSlice({
       state.fontContainerVisible = false;
       state.textProperties.selectedProperty = "";
     },
+    updateAllTexts: (state, action) => {
+      const updatedArray = action.payload;
+      const sortedArray = updatedArray.sort((a, b) => a.zIndex - b.zIndex);
+      const newElements = sortedArray.reduce((acc, element, index) => {
+        acc[index] = { ...element };
+        return acc;
+      }, {});
+
+      state.elements = newElements;
+    },
   },
 });
 
 export const {
   handleSelectTextProperty,
+  handleResetText,
   selectTextIndex,
   selectTextContents,
   updateTextSize,
@@ -143,6 +154,6 @@ export const {
   updateTextContents,
   updateFontContainerVisible,
   updateTextFontStyle,
-  handleResetText,
+  updateAllTexts,
 } = textSlice.actions;
 export default textSlice.reducer;

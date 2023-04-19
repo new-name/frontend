@@ -196,6 +196,16 @@ export const shapeSlice = createSlice({
     updateSizeProportionMode: (state, action) => {
       state.isSizeProportionMode = action.payload;
     },
+    updateAllShapes: (state, action) => {
+      const updatedArray = action.payload;
+      const sortedArray = updatedArray.sort((a, b) => a.zIndex - b.zIndex);
+      const newElements = sortedArray.reduce((acc, element, index) => {
+        acc[index] = { ...element };
+        return acc;
+      }, {});
+
+      state.elements = newElements;
+    },
   },
 });
 
@@ -211,5 +221,6 @@ export const {
   updateShapeRotation,
   handleResetShape,
   updateSizeProportionMode,
+  updateAllShapes,
 } = shapeSlice.actions;
 export default shapeSlice.reducer;

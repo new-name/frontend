@@ -63,6 +63,16 @@ export const imageSlice = createSlice({
 
       state.imageModalVisible = false;
     },
+    updateAllImages: (state, action) => {
+      const updatedArray = action.payload;
+      const sortedArray = updatedArray.sort((a, b) => a.zIndex - b.zIndex);
+      const newElements = sortedArray.reduce((acc, element, index) => {
+        acc[index] = { ...element };
+        return acc;
+      }, {});
+
+      state.elements = newElements;
+    },
   },
 });
 
@@ -75,5 +85,6 @@ export const {
   handleRenderImage,
   updateImageElements,
   handleResetImage,
+  updateAllImages,
 } = imageSlice.actions;
 export default imageSlice.reducer;

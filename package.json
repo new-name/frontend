@@ -20,11 +20,11 @@
     "expo-linear-gradient": "^12.1.2",
     "expo-secure-store": "^12.1.1",
     "expo-status-bar": "~1.4.4",
-    "lottie-react-native": "^6.0.0-rc.3",
+    "lottie-react-native": "5.1.4",
     "react": "18.2.0",
     "react-native": "0.71.6",
     "react-native-keyboard-accessory": "^0.1.16",
-    "react-native-svg": "^13.9.0",
+    "react-native-svg": "13.4.0",
     "react-redux": "^8.0.5"
   },
   "devDependencies": {

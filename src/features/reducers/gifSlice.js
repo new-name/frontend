@@ -63,9 +63,20 @@ export const gifSlice = createSlice({
     },
     updateGifPosition: (state, action) => {
       const { index, x, y } = action.payload;
+      if (isNaN(x) || isNaN(y)) return;
 
       state.elements[index].x += x;
       state.elements[index].y += y;
+    },
+    updateAllGifs: (state, action) => {
+      const updatedArray = action.payload;
+      const sortedArray = updatedArray.sort((a, b) => a.zIndex - b.zIndex);
+      const newElements = sortedArray.reduce((acc, element, index) => {
+        acc[index] = { ...element };
+        return acc;
+      }, {});
+
+      state.elements = newElements;
     },
   },
 });
@@ -78,5 +89,6 @@ export const {
   updateGifPosition,
   updateGifModalState,
   handleResetGif,
+  updateAllGifs,
 } = gifSlice.actions;
 export default gifSlice.reducer;
