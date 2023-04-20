@@ -8,3 +8,4 @@ export const UNACTIVE_COLOR = "gray";
 export const SHADOW_COLOR = "black";
 export const SCROLLBAR_COLOR = "#eee";
 export const EDITOR_COLOR = "rgba(255, 255, 255, 0.8)";
+export const UNEDITABLE_COLOR = "red";

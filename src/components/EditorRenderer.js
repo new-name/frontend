@@ -104,7 +104,7 @@ export default function EditorRenderer() {
     switch (activeEditor) {
       case SHAPE:
         return (
-          <View style={styles.imageEditorContainer}>
+          <View style={styles.editorContainer}>
             <ShapeEditor />
           </View>
         );
@@ -116,13 +116,13 @@ export default function EditorRenderer() {
         );
       case GIF:
         return (
-          <View style={styles.imageEditorContainer}>
+          <View style={styles.editorContainer}>
             <GifEditor />
           </View>
         );
       case IMAGE:
         return (
-          <View style={styles.imageEditorContainer}>
+          <View style={styles.editorContainer}>
             <ImageEditor />
           </View>
         );
@@ -138,12 +138,6 @@ const styles = StyleSheet.create({
   editorContainer: {
     position: "absolute",
     zIndex: 20,
-    height: APP_FOOTER_HEIGHT,
-    bottom: APP_FOOTER_HEIGHT * 1.35,
-  },
-  imageEditorContainer: {
-    position: "absolute",
-    zIndex: 20,
-    bottom: APP_FOOTER_HEIGHT * 1.35,
+    bottom: APP_FOOTER_HEIGHT * 1.25,
   },
 });

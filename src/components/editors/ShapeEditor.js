@@ -169,13 +169,6 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH,
     height: APP_FOOTER_HEIGHT,
     backgroundColor: EDITOR_COLOR,
-    shadowColor: SHADOW_COLOR,
-    shadowOffset: {
-      width: 0,
-      height: -2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3,
   },
   controllerContainer: {
     flexDirection: "row",
@@ -184,13 +177,6 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH,
     height: APP_FOOTER_HEIGHT,
     backgroundColor: WHITE_COLOR,
-    shadowColor: SHADOW_COLOR,
-    shadowOffset: {
-      width: 0,
-      height: -2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3,
   },
   sizeMode: {
     position: "absolute",

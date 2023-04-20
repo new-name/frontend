@@ -2,8 +2,6 @@ import PropTypes from "prop-types";
 import React from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
 
-import { HEADER } from "../constants/color";
-
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 const appFooterHeight = screenHeight / 12;
 
@@ -22,8 +20,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "top",
     width: screenWidth,
-    height: appFooterHeight + appFooterHeight * 0.25,
+    height: appFooterHeight * 1.25,
     paddingTop: appFooterHeight * 0.1,
-    backgroundColor: HEADER,
   },
 });
