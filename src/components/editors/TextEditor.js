@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
-import { WHITE_COLOR, SHADOW_COLOR } from "../../constants/color";
+import { SHADOW_COLOR, EDITOR_COLOR } from "../../constants/color";
 import { textFooter } from "../../constants/footerItems";
 import {
   ADD,
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: SCREEN_WIDTH,
     height: APP_FOOTER_HEIGHT,
-    backgroundColor: WHITE_COLOR,
+    backgroundColor: EDITOR_COLOR,
     shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -137,13 +137,13 @@ export default function EditorRenderer() {
 const styles = StyleSheet.create({
   editorContainer: {
     position: "absolute",
-    zIndex: 2,
+    zIndex: 20,
     height: APP_FOOTER_HEIGHT,
-    bottom: APP_FOOTER_HEIGHT + APP_FOOTER_HEIGHT * 0.35,
+    bottom: APP_FOOTER_HEIGHT * 1.35,
   },
   imageEditorContainer: {
     position: "absolute",
-    zIndex: 2,
-    bottom: APP_FOOTER_HEIGHT + APP_FOOTER_HEIGHT * 0.35,
+    zIndex: 20,
+    bottom: APP_FOOTER_HEIGHT * 1.35,
   },
 });

@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { Animated, Image, PanResponder, TouchableOpacity } from "react-native";
+import {
+  Animated,
+  Image,
+  PanResponder,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 import { ACTIVE_COLOR } from "../../constants/color";
@@ -81,7 +87,7 @@ export default function ImageElements() {
     if (isSelected && selectedImageProperty === SIZE) {
       return (
         <Animated.View
-          key={index}
+          key={element[index]?.id}
           style={[positionStyle, { transform: [{ scale: scaleRef }] }]}
           {...resizeResponder.panHandlers}
         >
@@ -95,7 +101,7 @@ export default function ImageElements() {
     if (isSelected && selectedImageProperty === MOVE) {
       return (
         <Animated.View
-          key={index}
+          key={element[index]?.id}
           onPress={() => handleSelect(index)}
           style={[
             positionStyle,
@@ -111,13 +117,14 @@ export default function ImageElements() {
     }
 
     return (
-      <TouchableOpacity
-        key={Date.now() + index}
-        onPress={() => handleSelect(index)}
+      <View
+        key={element[index]?.id}
         style={[{ position: "absolute" }, positionStyle]}
       >
-        {imageElements}
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleSelect(index)}>
+          {imageElements}
+        </TouchableOpacity>
+      </View>
     );
   };
 

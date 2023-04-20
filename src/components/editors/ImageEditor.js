@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { View, StyleSheet, ScrollView, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { WHITE_COLOR, SHADOW_COLOR } from "../../constants/color";
+import { SHADOW_COLOR, EDITOR_COLOR } from "../../constants/color";
 import { imageFooter } from "../../constants/footerItems";
 import { SIZE, UNSPLASH } from "../../constants/property";
 import { APP_FOOTER_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: SCREEN_WIDTH,
     height: APP_FOOTER_HEIGHT,
-    backgroundColor: WHITE_COLOR,
+    backgroundColor: EDITOR_COLOR,
     shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,

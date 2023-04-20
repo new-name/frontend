@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { View, StyleSheet, ScrollView, PanResponder } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { WHITE_COLOR, SHADOW_COLOR } from "../../constants/color";
+import { SHADOW_COLOR, EDITOR_COLOR } from "../../constants/color";
 import { gifFooter } from "../../constants/footerItems";
 import { LIBRARY, SIZE } from "../../constants/property";
 import {
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: SCREEN_WIDTH,
     height: APP_FOOTER_HEIGHT,
-    backgroundColor: WHITE_COLOR,
+    backgroundColor: EDITOR_COLOR,
     shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,

@@ -15,6 +15,7 @@ import {
   SHADOW_COLOR,
   ACTIVE_COLOR,
   UNACTIVE_COLOR,
+  EDITOR_COLOR,
 } from "../../constants/color";
 import { shapeFooter } from "../../constants/footerItems";
 import {
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: SCREEN_WIDTH,
     height: APP_FOOTER_HEIGHT,
-    backgroundColor: WHITE_COLOR,
+    backgroundColor: EDITOR_COLOR,
     shadowColor: SHADOW_COLOR,
     shadowOffset: {
       width: 0,

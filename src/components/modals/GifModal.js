@@ -51,6 +51,7 @@ export default function GifModal() {
       source: selected,
       size: SCREEN_WIDTH * 0.4,
       zIndex: layerNumber,
+      id: Date.now(),
     };
 
     const updatedElements = {

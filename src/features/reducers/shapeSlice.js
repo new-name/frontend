@@ -56,6 +56,7 @@ export const shapeSlice = createSlice({
           color: WHITE_COLOR,
           rotation: 0,
           zIndex: layerNumber,
+          id: Date.now(),
         };
       }
 
@@ -72,6 +73,7 @@ export const shapeSlice = createSlice({
           color: WHITE_COLOR,
           rotation: 0,
           zIndex: layerNumber,
+          id: Date.now(),
         };
       }
 
@@ -89,6 +91,7 @@ export const shapeSlice = createSlice({
           strokeWidth: 2,
           rotation: 0,
           zIndex: layerNumber,
+          id: Date.now(),
         };
       }
 

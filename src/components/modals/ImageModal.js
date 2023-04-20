@@ -17,6 +17,7 @@ import {
   WHITE_COLOR,
   SUB_GRAY_COLOR,
 } from "../../constants/color";
+import { IMAGE } from "../../constants/property";
 import { IMAGE_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import api from "../../features/api";
 import {
@@ -24,7 +25,6 @@ import {
   updateImageModalState,
 } from "../../features/reducers/imageSlice";
 import AppHeader from "../../layout/AppHeader";
-import { IMAGE } from "../../constants/property";
 
 export default function ImageModal() {
   const dispatch = useDispatch();
@@ -49,6 +49,7 @@ export default function ImageModal() {
       x: 0,
       y: 0,
       zIndex: layerNumber,
+      id: Date.now(),
     };
 
     const updatedElements = {

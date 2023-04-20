@@ -86,7 +86,7 @@ export default function TextElements() {
     if (isSelected && selectedTextProperty === MOVE) {
       return (
         <Animated.View
-          key={Date.now() + index}
+          key={element[index]?.id}
           onPress={() => handleSelectText(index)}
           style={[
             positionStyle,
@@ -106,7 +106,7 @@ export default function TextElements() {
         <KeyboardAvoidingView
           style={{ flex: 1, zIndex: Z_INDEX_100 }}
           behavior={Platform.OS === "ios" ? "padding" : null}
-          key={element[index]?.x + element[index].y}
+          key={element[index]?.id}
         >
           <TouchableOpacity
             onPress={() => handleSelectText(index)}
@@ -159,13 +159,14 @@ export default function TextElements() {
     }
 
     return (
-      <TouchableOpacity
-        key={Date.now() + index}
-        onPress={() => handleSelectText(index)}
+      <View
+        key={element[index]?.id}
         style={[{ position: "absolute" }, positionStyle]}
       >
-        {textElement}
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleSelectText(index)}>
+          {textElement}
+        </TouchableOpacity>
+      </View>
     );
   };
 

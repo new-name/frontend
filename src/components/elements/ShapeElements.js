@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Animated, PanResponder, TouchableOpacity } from "react-native";
+import { Animated, PanResponder, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 import { MOVE, SIZE, SHAPE, ROTATE } from "../../constants/property";
@@ -83,7 +83,7 @@ export default function ShapeElements() {
     if (isSelected && selectedShapeProperty === ROTATE) {
       return (
         <Animated.View
-          key={index}
+          key={element[index]?.id}
           onPress={() => handleSelect(index)}
           style={[
             { position: "absolute" },
@@ -118,7 +118,7 @@ export default function ShapeElements() {
 
       return (
         <Animated.View
-          key={index}
+          key={element[index]?.id}
           onPress={() => handleSelect(index)}
           style={[{ position: "absolute" }, positionStyle, { transform }]}
           {...resizeResponder.panHandlers}
@@ -131,7 +131,7 @@ export default function ShapeElements() {
     if (isSelected && selectedShapeProperty === MOVE) {
       return (
         <Animated.View
-          key={Date.now() + index}
+          key={element[index]?.id}
           onPress={() => handleSelect(index)}
           style={[
             { position: "absolute" },
@@ -152,13 +152,14 @@ export default function ShapeElements() {
     }
 
     return (
-      <TouchableOpacity
-        key={Date.now() + index}
-        onPress={() => handleSelect(index)}
+      <View
+        key={element[index]?.id}
         style={[{ position: "absolute" }, positionStyle, rotationStyle]}
       >
-        {shapeElements}
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleSelect(index)}>
+          {shapeElements}
+        </TouchableOpacity>
+      </View>
     );
   };
 

@@ -9,6 +9,7 @@ const initialState = {
   selectedProperty: "",
   colorPickerVisible: false,
   layerModalVisible: false,
+  shouldSaveInEditor: false,
 };
 
 export const editorSlice = createSlice({
@@ -24,6 +25,10 @@ export const editorSlice = createSlice({
     handleLayerModalVisible: (state, action) => {
       state.layerModalVisible = action.payload;
       state.selectedProperty = "";
+    },
+    handleSaveInEditor: (state, action) => {
+      const { saveValue } = action.payload;
+      state.shouldSaveInEditor = saveValue;
     },
     updateNewElements: (state, action) => {
       const elements = action.payload;
@@ -60,6 +65,7 @@ export const {
   handleActiveEditor,
   handleColorModalVisible,
   handleLayerModalVisible,
+  handleSaveInEditor,
   updateNewElements,
   updateAllElements,
   updateLayer,

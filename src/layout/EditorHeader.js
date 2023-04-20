@@ -2,11 +2,22 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 import { UNACTIVE_COLOR } from "../constants/color";
+import { handleSaveInEditor } from "../features/reducers/editorSlice";
 
 export default function EditorHeader() {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const allElements = useSelector((state) => state.editorReducer.allElements);
+  const saveValue = useSelector(
+    (state) => state.editorReducer.shouldSaveInEditor,
+  );
+
+  const handleSave = () => {
+    dispatch(handleSaveInEditor({ allElements, saveValue: !saveValue }));
+  };
 
   return (
     <>
@@ -39,7 +50,7 @@ export default function EditorHeader() {
         </TouchableOpacity>
       </View>
       <View style={styles.download}>
-        <TouchableOpacity onPress={() => console.log("save")}>
+        <TouchableOpacity onPress={handleSave}>
           <Ionicons
             name="ios-download-outline"
             size={30}

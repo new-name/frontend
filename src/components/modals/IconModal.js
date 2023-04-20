@@ -53,6 +53,7 @@ export default function IconModal() {
       x: 0,
       y: 0,
       zIndex: layerNumber,
+      id: Date.now(),
     };
 
     const updatedShapeElements = {

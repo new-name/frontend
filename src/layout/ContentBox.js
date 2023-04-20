@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { StyleSheet, View, Dimensions } from "react-native";
 
-import { WHITE_COLOR } from "../constants/color";
+import { UNACTIVE_COLOR } from "../constants/color";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 const contentBoxHeight = screenHeight * 0.75;
@@ -20,6 +20,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: screenWidth,
     height: contentBoxHeight,
-    backgroundColor: WHITE_COLOR,
+    backgroundColor: UNACTIVE_COLOR,
   },
 });

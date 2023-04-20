@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import { TEXT } from "../../constants/property";
 import {
   MAX_TEXT_SIZE,
   MIN_TEXT_SIZE,
   SCROLL_HANDLE_HEIGHT,
 } from "../../constants/size";
-import { TEXT } from "../../constants/property";
 
 const textProperties = {
   selectedProperty: "",
@@ -74,6 +74,7 @@ export const textSlice = createSlice({
         fontStyle: "",
         rotate: 0,
         zIndex: layerNumber,
+        id: Date.now(),
       };
 
       const updatedTextElements = {

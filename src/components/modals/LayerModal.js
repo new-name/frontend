@@ -23,7 +23,6 @@ import {
 import { GIF, IMAGE, SHAPE, TEXT } from "../../constants/property";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import {
-  handleLayerModalVisible,
   updateAllElements,
   updateLayer,
 } from "../../features/reducers/editorSlice";

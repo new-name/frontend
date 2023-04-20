@@ -1,6 +1,6 @@
 import Lottie from "lottie-react-native";
 import { useEffect, useRef, useState } from "react";
-import { Animated, PanResponder, TouchableOpacity } from "react-native";
+import { Animated, PanResponder, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 import { ACTIVE_COLOR } from "../../constants/color";
@@ -67,7 +67,7 @@ export default function GifElements() {
     if (isSelected && selectedGifProperty === MOVE) {
       return (
         <Animated.View
-          key={Date.now() + index}
+          key={element[index]?.id}
           onPress={() => handleSelect(index)}
           style={[
             positionStyle,
@@ -83,13 +83,14 @@ export default function GifElements() {
     }
 
     return (
-      <TouchableOpacity
-        key={Date.now() + index}
-        onPress={() => handleSelect(index)}
+      <View
+        key={element[index]?.id}
         style={[{ position: "absolute" }, positionStyle, selectedBorderStyle]}
       >
-        {gifElements}
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleSelect(index)}>
+          {gifElements}
+        </TouchableOpacity>
+      </View>
     );
   };
 
