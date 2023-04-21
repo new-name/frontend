@@ -77,12 +77,7 @@ export const textSlice = createSlice({
         id: Date.now(),
       };
 
-      const updatedTextElements = {
-        ...state.elements,
-        [nextIndex]: newTextModel,
-      };
-
-      state.elements = updatedTextElements;
+      state.elements[nextIndex] = newTextModel;
 
       state.textProperties.selectedProperty = "";
     },

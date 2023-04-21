@@ -101,6 +101,37 @@ async function getFonts() {
   }
 }
 
+async function makeGifFromLottie({ frames, fps, width, height }) {
+  try {
+    const response = await axiosInstance.post("/api/files/gif/new", {
+      frames,
+      fps,
+      width,
+      height,
+    });
+
+    if (response.status === 200) {
+      return response.data.base64Gif;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function sendFramesChunk({ frames, width, height }) {
+  try {
+    const response = await axiosInstance.post("/api/files/gif/chunks", {
+      frames,
+      width,
+      height,
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch {}
+}
+
 export default {
   postSignUp,
   postSignIn,
@@ -108,4 +139,6 @@ export default {
   getImages,
   searchImages,
   getFonts,
+  makeGifFromLottie,
+  sendFramesChunk,
 };

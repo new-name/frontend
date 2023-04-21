@@ -33,7 +33,6 @@ export default function ImageModal() {
   const [photos, setPhotos] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const imageElements = useSelector((state) => state.imageReducer.elements);
   const allElements = useSelector((state) => state.editorReducer.allElements);
 
   const isModalVisible = useSelector(
@@ -42,7 +41,6 @@ export default function ImageModal() {
 
   const updateImages = () => {
     const layerNumber = Object.keys(allElements).length;
-    const nextIndex = Object.keys(imageElements).length;
     const property = {
       ...selected,
       type: IMAGE,
@@ -52,11 +50,7 @@ export default function ImageModal() {
       id: Date.now(),
     };
 
-    const updatedElements = {
-      ...imageElements,
-      [nextIndex]: property,
-    };
-    dispatch(handleRenderImage(updatedElements));
+    dispatch(handleRenderImage(property));
   };
 
   const getImageSize = (uri) => {

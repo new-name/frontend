@@ -1,4 +1,5 @@
 import Lottie from "lottie-react-native";
+import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { Animated, PanResponder, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +11,7 @@ import {
   updateGifPosition,
 } from "../../features/reducers/gifSlice";
 
-export default function GifElements() {
+export default function GifElements({ updateLongestLottieRef }) {
   const dispatch = useDispatch();
   const activeEditor = useSelector(
     (state) => state.editorReducer.selectedProperty,
@@ -94,6 +95,36 @@ export default function GifElements() {
     );
   };
 
+  const findLongestLottieDuration = (lottieDataArray) => {
+    const longestLottie = { duration: 0, index: 0 };
+
+    lottieDataArray.forEach((lottieData, index) => {
+      const frameRate = lottieData.source.fr;
+      const inPoint = lottieData.source.ip;
+      const outPoint = lottieData.source.op;
+      const duration = (outPoint - inPoint) / frameRate;
+
+      if (duration > longestLottie.duration) {
+        longestLottie.duration = duration;
+        longestLottie.index = index;
+      }
+    });
+
+    return longestLottie;
+  };
+
+  useEffect(() => {
+    const lottieArray = Object.keys(gifElements).map(
+      (element) => gifElements[element],
+    );
+    const longestLottie = findLongestLottieDuration(lottieArray);
+
+    updateLongestLottieRef({
+      ref: animationRefs.current[longestLottie.index],
+      duration: longestLottie.duration,
+    });
+  }, [gifElements]);
+
   useEffect(() => {
     setMoveResponder(
       PanResponder.create({
@@ -140,3 +171,7 @@ export default function GifElements() {
     </>
   );
 }
+
+GifElements.propTypes = {
+  updateLongestLottieRef: PropTypes.func.isRequired,
+};

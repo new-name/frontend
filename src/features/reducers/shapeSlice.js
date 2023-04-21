@@ -95,12 +95,7 @@ export const shapeSlice = createSlice({
         };
       }
 
-      const updatedShapeElements = {
-        ...state.elements,
-        [nextIndex]: property,
-      };
-
-      state.elements = updatedShapeElements;
+      state.elements[nextIndex] = property;
 
       state.shapeProperties.selectedProperty = "";
     },

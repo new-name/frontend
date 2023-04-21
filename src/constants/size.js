@@ -7,6 +7,8 @@ export const SCROLL_HANDLE_HEIGHT = 20;
 export const SCREEN_WIDTH = screenWidth;
 export const SCREEN_HEIGHT = screenHeight;
 
+export const SCROLL_CONTAINER_HEIGHT = screenHeight * 0.8;
+export const CONTAINER_HEIGHT = screenHeight * 0.7;
 export const CONTAINER_WIDTH = screenWidth * 0.85;
 export const IMAGE_WIDTH = screenWidth * 0.8;
 export const EDIT_WIDTH = screenWidth * 0.8;

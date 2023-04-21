@@ -33,6 +33,14 @@ export const gifSlice = createSlice({
 
       gifProperties.selectedIndex = action.payload;
     },
+    handleRenderGif: (state, action) => {
+      const property = action.payload;
+      const nextIndex = Object.keys(state.elements).length;
+
+      state.elements[nextIndex] = property;
+
+      state.gifModalVisible = false;
+    },
     handleResetGif: (state) => {
       const { gifProperties } = state;
 
@@ -43,11 +51,6 @@ export const gifSlice = createSlice({
       state.gifModalVisible = action.payload;
 
       state.gifProperties.selectedProperty = "";
-    },
-    handleRenderGif: (state, action) => {
-      state.elements = action.payload;
-
-      state.gifModalVisible = false;
     },
     updateGifSize: (state, action) => {
       const index = state.gifProperties.selectedIndex;

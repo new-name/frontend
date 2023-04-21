@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 
 import api from "./src/features/api";
 import AppNavigator from "./src/navigator/AppNavigator";
-import store from "./src/store/congifureStore";
+import store from "./src/store/configureStore";
 
 export default function App() {
   useEffect(() => {

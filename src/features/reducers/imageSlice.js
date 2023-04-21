@@ -27,6 +27,14 @@ export const imageSlice = createSlice({
 
       imageProperties.selectedIndex = action.payload;
     },
+    handleRenderImage: (state, action) => {
+      const property = action.payload;
+      const nextIndex = Object.keys(state.elements).length;
+
+      state.elements[nextIndex] = property;
+
+      state.imageModalVisible = false;
+    },
     handleResetImage: (state) => {
       const { imageProperties } = state;
 
@@ -57,11 +65,6 @@ export const imageSlice = createSlice({
       state.elements = action.payload.reduce((acc, el, index) => {
         return { ...acc, [index]: el };
       }, {});
-    },
-    handleRenderImage: (state, action) => {
-      state.elements = action.payload;
-
-      state.imageModalVisible = false;
     },
     updateAllImages: (state, action) => {
       const updatedArray = action.payload;

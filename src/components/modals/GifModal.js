@@ -32,7 +32,6 @@ export default function GifModal() {
   const [gifURLs, setGifURLs] = useState([]);
   const [animationData, setAnimationData] = useState([]);
 
-  const gifElements = useSelector((state) => state.gifReducer.elements);
   const allElements = useSelector((state) => state.editorReducer.allElements);
 
   const animationRefs = useRef([]);
@@ -43,7 +42,6 @@ export default function GifModal() {
 
   const updateGifs = () => {
     const layerNumber = Object.keys(allElements).length;
-    const nextIndex = Object.keys(gifElements).length;
     const property = {
       type: GIF,
       x: 0,
@@ -54,11 +52,7 @@ export default function GifModal() {
       id: Date.now(),
     };
 
-    const updatedElements = {
-      ...gifElements,
-      [nextIndex]: property,
-    };
-    dispatch(handleRenderGif(updatedElements));
+    dispatch(handleRenderGif(property));
   };
 
   useEffect(() => {
@@ -92,7 +86,7 @@ export default function GifModal() {
   }, [gifURLs]);
 
   useEffect(() => {
-    animationRefs.current = animationRefs.current.slice(0, gifURLs.length);
+    animationRefs.current = animationRefs.current.slice(0, gifURLs?.length);
   }, [gifURLs]);
 
   return (
