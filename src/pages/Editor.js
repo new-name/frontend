@@ -77,55 +77,47 @@ export default function Editor() {
     }
   };
 
-  const onSaveGifAsync = async (longestLottieRef, duration, fps = 30) => {
+  const onSaveGifAsync = async (duration, fps = 60) => {
     try {
       const frames = [];
+      const encodedFrames = [];
       const frameCount = Math.round(duration * fps);
 
       for (let i = 0; i < frameCount; i++) {
-        const progress = i / frameCount;
-        longestLottieRef.play(0, progress);
-
         const frame = await captureRef(imageRef, {
           format: "png",
           quality: 1.0,
-          height: CONTAINER_HEIGHT,
         });
 
-        const buffer = await FileSystem.readAsStringAsync(frame, {
+        frames.push(frame);
+      }
+
+      for (const frame of frames) {
+        const base64Data = await FileSystem.readAsStringAsync(frame, {
           encoding: FileSystem.EncodingType.Base64,
         });
-
-        frames.push(buffer);
+        encodedFrames.push(`data:image/png;base64,${base64Data}`);
       }
 
-      const chunkSize = 10;
-      for (let i = 0; i < frames.length; i += chunkSize) {
-        const chunk = frames.slice(i, i + chunkSize);
-        await api.sendFramesChunk({
-          frames: chunk,
-          width: CONTAINER_WIDTH,
-          height: CONTAINER_HEIGHT,
-        });
-      }
-
-      const response = await api.makeGifFromLottie({
+      const response = await api.createGif({
+        encodedFrames,
         fps,
-        width: CONTAINER_WIDTH,
         height: CONTAINER_HEIGHT,
+        width: CONTAINER_WIDTH,
       });
 
-      if (!response) {
-        alert("Failed to create GIF.");
-        return;
-      }
+      const base64Gif = response.data.base64Gif;
 
-      const base64Gif = `data:image/gif;base64,${response}`;
+      const tempFilePath = FileSystem.documentDirectory + "temp.gif";
+      await FileSystem.writeAsStringAsync(tempFilePath, base64Gif, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
 
-      await MediaLibrary.saveToLibraryAsync(base64Gif);
+      await MediaLibrary.createAssetAsync(tempFilePath);
+      await FileSystem.deleteAsync(tempFilePath, { idempotent: true });
 
       if (base64Gif) {
-        alert("Succefully Saved!");
+        alert("Successfully Saved!");
       }
     } catch (e) {
       console.log(e);
@@ -138,7 +130,7 @@ export default function Editor() {
     }
 
     if (captureFlag && isLayoutReady && hasGifTypeInElements) {
-      onSaveGifAsync(longestLottieRef.ref, longestLottieRef.duration);
+      onSaveGifAsync(longestLottieRef.duration);
     }
   }, [captureFlag, isLayoutReady]);
 
