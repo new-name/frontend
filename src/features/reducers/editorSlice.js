@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const allElements = {};
 const layerElements = {};
+const loading = [];
 
 const initialState = {
   allElements,
@@ -10,6 +11,7 @@ const initialState = {
   colorPickerVisible: false,
   layerModalVisible: false,
   shouldSaveInEditor: false,
+  loading,
 };
 
 export const editorSlice = createSlice({
@@ -29,6 +31,9 @@ export const editorSlice = createSlice({
     handleSaveInEditor: (state, action) => {
       const { saveValue } = action.payload;
       state.shouldSaveInEditor = saveValue;
+    },
+    handleLoadingData: (state, action) => {
+      state.loading = action.payload;
     },
     updateNewElements: (state, action) => {
       const elements = action.payload;
@@ -66,6 +71,7 @@ export const {
   handleColorModalVisible,
   handleLayerModalVisible,
   handleSaveInEditor,
+  handleLoadingData,
   updateNewElements,
   updateAllElements,
   updateLayer,

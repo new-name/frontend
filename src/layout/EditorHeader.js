@@ -11,12 +11,9 @@ export default function EditorHeader() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const allElements = useSelector((state) => state.editorReducer.allElements);
-  const saveValue = useSelector(
-    (state) => state.editorReducer.shouldSaveInEditor,
-  );
 
   const handleSave = () => {
-    dispatch(handleSaveInEditor({ allElements, saveValue: !saveValue }));
+    dispatch(handleSaveInEditor({ allElements, saveValue: true }));
   };
 
   return (

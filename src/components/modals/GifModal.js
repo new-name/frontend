@@ -17,7 +17,7 @@ import {
   SUB_GRAY_COLOR,
   UNACTIVE_COLOR,
 } from "../../constants/color";
-import { GIF } from "../../constants/property";
+import { CHECKBOX, FILE_SAVE, GIF } from "../../constants/property";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import api from "../../features/api";
 import {
@@ -25,17 +25,16 @@ import {
   updateGifModalState,
 } from "../../features/reducers/gifSlice";
 import AppHeader from "../../layout/AppHeader";
+import { handleLoadingData } from "../../features/reducers/editorSlice";
 
 export default function GifModal() {
   const dispatch = useDispatch();
   const [selected, setSelected] = useState("");
   const [gifURLs, setGifURLs] = useState([]);
   const [animationData, setAnimationData] = useState([]);
-
-  const allElements = useSelector((state) => state.editorReducer.allElements);
-
   const animationRefs = useRef([]);
 
+  const allElements = useSelector((state) => state.editorReducer.allElements);
   const isGifModalVisible = useSelector(
     (state) => state.gifReducer.gifModalVisible,
   );
@@ -76,6 +75,11 @@ export default function GifModal() {
           }),
         );
 
+        const loadingSource = allData.filter(
+          (data) => data.nm.includes(CHECKBOX) || data.nm.includes(FILE_SAVE),
+        );
+
+        dispatch(handleLoadingData(loadingSource));
         setAnimationData(allData);
       } catch (error) {
         console.error("Error fetching Lottie JSON data:", error);
