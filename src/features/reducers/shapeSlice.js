@@ -56,7 +56,7 @@ export const shapeSlice = createSlice({
           color: WHITE_COLOR,
           rotation: 0,
           zIndex: layerNumber,
-          id: Date.now(),
+          _id: Date.now(),
         };
       }
 
@@ -73,7 +73,7 @@ export const shapeSlice = createSlice({
           color: WHITE_COLOR,
           rotation: 0,
           zIndex: layerNumber,
-          id: Date.now(),
+          _id: Date.now(),
         };
       }
 
@@ -91,7 +91,7 @@ export const shapeSlice = createSlice({
           strokeWidth: 2,
           rotation: 0,
           zIndex: layerNumber,
-          id: Date.now(),
+          _id: Date.now(),
         };
       }
 
@@ -220,5 +220,6 @@ export const {
   handleResetShape,
   updateSizeProportionMode,
   updateAllShapes,
+  renderFirstMountShapes,
 } = shapeSlice.actions;
 export default shapeSlice.reducer;

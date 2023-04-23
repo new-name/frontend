@@ -47,7 +47,7 @@ export default function ImageModal() {
       x: 0,
       y: 0,
       zIndex: layerNumber,
-      id: Date.now(),
+      _id: Date.now(),
     };
 
     dispatch(handleRenderImage(property));

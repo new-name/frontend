@@ -87,7 +87,7 @@ export default function ImageElements() {
     if (isSelected && selectedImageProperty === SIZE) {
       return (
         <Animated.View
-          key={element[index]?.id}
+          key={element[index]?._id}
           style={[positionStyle, { transform: [{ scale: scaleRef }] }]}
           {...resizeResponder.panHandlers}
         >
@@ -101,7 +101,7 @@ export default function ImageElements() {
     if (isSelected && selectedImageProperty === MOVE) {
       return (
         <Animated.View
-          key={element[index]?.id}
+          key={element[index]?._id}
           onPress={() => handleSelect(index)}
           style={[
             positionStyle,
@@ -118,7 +118,7 @@ export default function ImageElements() {
 
     return (
       <View
-        key={element[index]?.id}
+        key={element[index]?._id}
         style={[{ position: "absolute" }, positionStyle]}
       >
         <TouchableOpacity onPress={() => handleSelect(index)}>

@@ -39,6 +39,7 @@ import AppHeader from "../layout/AppHeader";
 import ContentBox from "../layout/ContentBox";
 import EditorFooter from "../layout/EditorFooter";
 import EditorHeader from "../layout/EditorHeader";
+import { handleSaveImageFile } from "../utils/handleSaveImage";
 
 export default function Editor() {
   const dispatch = useDispatch();
@@ -83,23 +84,6 @@ export default function Editor() {
     setTimeout(() => {
       setShowSuccessAnimation(false);
     }, 1500);
-  };
-
-  const onSaveImageAsync = async () => {
-    try {
-      const localUri = await captureRef(imageRef, {
-        format: "png",
-        quality: 1.0,
-        height: CONTAINER_HEIGHT,
-      });
-
-      await MediaLibrary.saveToLibraryAsync(localUri);
-      if (localUri) {
-        alert("Succefully Saved!");
-      }
-    } catch (e) {
-      console.log(e);
-    }
   };
 
   const onSaveGifAsync = async (duration, fps = 60) => {
@@ -154,8 +138,8 @@ export default function Editor() {
         dispatch(handleSaveInEditor({ saveValue: false }));
         showSuccessAndHide();
       }
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -172,7 +156,7 @@ export default function Editor() {
 
   useEffect(() => {
     if (captureFlag && isLayoutReady && !hasGifTypeInElements) {
-      onSaveImageAsync();
+      handleSaveImageFile(imageRef);
     }
 
     if (captureFlag && isLayoutReady && hasGifTypeInElements) {
@@ -211,7 +195,7 @@ export default function Editor() {
         </View>
       )}
       <AppHeader>
-        <EditorHeader />
+        <EditorHeader imageRef={imageRef} />
       </AppHeader>
       <ScrollView
         scrollEnabled={!activeEditor}

@@ -1,5 +1,6 @@
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import PropTypes from "prop-types";
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,8 +8,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { UNACTIVE_COLOR } from "../constants/color";
 import api from "../features/api";
 import { handleSaveInEditor } from "../features/reducers/editorSlice";
+import { handleSaveImageFile } from "../utils/handleSaveImage";
 
-export default function EditorHeader() {
+export default function EditorHeader({ imageRef }) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const allElements = useSelector((state) => state.editorReducer.allElements);
@@ -24,7 +26,12 @@ export default function EditorHeader() {
       return Alert.alert("저장할 컨텐츠가 없습니다.");
     }
 
-    const response = await api.postProjects(allElements);
+    const base64 = await handleSaveImageFile(imageRef, false);
+
+    const response = await api.postProjects({
+      allElements,
+      thumbnail: base64,
+    });
 
     if (response.status === 201) {
       Alert.alert("Succefully Saved!");
@@ -77,6 +84,10 @@ export default function EditorHeader() {
     </>
   );
 }
+
+EditorHeader.propTypes = {
+  imageRef: PropTypes.object.isRequired,
+};
 
 const styles = StyleSheet.create({
   header: {

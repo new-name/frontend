@@ -83,7 +83,7 @@ export default function ShapeElements() {
     if (isSelected && selectedShapeProperty === ROTATE) {
       return (
         <Animated.View
-          key={element[index]?.id}
+          key={element[index]?._id}
           onPress={() => handleSelect(index)}
           style={[
             { position: "absolute" },
@@ -118,7 +118,7 @@ export default function ShapeElements() {
 
       return (
         <Animated.View
-          key={element[index]?.id}
+          key={element[index]?._id}
           onPress={() => handleSelect(index)}
           style={[{ position: "absolute" }, positionStyle, { transform }]}
           {...resizeResponder.panHandlers}
@@ -131,7 +131,7 @@ export default function ShapeElements() {
     if (isSelected && selectedShapeProperty === MOVE) {
       return (
         <Animated.View
-          key={element[index]?.id}
+          key={element[index]?._id}
           onPress={() => handleSelect(index)}
           style={[
             { position: "absolute" },
@@ -153,7 +153,7 @@ export default function ShapeElements() {
 
     return (
       <View
-        key={element[index]?.id}
+        key={element[index]?._id}
         style={[{ position: "absolute" }, positionStyle, rotationStyle]}
       >
         <TouchableOpacity onPress={() => handleSelect(index)}>

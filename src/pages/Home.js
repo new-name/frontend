@@ -1,26 +1,33 @@
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from "react-native";
+import { useDispatch } from "react-redux";
 
 import Logo from "../components/Logo";
-import { WHITE_COLOR, SHADOW_COLOR, UNACTIVE_COLOR } from "../constants/color";
+import { WHITE_COLOR, HEADER, UNACTIVE_COLOR } from "../constants/color";
 import { homeFooter } from "../constants/footerItems";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/size";
 import api from "../features/api";
+import { updateAllGifs } from "../features/reducers/gifSlice";
+import { updateAllImages } from "../features/reducers/imageSlice";
+import { updateAllShapes } from "../features/reducers/shapeSlice";
+import { updateAllTexts } from "../features/reducers/textSlice";
 import AppFooter from "../layout/AppFooter";
 import AppHeader from "../layout/AppHeader";
 import ContentBox from "../layout/ContentBox";
 
-const exampleImage = require("../../assets/example.png");
-
 export default function Home({ navigation }) {
+  const dispatch = useDispatch();
   const { navigate } = navigation;
   const [projects, setProjects] = useState([]);
 
@@ -28,15 +35,60 @@ export default function Home({ navigation }) {
     navigate("Editor");
   };
 
-  useEffect(() => {
+  const handleSelectedEdit = async (index) => {
+    const shapes = [];
+    const texts = [];
+    const gifs = [];
+    const images = [];
+
+    const selectedProject = projects[index];
+
+    selectedProject.shapes.forEach((shape) => {
+      shapes.push(shape);
+    });
+
+    selectedProject.texts.forEach((text) => {
+      texts.push(text);
+    });
+
+    selectedProject.gifs.forEach((gif) => {
+      gifs.push(gif);
+    });
+
+    selectedProject.images.forEach((image) => {
+      images.push(image);
+    });
+
+    if (shapes.length >= 0) {
+      dispatch(updateAllShapes(shapes));
+    }
+
+    if (texts.length >= 0) {
+      dispatch(updateAllTexts(texts));
+    }
+
+    if (gifs.length >= 0) {
+      dispatch(updateAllGifs(gifs));
+    }
+
+    if (images.length >= 0) {
+      dispatch(updateAllImages(images));
+    }
+
+    await SecureStore.setItemAsync("projectId", selectedProject._id);
+
+    navigate("Editor");
+  };
+
+  useFocusEffect(() => {
     async function getProejct() {
       const response = await api.getProjects();
 
-      setProjects(response);
+      setProjects(response.data.projects);
     }
 
     getProejct();
-  }, []);
+  });
 
   return (
     <View style={styles.container}>
@@ -73,7 +125,25 @@ export default function Home({ navigation }) {
               <ScrollView
                 contentContainerStyle={styles.projectList}
                 pagingEnabled
-              />
+              >
+                {projects.map((project, index) => (
+                  <TouchableOpacity
+                    onPress={() => handleSelectedEdit(index)}
+                    key={project._id}
+                  >
+                    <Image
+                      style={styles.thumbnail}
+                      source={{
+                        uri: `data:image/png;base64,${project.thumbnail}`,
+                      }}
+                    />
+                  </TouchableOpacity>
+                ))}
+                {projects.length < 4 &&
+                  [...Array(4 - projects.length)].map((_, index) => (
+                    <View key={index} style={styles.grayBox} />
+                  ))}
+              </ScrollView>
             )}
           </View>
         </View>
@@ -132,22 +202,9 @@ const styles = StyleSheet.create({
   },
   projectList: {
     flexDirection: "row",
-    justifyContent: "flex-start",
-    gap: 10,
+    flexWrap: "wrap",
+    justifyContent: "space-between",
     marginTop: 10,
-  },
-  projectItem: {
-    width: SCREEN_WIDTH * 0.35,
-    height: SCREEN_HEIGHT * 0.29,
-    margin: 5,
-    backgroundColor: WHITE_COLOR,
-    shadowColor: SHADOW_COLOR,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3,
   },
   footer: {
     flexDirection: "row",
@@ -161,5 +218,17 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 12,
     color: UNACTIVE_COLOR,
+  },
+  thumbnail: {
+    width: SCREEN_WIDTH * 0.35,
+    height: SCREEN_HEIGHT * 0.3,
+    resizeMode: "contain",
+    margin: 7.5,
+  },
+  grayBox: {
+    width: SCREEN_WIDTH * 0.35,
+    height: SCREEN_HEIGHT * 0.3,
+    backgroundColor: HEADER,
+    margin: 7.5,
   },
 });
