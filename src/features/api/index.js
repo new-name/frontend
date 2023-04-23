@@ -1,7 +1,6 @@
 import { SERVER_URL, UNSPLASH_ACCESS_KEY } from "@env";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
-import { Alert } from "react-native";
 
 const axiosInstance = axios.create({
   baseURL: SERVER_URL,
@@ -13,6 +12,32 @@ const unsplashInstance = axios.create({
     Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`,
   },
 });
+
+async function getProjects(allElements) {
+  try {
+    const userId = await SecureStore.getItemAsync("user");
+
+    const response = await axiosInstance.get(`api/users/${userId}`);
+
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function postProjects(allElements) {
+  try {
+    const userId = await SecureStore.getItemAsync("user");
+
+    const response = await axiosInstance.post(`api/users/${userId}/projects`, {
+      allElements,
+    });
+
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 async function getImages() {
   try {
@@ -47,19 +72,12 @@ async function postSignIn(email, password) {
 
     if (response.status === 201) {
       await SecureStore.setItemAsync("token", response.data.token);
+      await SecureStore.setItemAsync("user", response.data.user._id);
     }
 
     return response;
   } catch (err) {
-    const error = err.response.status;
-
-    if (error === 400) {
-      Alert.alert("Failed login");
-    }
-
-    if (error === 500) {
-      Alert.alert("Internal Server Error");
-    }
+    console.log(err);
   }
 }
 
@@ -126,4 +144,6 @@ export default {
   searchImages,
   getFonts,
   createGif,
+  postProjects,
+  getProjects,
 };

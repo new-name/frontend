@@ -2,6 +2,8 @@ import PropTypes from "prop-types";
 import React from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
 
+import { HEADER } from "../constants/color";
+
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 const appFooterHeight = screenHeight / 12;
 
@@ -15,12 +17,13 @@ AppFooter.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    zIndex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "top",
     width: screenWidth,
     height: appFooterHeight * 1.25,
     paddingTop: appFooterHeight * 0.1,
+    zIndex: 1,
+    backgroundColor: HEADER,
   },
 });

@@ -30,6 +30,7 @@ export const editorSlice = createSlice({
     },
     handleSaveInEditor: (state, action) => {
       const { saveValue } = action.payload;
+
       state.shouldSaveInEditor = saveValue;
     },
     handleLoadingData: (state, action) => {

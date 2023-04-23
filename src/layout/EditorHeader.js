@@ -1,10 +1,11 @@
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 import { UNACTIVE_COLOR } from "../constants/color";
+import api from "../features/api";
 import { handleSaveInEditor } from "../features/reducers/editorSlice";
 
 export default function EditorHeader() {
@@ -12,8 +13,23 @@ export default function EditorHeader() {
   const navigation = useNavigation();
   const allElements = useSelector((state) => state.editorReducer.allElements);
 
-  const handleSave = () => {
-    dispatch(handleSaveInEditor({ allElements, saveValue: true }));
+  const handleSaveFile = () => {
+    dispatch(handleSaveInEditor({ saveValue: true }));
+  };
+
+  const handleSaveProject = async () => {
+    const isValid = Object.keys(allElements).length;
+
+    if (!isValid) {
+      return Alert.alert("저장할 컨텐츠가 없습니다.");
+    }
+
+    const response = await api.postProjects(allElements);
+
+    if (response.status === 201) {
+      Alert.alert("Succefully Saved!");
+      navigation.navigate("Home");
+    }
   };
 
   return (
@@ -26,8 +42,8 @@ export default function EditorHeader() {
             color={UNACTIVE_COLOR}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-          <Text>뒤로 가기</Text>
+        <TouchableOpacity onPress={handleSaveProject}>
+          <Text>프로젝트 저장</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.undo}>
@@ -47,15 +63,15 @@ export default function EditorHeader() {
         </TouchableOpacity>
       </View>
       <View style={styles.download}>
-        <TouchableOpacity onPress={handleSave}>
+        <TouchableOpacity onPress={handleSaveFile}>
+          <Text>내려 받기</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleSaveFile}>
           <Ionicons
             name="ios-download-outline"
             size={30}
             color={UNACTIVE_COLOR}
           />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log("upload")}>
-          <Ionicons name="ios-share-outline" size={30} color={UNACTIVE_COLOR} />
         </TouchableOpacity>
       </View>
     </>
@@ -78,6 +94,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "flex-end",
+    alignItems: "center",
     gap: 10,
   },
 });

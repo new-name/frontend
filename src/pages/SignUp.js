@@ -98,7 +98,7 @@ export default function SignUp({ navigation }) {
           />
           <TextInput
             style={styles.input}
-            placeholder="비밀번호"
+            placeholder="비밀번호 최소 8글자 - 20글자"
             secureTextEntry
             value={user?.password}
             onChangeText={(value) => handleInput("password", value)}

@@ -217,7 +217,7 @@ export default function Editor() {
         scrollEnabled={!activeEditor}
         contentContainerStyle={styles.scrollContainer}
       >
-        <ContentBox>
+        <ContentBox color={UNACTIVE_COLOR}>
           <ViewShot
             style={{ width: CONTAINER_WIDTH, height: CONTAINER_HEIGHT }}
             ref={imageRef}

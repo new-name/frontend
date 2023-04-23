@@ -12,7 +12,7 @@ export default function AppNavigator() {
   return (
     <NavigationContainer>
       <Navigator
-        initialRouteName="Editor"
+        initialRouteName="SignIn"
         screenOptions={{ headerShown: false }}
       >
         <Screen name="SignIn" component={SignIn} />

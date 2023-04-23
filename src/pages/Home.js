@@ -1,19 +1,19 @@
 import { Feather, Ionicons } from "@expo/vector-icons";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  FlatList,
-  Image,
+  ScrollView,
 } from "react-native";
 
 import Logo from "../components/Logo";
 import { WHITE_COLOR, SHADOW_COLOR, UNACTIVE_COLOR } from "../constants/color";
 import { homeFooter } from "../constants/footerItems";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/size";
+import api from "../features/api";
 import AppFooter from "../layout/AppFooter";
 import AppHeader from "../layout/AppHeader";
 import ContentBox from "../layout/ContentBox";
@@ -22,34 +22,39 @@ const exampleImage = require("../../assets/example.png");
 
 export default function Home({ navigation }) {
   const { navigate } = navigation;
-  const [isNavBarVisible, setIsNavBarVisible] = useState(false);
   const [projects, setProjects] = useState([]);
 
   const handleMakeNewProjectPress = () => {
     navigate("Editor");
   };
 
+  useEffect(() => {
+    async function getProejct() {
+      const response = await api.getProjects();
+
+      setProjects(response);
+    }
+
+    getProejct();
+  }, []);
+
   return (
     <View style={styles.container}>
-      <AppHeader>
-        <Feather
-          name="menu"
-          size={30}
-          color={UNACTIVE_COLOR}
-          onPress={() => setIsNavBarVisible(true)}
-        />
+      <AppHeader content="center">
         <Logo fontSize={16} />
       </AppHeader>
-      <ContentBox>
+      <ContentBox color={WHITE_COLOR}>
         <View style={styles.contentContainer}>
           <View style={styles.header}>
             <View style={styles.headerText}>
               <Text style={{ fontSize: 20 }}>내가 만든 명함</Text>
-              <Ionicons
-                name="ios-add-outline"
-                size={25}
-                color={UNACTIVE_COLOR}
-              />
+              <TouchableOpacity onPress={handleMakeNewProjectPress}>
+                <Ionicons
+                  name="ios-add-outline"
+                  size={25}
+                  color={UNACTIVE_COLOR}
+                />
+              </TouchableOpacity>
             </View>
           </View>
           <View style={styles.contents}>
@@ -65,22 +70,8 @@ export default function Home({ navigation }) {
                 <Text style={{ fontSize: 20 }}>새로운 명함 만들기</Text>
               </>
             ) : (
-              <FlatList
-                data={projects}
-                renderItem={({ item }) => (
-                  <View style={styles.projectItem}>
-                    <Image
-                      source={item.imageUri}
-                      style={{ width: "100%", height: "100%" }}
-                      resizeMode="cover"
-                    />
-                  </View>
-                )}
-                keyExtractor={(item, index) => index.toString()}
-                numColumns={2}
-                columnWrapperStyle={styles.projectList}
-                contentContainer={{ paddingBottom: 20 }}
-                showsVerticalScrollIndicator={false}
+              <ScrollView
+                contentContainerStyle={styles.projectList}
                 pagingEnabled
               />
             )}
