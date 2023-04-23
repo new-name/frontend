@@ -30,6 +30,8 @@ async function postProjects({ allElements, thumbnail }) {
     const userId = await SecureStore.getItemAsync("user");
     const projectId = await SecureStore.getItemAsync("projectId");
 
+    console.log(allElements);
+
     const response = await axiosInstance.post(`api/users/${userId}/projects`, {
       allElements,
       thumbnail,

@@ -86,7 +86,7 @@ export default function TextElements() {
     if (isSelected && selectedTextProperty === MOVE) {
       return (
         <Animated.View
-          key={element[index]?._id}
+          key={element[index]?.id}
           onPress={() => handleSelectText(index)}
           style={[
             positionStyle,
@@ -106,7 +106,7 @@ export default function TextElements() {
         <KeyboardAvoidingView
           style={{ flex: 1, zIndex: Z_INDEX_100 }}
           behavior={Platform.OS === "ios" ? "padding" : null}
-          key={element[index]?._id}
+          key={element[index]?.id}
         >
           <TouchableOpacity
             onPress={() => handleSelectText(index)}

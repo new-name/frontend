@@ -74,7 +74,7 @@ export const textSlice = createSlice({
         fontStyle: "",
         rotate: 0,
         zIndex: layerNumber,
-        _id: Date.now(),
+        id: Date.now(),
       };
 
       state.elements[nextIndex] = newTextModel;

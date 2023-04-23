@@ -20,12 +20,12 @@ import {
 import { CHECKBOX, FILE_SAVE, GIF } from "../../constants/property";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
 import api from "../../features/api";
+import { handleLoadingData } from "../../features/reducers/editorSlice";
 import {
   handleRenderGif,
   updateGifModalState,
 } from "../../features/reducers/gifSlice";
 import AppHeader from "../../layout/AppHeader";
-import { handleLoadingData } from "../../features/reducers/editorSlice";
 
 export default function GifModal() {
   const dispatch = useDispatch();
@@ -48,7 +48,7 @@ export default function GifModal() {
       source: selected,
       size: SCREEN_WIDTH * 0.4,
       zIndex: layerNumber,
-      _id: Date.now(),
+      id: Date.now(),
     };
 
     dispatch(handleRenderGif(property));

@@ -68,7 +68,7 @@ export default function GifElements({ updateLongestLottieRef }) {
     if (isSelected && selectedGifProperty === MOVE) {
       return (
         <Animated.View
-          key={element[index]?._id}
+          key={element[index]?.id}
           onPress={() => handleSelect(index)}
           style={[
             positionStyle,
@@ -85,7 +85,7 @@ export default function GifElements({ updateLongestLottieRef }) {
 
     return (
       <View
-        key={element[index]?._id}
+        key={element[index]?.id}
         style={[{ position: "absolute" }, positionStyle, selectedBorderStyle]}
       >
         <TouchableOpacity onPress={() => handleSelect(index)}>
