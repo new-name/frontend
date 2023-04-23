@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   WHITE_COLOR,
-  SHADOW_COLOR,
   ACTIVE_COLOR,
   UNACTIVE_COLOR,
   EDITOR_COLOR,
@@ -53,6 +52,7 @@ export default function ShapeEditor() {
   const selectedShapeProperty = useSelector(
     (state) => state.shapeReducer.shapeProperties.selectedProperty,
   );
+
   const selectedShapeIndex = useSelector(
     (state) => state.shapeReducer.shapeProperties.selectedIndex,
   );
@@ -119,8 +119,8 @@ export default function ShapeEditor() {
   return (
     <View style={styles.container}>
       {selectedShapeProperty === SIZE &&
-        (shapeElements[selectedShapeIndex]?.type === ICON ||
-          shapeElements[selectedShapeIndex]?.type === LINE) && (
+        (shapeElements[selectedShapeIndex]?.shapeType === ICON ||
+          shapeElements[selectedShapeIndex]?.shapeType === LINE) && (
           <SizeSlider
             scrollbarRef={customScrollbarRef}
             sizeResponder={sizeResponder}
@@ -128,7 +128,8 @@ export default function ShapeEditor() {
           />
         )}
       {selectedShapeProperty === SIZE &&
-        shapeElements[selectedShapeIndex]?.type !== ICON && (
+        shapeElements[selectedShapeIndex]?.shapeType !== ICON &&
+        shapeElements[selectedShapeIndex]?.shapeType !== LINE && (
           <TouchableOpacity
             onPress={() =>
               dispatch(updateSizeProportionMode(!sizeProportionMode))

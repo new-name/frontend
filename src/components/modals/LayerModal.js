@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Lottie from "lottie-react-native";
 import { useEffect, useRef, useState } from "react";
 import {
+  Alert,
   Animated,
   Image,
   Modal,
@@ -49,6 +50,18 @@ export default function LayerModal() {
     dispatch(updateLayer(sortedElements));
   };
 
+  const removeLayers = () => {
+    const filteredLayers = sortedElements.filter(
+      (element) => element.zIndex !== sortedElements[selectedLayer].zIndex,
+    );
+
+    const resortedLayers = filteredLayers.map((element, index) => {
+      return { ...element, zIndex: filteredLayers.length - 1 - index };
+    });
+
+    dispatch(updateAllElements(resortedLayers));
+  };
+
   const handleSelect = (index) => {
     const newSelectedIndex = selectedLayer === index ? null : index;
     selectedLayerIndex.current = newSelectedIndex;
@@ -61,6 +74,29 @@ export default function LayerModal() {
 
     if (newSelectedIndex === null) {
       draggingRef.current = false;
+    }
+  };
+
+  const handleRemove = (index) => {
+    if (selectedLayer === null) {
+      Alert.alert("제거를 원하는 레이어를 선택해주세요.");
+    }
+
+    if (selectedLayer !== null) {
+      Alert.alert(
+        "선택한 레이어를 제거하시겠습니까?",
+        `Layer ${sortedElements[selectedLayer].zIndex}`,
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "OK",
+            onPress: () => removeLayers(),
+          },
+        ],
+      );
     }
   };
 
@@ -250,9 +286,9 @@ export default function LayerModal() {
                     {renderElements(sortedElements, index)}
                   </View>
                   <TouchableOpacity style={styles.property}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={handleRemove}>
                       <Ionicons
-                        name="lock-closed"
+                        name="trash-outline"
                         size={30}
                         color={UNACTIVE_COLOR}
                       />

@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { View, StyleSheet, ScrollView, Alert } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { SHADOW_COLOR, EDITOR_COLOR } from "../../constants/color";
+import { EDITOR_COLOR } from "../../constants/color";
 import { imageFooter } from "../../constants/footerItems";
 import { SIZE, UNSPLASH } from "../../constants/property";
 import { APP_FOOTER_HEIGHT, SCREEN_WIDTH } from "../../constants/size";
@@ -42,7 +42,7 @@ export default function ImageEditor() {
   return (
     <View>
       <View style={styles.controllerContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View style={styles.editorContainer}>
           {imageFooter.map((item) => (
             <IconRenderer
               element={item}
@@ -51,7 +51,7 @@ export default function ImageEditor() {
               key={item.iconName}
             />
           ))}
-        </ScrollView>
+        </View>
       </View>
     </View>
   );
@@ -65,5 +65,9 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH,
     height: APP_FOOTER_HEIGHT,
     backgroundColor: EDITOR_COLOR,
+  },
+  editorContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
   },
 });

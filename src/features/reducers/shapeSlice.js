@@ -150,7 +150,7 @@ export const shapeSlice = createSlice({
         proportionY,
       } = action.payload;
 
-      if (state.elements[index].type === ICON) {
+      if (state.elements[index].shapeType === ICON) {
         const iconSize =
           MIN_ICON_SIZE +
           ((scrollHeight - SCROLL_HANDLE_HEIGHT - handlerPositionOfY) /
@@ -161,7 +161,7 @@ export const shapeSlice = createSlice({
         return;
       }
 
-      if (state.elements[index].type === LINE) {
+      if (state.elements[index].shapeType === LINE) {
         const lineSize =
           MIN_LINE_SIZE +
           ((scrollHeight - SCROLL_HANDLE_HEIGHT - handlerPositionOfY) /

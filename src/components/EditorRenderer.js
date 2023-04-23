@@ -61,19 +61,19 @@ export default function EditorRenderer() {
       }
     });
 
-    if (shapes.length > 0) {
+    if (shapes.length >= 0) {
       dispatch(updateAllShapes(shapes));
     }
 
-    if (texts.length > 0) {
+    if (texts.length >= 0) {
       dispatch(updateAllTexts(texts));
     }
 
-    if (gifs.length > 0) {
+    if (gifs.length >= 0) {
       dispatch(updateAllGifs(gifs));
     }
 
-    if (images.length > 0) {
+    if (images.length >= 0) {
       dispatch(updateAllImages(images));
     }
   }, [layerElements]);

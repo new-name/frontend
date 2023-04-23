@@ -33,7 +33,6 @@ export const shapeFooter = [
   },
   { icon: "FontAwesome", iconName: "rotate-right", text: "Rotate" },
   { icon: "Ionicons", iconName: "ios-color-palette-outline", text: "Color" },
-  { icon: "Ionicons", iconName: "remove-circle-outline", text: "Remove" },
 ];
 
 export const textFooter = [
@@ -54,9 +53,6 @@ export const gifFooter = [
     iconName: "image-size-select-large",
     text: "Size",
   },
-  { icon: "FontAwesome", iconName: "rotate-left", text: "Left Rotate" },
-  { icon: "FontAwesome", iconName: "rotate-right", text: "Right Rotate" },
-  { icon: "Ionicons", iconName: "remove-circle-outline", text: "Remove" },
 ];
 
 export const imageFooter = [
@@ -71,7 +67,4 @@ export const imageFooter = [
     iconName: "image-size-select-large",
     text: "Size",
   },
-  { icon: "FontAwesome", iconName: "rotate-left", text: "Left Rotate" },
-  { icon: "FontAwesome", iconName: "rotate-right", text: "Right Rotate" },
-  { icon: "Ionicons", iconName: "remove-circle-outline", text: "Remove" },
 ];

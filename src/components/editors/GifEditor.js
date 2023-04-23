@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { View, StyleSheet, ScrollView, PanResponder } from "react-native";
+import { View, StyleSheet, PanResponder } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { SHADOW_COLOR, EDITOR_COLOR } from "../../constants/color";
+import { EDITOR_COLOR } from "../../constants/color";
 import { gifFooter } from "../../constants/footerItems";
 import { LIBRARY, SIZE } from "../../constants/property";
 import {
@@ -63,7 +63,7 @@ export default function GifEditor() {
             scrollPosition={scrollPosition}
           />
         )}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View style={styles.editorContainer}>
           {gifFooter.map((item) => (
             <IconRenderer
               element={item}
@@ -72,7 +72,7 @@ export default function GifEditor() {
               key={item.iconName}
             />
           ))}
-        </ScrollView>
+        </View>
       </View>
     </View>
   );
@@ -86,5 +86,9 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH,
     height: APP_FOOTER_HEIGHT,
     backgroundColor: EDITOR_COLOR,
+  },
+  editorContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
   },
 });

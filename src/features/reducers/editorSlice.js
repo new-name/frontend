@@ -45,7 +45,6 @@ export const editorSlice = createSlice({
     },
     updateAllElements: (state, action) => {
       const updatedArray = action.payload;
-
       const newElements = updatedArray.reduce((acc, element, index) => {
         acc[index] = { ...element };
         return acc;

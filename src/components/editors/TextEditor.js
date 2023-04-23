@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
-import { SHADOW_COLOR, EDITOR_COLOR } from "../../constants/color";
+import { EDITOR_COLOR } from "../../constants/color";
 import { textFooter } from "../../constants/footerItems";
 import {
   ADD,
