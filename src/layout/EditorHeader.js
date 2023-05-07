@@ -1,4 +1,4 @@
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import PropTypes from "prop-types";
 import React from "react";
@@ -49,24 +49,9 @@ export default function EditorHeader({ imageRef }) {
             color={UNACTIVE_COLOR}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleSaveProject}>
+        <TouchableOpacity style={styles.saveButton} onPress={handleSaveProject}>
+          <Ionicons name="ios-save-outline" size={25} color={UNACTIVE_COLOR} />
           <Text>프로젝트 저장</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.undo}>
-        <TouchableOpacity>
-          <MaterialCommunityIcons
-            name="undo"
-            size={30}
-            color={UNACTIVE_COLOR}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <MaterialCommunityIcons
-            name="redo"
-            size={30}
-            color={UNACTIVE_COLOR}
-          />
         </TouchableOpacity>
       </View>
       <View style={styles.download}>
@@ -107,5 +92,11 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
     gap: 10,
+  },
+  saveButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    marginLeft: 10,
   },
 });

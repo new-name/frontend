@@ -8,6 +8,7 @@ export const EDIT = "Edit";
 export const LIBRARY = "Library";
 export const UNSPLASH = "Unsplash";
 export const ROTATE = "Rotate";
+export const DELETE = "Delete";
 
 export const SHAPE = "Shape";
 export const TEXT = "Text";

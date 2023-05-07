@@ -1,4 +1,8 @@
-export const homeFooter = [{ iconName: "ios-folder-open-outline", text: "My" }];
+export const homeFooter = [
+  { iconName: "ios-folder-open-outline", text: "Projects" },
+  { iconName: "pencil", text: "Edit" },
+  { iconName: "trash-outline", text: "Delete" },
+];
 
 export const editorFooter = [
   { iconName: "ios-shapes", text: "Shape" },

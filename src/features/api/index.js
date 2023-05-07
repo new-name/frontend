@@ -30,13 +30,27 @@ async function postProjects({ allElements, thumbnail }) {
     const userId = await SecureStore.getItemAsync("user");
     const projectId = await SecureStore.getItemAsync("projectId");
 
-    console.log(allElements);
-
     const response = await axiosInstance.post(`api/users/${userId}/projects`, {
       allElements,
       thumbnail,
       projectId,
     });
+
+    await SecureStore.deleteItemAsync("projectId");
+
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function deleteProjects(projectId) {
+  try {
+    const userId = await SecureStore.getItemAsync("user");
+
+    const response = await axiosInstance.delete(
+      `api/users/${userId}/projects/${projectId}`,
+    );
 
     return response;
   } catch (err) {
@@ -151,4 +165,5 @@ export default {
   createGif,
   postProjects,
   getProjects,
+  deleteProjects,
 };

@@ -10,18 +10,26 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  Alert,
 } from "react-native";
 import { useDispatch } from "react-redux";
 
 import Logo from "../components/Logo";
-import { WHITE_COLOR, HEADER, UNACTIVE_COLOR } from "../constants/color";
+import {
+  WHITE_COLOR,
+  HEADER,
+  UNACTIVE_COLOR,
+  ACTIVE_COLOR,
+} from "../constants/color";
 import { homeFooter } from "../constants/footerItems";
+import { DELETE, EDIT } from "../constants/property";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/size";
 import api from "../features/api";
-import { updateAllGifs } from "../features/reducers/gifSlice";
-import { updateAllImages } from "../features/reducers/imageSlice";
-import { updateAllShapes } from "../features/reducers/shapeSlice";
-import { updateAllTexts } from "../features/reducers/textSlice";
+import { resetAllElements } from "../features/reducers/editorSlice";
+import { resetGifs, updateAllGifs } from "../features/reducers/gifSlice";
+import { resetImages, updateAllImages } from "../features/reducers/imageSlice";
+import { resetShapes, updateAllShapes } from "../features/reducers/shapeSlice";
+import { resetTexts, updateAllTexts } from "../features/reducers/textSlice";
 import AppFooter from "../layout/AppFooter";
 import AppHeader from "../layout/AppHeader";
 import ContentBox from "../layout/ContentBox";
@@ -29,19 +37,72 @@ import ContentBox from "../layout/ContentBox";
 export default function Home({ navigation }) {
   const dispatch = useDispatch();
   const { navigate } = navigation;
+  const [selectedHomeProperty, setSelectedHomeProperty] = useState("Projects");
+  const [selectedProject, setSelectedProject] = useState(null);
   const [projects, setProjects] = useState([]);
 
-  const handleMakeNewProjectPress = () => {
+  const handleSelectedProperty = async (name) => {
+    const newSelectedProperty = selectedHomeProperty === name ? "" : name;
+
+    if (newSelectedProperty === EDIT) {
+      if (selectedProject === null) {
+        Alert.alert("원하는 프로젝트를 선택해주세요.");
+      }
+
+      if (selectedProject !== null) {
+        handleSelectedEdit(selectedProject);
+      }
+
+      setSelectedHomeProperty("Projects");
+    }
+
+    if (newSelectedProperty === DELETE) {
+      if (selectedProject === null) {
+        Alert.alert("원하는 프로젝트를 선택해주세요.");
+      }
+
+      if (selectedProject !== null) {
+        const response = await api.deleteProjects(selectedProject);
+
+        if (response.status === 204) {
+          const updatedProjects = await api.getProjects();
+          setProjects(updatedProjects.data.projects);
+
+          Alert.alert("Successfully deleted");
+        }
+      }
+
+      setSelectedHomeProperty("Projects");
+    }
+  };
+
+  const handleSelectedProject = (id) => {
+    const newSelectedProperty = selectedHomeProperty === id ? null : id;
+
+    setSelectedProject(newSelectedProperty);
+  };
+
+  const handleMakeNewProjectPress = async () => {
+    dispatch(resetGifs());
+    dispatch(resetImages());
+    dispatch(resetShapes());
+    dispatch(resetTexts());
+    dispatch(resetAllElements());
+
+    await SecureStore.deleteItemAsync("projectId");
+
     navigate("Editor");
   };
 
-  const handleSelectedEdit = async (index) => {
+  const handleSelectedEdit = async (selectedId) => {
     const shapes = [];
     const texts = [];
     const gifs = [];
     const images = [];
 
-    const selectedProject = projects[index];
+    const selectedProject = projects.find(
+      (project) => project._id === selectedId,
+    );
 
     selectedProject.shapes.forEach((shape) => {
       shapes.push(shape);
@@ -128,8 +189,16 @@ export default function Home({ navigation }) {
               >
                 {projects.map((project, index) => (
                   <TouchableOpacity
-                    onPress={() => handleSelectedEdit(index)}
                     key={project._id}
+                    onPress={() => handleSelectedProject(project._id)}
+                    style={{
+                      borderColor:
+                        selectedProject === project._id
+                          ? ACTIVE_COLOR
+                          : "transparent",
+                      borderWidth: 2,
+                      borderRadius: 10,
+                    }}
                   >
                     <Image
                       style={styles.thumbnail}
@@ -150,11 +219,32 @@ export default function Home({ navigation }) {
       </ContentBox>
       <AppFooter>
         <View style={styles.footer}>
-          {homeFooter.map((item, index) => (
-            <View key={item.iconName} style={styles.iconWithText}>
-              <Ionicons name={item.iconName} size={30} color={UNACTIVE_COLOR} />
-              <Text style={styles.iconText}>{item.text}</Text>
-            </View>
+          {homeFooter.map((item) => (
+            <TouchableOpacity
+              key={item.iconName}
+              style={styles.iconWithText}
+              onPress={() => handleSelectedProperty(item.text)}
+            >
+              <Ionicons
+                name={item.iconName}
+                size={30}
+                color={
+                  selectedHomeProperty === item.text
+                    ? ACTIVE_COLOR
+                    : UNACTIVE_COLOR
+                }
+              />
+              <Text
+                style={styles.iconText}
+                color={
+                  selectedHomeProperty === item.text
+                    ? ACTIVE_COLOR
+                    : UNACTIVE_COLOR
+                }
+              >
+                {item.text}
+              </Text>
+            </TouchableOpacity>
           ))}
         </View>
       </AppFooter>
@@ -179,7 +269,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 10,
     paddingHorizontal: 10,
     borderBottomWidth: 2,
     borderColor: UNACTIVE_COLOR,
