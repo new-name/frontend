@@ -94,7 +94,7 @@ export default function Editor() {
       const frameCount = Math.round(duration * 60);
       const frameInterval = 1000 / (fps / 2);
 
-      for (let i = 0; i < frameCount * 2; i++) {
+      for (let i = 0; i < frameCount; i++) {
         setTimeout(async () => {
           const frame = await captureRef(imageRef, {
             format: "png",
@@ -145,10 +145,10 @@ export default function Editor() {
 
   useEffect(() => {
     const loading = loadingGif.find((element) =>
-      element?.nm.includes(FILE_SAVE),
+      element?.nm?.includes(FILE_SAVE),
     );
     const success = loadingGif.find((element) =>
-      element?.nm.includes(CHECKBOX),
+      element?.nm?.includes(CHECKBOX),
     );
     animationRefs.current = { loading, success };
     setLoadingSource({ loading, success });

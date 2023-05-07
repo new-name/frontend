@@ -204,6 +204,7 @@ export const shapeSlice = createSlice({
 
       state.elements = newElements;
     },
+    resetShapes: () => initialState,
   },
 });
 
@@ -221,5 +222,6 @@ export const {
   updateSizeProportionMode,
   updateAllShapes,
   renderFirstMountShapes,
+  resetShapes,
 } = shapeSlice.actions;
 export default shapeSlice.reducer;

@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   keyboardAccesoryView: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    top: SCREEN_HEIGHT * 0.795,
+    top: SCREEN_HEIGHT * 0.775,
     marginLeft: -SCREEN_WIDTH * 0.05,
     width: SCREEN_WIDTH,
     backgroundColor: HEADER,

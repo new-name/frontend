@@ -189,6 +189,7 @@ export default function ImageElements() {
             x: gestureState.dx,
             y: gestureState.dy,
           };
+
           movePan.setOffset(positionRef.current);
           movePan.setValue({ x: 0, y: 0 });
         },

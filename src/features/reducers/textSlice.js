@@ -133,6 +133,7 @@ export const textSlice = createSlice({
 
       state.elements = newElements;
     },
+    resetTexts: () => initialState,
   },
 });
 
@@ -151,5 +152,6 @@ export const {
   updateFontContainerVisible,
   updateTextFontStyle,
   updateAllTexts,
+  resetTexts,
 } = textSlice.actions;
 export default textSlice.reducer;

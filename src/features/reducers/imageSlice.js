@@ -76,6 +76,7 @@ export const imageSlice = createSlice({
 
       state.elements = newElements;
     },
+    resetImages: () => initialState,
   },
 });
 
@@ -89,5 +90,6 @@ export const {
   updateImageElements,
   handleResetImage,
   updateAllImages,
+  resetImages,
 } = imageSlice.actions;
 export default imageSlice.reducer;

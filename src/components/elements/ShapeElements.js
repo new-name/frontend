@@ -229,6 +229,7 @@ export default function ShapeElements() {
               x: distanceX,
               y: distanceY,
             };
+
             scaleRefXY._startingDistance = distance;
           }
         },

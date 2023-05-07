@@ -63,6 +63,7 @@ export const editorSlice = createSlice({
       state.layerElements = newElements;
       state.layerModalVisible = false;
     },
+    resetAllElements: () => initialState,
   },
 });
 
@@ -75,5 +76,6 @@ export const {
   updateNewElements,
   updateAllElements,
   updateLayer,
+  resetAllElements,
 } = editorSlice.actions;
 export default editorSlice.reducer;

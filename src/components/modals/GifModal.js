@@ -76,7 +76,7 @@ export default function GifModal() {
         );
 
         const loadingSource = allData.filter(
-          (data) => data.nm.includes(CHECKBOX) || data.nm.includes(FILE_SAVE),
+          (data) => data.nm?.includes(CHECKBOX) || data.nm?.includes(FILE_SAVE),
         );
 
         dispatch(handleLoadingData(loadingSource));

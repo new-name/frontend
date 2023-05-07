@@ -166,6 +166,7 @@ export default function LayerModal() {
             x: gestureState.dx,
             y: gestureState.dy,
           };
+
           movePan.setOffset(positionRef.current);
           movePan.setValue({ x: 0, y: 0 });
         },

@@ -22,7 +22,7 @@ const styles = (content) =>
       alignItems: "center",
       width: SCREEN_WIDTH,
       height: APP_FOOTER_HEIGHT * 1.65,
-      paddingTop: APP_FOOTER_HEIGHT * 0.9,
+      paddingTop: APP_FOOTER_HEIGHT * 0.75,
       paddingHorizontal: 10,
       backgroundColor: HEADER,
     },

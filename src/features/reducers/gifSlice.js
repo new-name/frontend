@@ -81,6 +81,7 @@ export const gifSlice = createSlice({
 
       state.elements = newElements;
     },
+    resetGifs: () => initialState,
   },
 });
 
@@ -93,5 +94,6 @@ export const {
   updateGifModalState,
   handleResetGif,
   updateAllGifs,
+  resetGifs,
 } = gifSlice.actions;
 export default gifSlice.reducer;
