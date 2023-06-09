@@ -1,20 +1,25 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import * as Font from "expo-font";
+import { useEffect } from "react";
+import { Provider } from "react-redux";
+
+import api from "./src/features/api";
+import AppNavigator from "./src/navigator/AppNavigator";
+import store from "./src/store/configureStore";
 
 export default function App() {
+  useEffect(() => {
+    async function fetchFont() {
+      const response = await api.getFonts();
+
+      await Font.loadAsync(response);
+    }
+
+    fetchFont();
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}>
+      <AppNavigator />
+    </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
