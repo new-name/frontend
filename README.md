@@ -514,6 +514,10 @@ useEffect(() => {
 4. 서버에서는 `base64`을 디코딩하여 `GIF`로 변환한 뒤 다시 `base64`로 인코딩 한 후 `RN`으로 반환
 5. `RN`에서는 `base64`를 다시 디코딩한 후 `GIF`로 저장하기.
 
+<p align="center">
+  <img width="500" alt="Untitled (1)" src="https://github.com/new-name/client/assets/113571767/bbf2a3da-5687-4158-8f69-61114463a3ac">
+</p>
+
 - 여기에서 `base64`란 이미지등을 쉽게 변환할 수 있는 아스키코드의 문자들로 이루어진 64진법으로 인코딩한 방식입니다.
 
 ```javascript
@@ -596,7 +600,6 @@ res.send({ base64Gif: gifBuffer.toString("base64") });
 
 ## **UX**
 
-<hr>
 <br>
 
 **어떻게 하면 유저 친화적으로 만들 수 있을 까?**
