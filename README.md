@@ -83,7 +83,7 @@ New Name은 `Text`, `SVG`, `Image`, `GIF`를 이용해 쉽게 세로형 명함�
 
 <hr>
 
-`PanResponder`는 `RN`의 라이프 사이클을 관리하는 `Gesture Responder System`에 의애 터치의 예측을 가능하게 해줍니다.
+`PanResponder`는 `RN`의 라이프 사이클을 관리하는 `Gesture Responder System`에 의해 터치의 예측을 가능하게 해줍니다.
 
 처음 `PanResponder` 인스턴스를 생성하기 위해서는 PanResponder 내부의 정적 메소드인 `PanResponder.create`를 통해 새로운 PanResponder 인스턴스를 생성합니다.
 
