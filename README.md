@@ -16,7 +16,7 @@ New Name은 `Text`, `SVG`, `Image`, `GIF`를 이용해 쉽게 세로형 명함�
 
 - [동기](#동기)
 - [서비스 화면](#서비스-화면)
-- [고민한 부분](#고려한-부분)
+- [고민한 부분](#고민한-부분)
 
   - [핑거 제스쳐 다루기](#핑거-제스쳐-다루기)
     - [`PanResponder`를 이용해 원하는 요소를 손가락의 이동만큼 이동시킬 수 있을까?](#`PanResponder`를-이용해-원하는-요소를-손가락의-이동만큼-이동시킬-수-있을까?)
@@ -43,7 +43,11 @@ New Name은 `Text`, `SVG`, `Image`, `GIF`를 이용해 쉽게 세로형 명함�
 
 # 동기
 
-이번 프로젝트의 목표는 모바일이라는 특성상 마우스가 아닌 **손가락을 이용해 `GUI` 잘 이용할 수 있는 기능이 있는 모바일 어플리케이션**을 만들어보고자 하였습니다.
+이번 프로젝트의 목표는 모바일이라는 특성상 마우스가 아닌 **손가락을 이용해 `GUI`를 잘 이용할 수 있는 기능이 있는 모바일 어플리케이션**을 만들어보고자 하였습니다.
+
+<p align="center">
+  <img width=300 src="https://github.com/new-name/client/assets/113571767/0a82ae2c-37d7-4981-aa70-12a455645665" />
+</p>
 
 이 목표에 적합한 아이디어를 고민하다 원하는 이미지를 생성하는 **모바일 이미지 에디터 툴**을 구현할 경우 공부할 요소가 많을 것이라 판단하였습니다.
 
@@ -89,19 +93,34 @@ New Name은 `Text`, `SVG`, `Image`, `GIF`를 이용해 쉽게 세로형 명함�
 
 이를 `RN`상에서는 `useRef` 혹은 `useState`를 이용해 생성된 인스턴스의 상태를 관리할 수 있습니다.
 
-여기에서 `useRef`를 이용하지 않고 `useEffect`와 `useState`를 이용하였는데 그 이유는 `useRef`를 이용할 경우 값이 변경되어도 재렌더링이 되지 않고 값을 참조할 수 있습니다.
+```js
+  const panResponder = useRef(
+    PanResponder.create({
+    }),
+  ).current;
+  
+  useEffect(() => {
+    setPanResponder(PanResponder.create({}));
+  }, [pan]);
+```
+
+여기에서 저는 `useRef`를 이용하지 않고 `useEffect`와 `useState`를 이용하였습니다. 그 이유는 `useRef`를 이용할 경우 값이 변경되어도 리페인팅이 되지 않고 값을 참조할 수 있습니다.
 
 하지만 이미지나 GIF 또는 다른 요소들의 크기를 변경하는 작업은 리페인팅이 다시 되어야 하기 때문에 후자를 이용하는 것이 나은 방법이라 판단하였습니다.
 
 `RN`의 경우 `UI`구축의 가장 기본적인 구성요소로써 사용되는 `View`라는 형태를 사용해 원하는 `UI`를 표시하는 기능을 지원합니다.
 
-이 `View`를 `PanResponder`를 이용해 요소를 부드럽게 조절하려면 `Animated`라는 `RN`의 내장 `API`를 같이 이용해 `Animated.View`로 이용해 주어야 합니다.
+이 `View`를 `PanResponder`를 이용해 요소를 부드럽게 조절하려면 `Animated`라는 `RN`의 내장 `API`를 같이 이용해 `Animated.View`로 이용해 주어야 했음을 알 수 있었습니다.
 
-이를 위해 관리가 가능한 값인 `Animated.Value`를 이용합니다.
+또한 `Animated.View`의 경우 특정 `Animated.Value`를 이용합니다.
 
 추가적으로 `RN`상에서는 어떤 `View`를 터치할 경우 이벤트 버블링이 발생해 제스처에 대응하는 이벤트 핸들링이 가장 아래 `View`로 부터 시작합니다.
 
 이를 제스처 컨트롤이 내부의 자식 `View`부터 이벤트를 컨트롤 하는 것을 원치 않는다면 `PanResponder`의 `onStartShouldSetPanResponder` 속성을 `true`로 만들어줘야 합니다.
+
+<p align="center">
+  <img width=300 src="https://github.com/new-name/client/assets/113571767/87875f4c-cb96-4b37-960d-6cd1c5da5256" />
+</p>
 
 ```js
   onStartShouldSetPanResponder: (evt, gestureState) => true,
@@ -120,7 +139,7 @@ useEffect(() => {
   setMoveResponder(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderGrant: (_, gestureState) => {
+      onPanResponderGrant: ({ nativeEvent }, gestureState) => {
         position = {
           x: gestureState.dx,
           y: gestureState.dy,
@@ -190,10 +209,18 @@ positionRef.current = {
 1. 두개의 손가락을 이용해 핀치 줌,아웃을 이용하는 방법
 2. 슬라이더 스크롤을 이용해 정밀하게 조절하는 방법
 
-저는 처음 방법인 두 손가락의 거리가 처음 닿았을 때를 구하는 것부터 시작을 해보자라고 생각을 하였습니다.
+저는 두가지의 방법을 다 적용하되, 처음 방법인 두 손가락의 거리가 처음 닿았을 때를 구하는 것부터 시작을 해보자라고 생각을 하였습니다.
 
-- 첫번째 이벤트 인자속의 `nativeEvent`를 구조분해할당을 이용해 내부의 값들을 가져온 뒤 그 속에서 `touches`라는 현재 닿아 있는 터치를 구할 수 있는 속성을 이용해 현재 `touches` 배열의 길이를 이용해, 손가락이 두개가 닿지 않았을 때는 `early return` 하는 식으로 처음 시작을 잡았습니다.
+<p align="center">
+  <img width=300 src="https://github.com/new-name/client/assets/113571767/7bc088d5-bfd9-46f8-a843-9e98c2fae6b4" />
+</p>
+
+- 첫번째 이벤트 인자속의 `nativeEvent`를 구조분해할당을 이용해 내부의 값들을 가져온 뒤 그 속에서 `touches`라는 현재 닿아 있는 터치를 구할 수 있는 속성을 이용해 현재 `touches` 배열의 길이를 이용해, 손가락이 두개가 닿지 않았을 때는 `early return` 하는 방법으로 처음 시작을 잡았습니다.
 - 여기에서 두 손가락 사이의 거리를 구하는 `getDistance`함수를 표현 한 뒤 피타고라스의 정리를 이용해 구해보았습니다.
+
+<p align="center">
+  <img width=300 src="https://github.com/new-name/client/assets/113571767/a1c4c3c7-66be-414d-b199-1f004ef3d036" />
+</p>
 
 ```javascript
 const getDistance = (touch1, touch2) => {
@@ -222,7 +249,7 @@ const getDistance = (touch1, touch2) => {
   },
 ```
 
-- `onPanResponderGrant`의 `distance`를 초기 값으로 잡아 준 뒤 그 값을 이동 중일 때 비교해 주려 하였습니다.
+- `onPanResponderGrant`의 `distance`를 초기 값으로 잡아 준 뒤 그 값을 onPanResponderMove 속성을 이용해 물체가 이동 중일 때 값을 업데이트 시켜 주었습니다.
 
 ```javascript
   onPanResponderMove: ({ nativeEvent }) => {
@@ -312,7 +339,7 @@ return (
 
       scaleRefXY.setValue(scaleFactorAll);
 
-      if (scaleFactorX > scaleFactorY && !sizeProportionMode) {
+      if (scaleFactorX > scaleFactorY && !sizeProportionMode) { //distanceX와 distanceY의 값을 비교
         scaleRef.setValue({
           x: scaleFactorX,
           y: 1,
@@ -330,7 +357,7 @@ return (
 ```
 
 ```javascript
-if (sizeProportionMode) {
+if (sizeProportionMode) { // 비례모드일 경우 전체적인 scale 변화
   transform.push({ scale: scaleRefXY });
 } else {
   transform.push({ scaleX: scaleRef.x });
@@ -341,7 +368,7 @@ return (
   <Animated.View
     key={element[index]?.id}
     onPress={() => handleSelect(index)}
-    style={[{ position: "absolute" }, positionStyle, { transform }]}
+    style={[{ position: "absolute" }, positionStyle, { transform }]} // transform 배열 속에 scale 존재
     {...resizeResponder.panHandlers}
   >
     <TouchableOpacity>{shapeElements}</TouchableOpacity>
@@ -590,7 +617,12 @@ res.send({ base64Gif: gifBuffer.toString("base64") });
 
 <br>
 
-**하나의 성공적인 GIF가 생성되었습니다!**
+<p align="center">
+  <img width="200" alt="Untitled (1)" src="https://github.com/new-name/client/assets/113571767/9e529a73-e8d8-48ae-975d-2c4bba216458">
+</p>
+<p align="center">
+  하나의 성공적인 GIF가 생성되었습니다!
+</p>
 
 <br>
 
