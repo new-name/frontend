@@ -46,28 +46,38 @@ New Name은 `Text`, `SVG`, `Image`, `GIF`를 이용해 쉽게 세로형 명함�
 이번 프로젝트의 목표는 모바일이라는 특성상 마우스가 아닌 **손가락을 이용해 `GUI`를 잘 이용할 수 있는 기능이 있는 모바일 어플리케이션**을 만들어보고자 하였습니다.
 
 <p align="center">
-  <img width=300 src="https://github.com/new-name/client/assets/113571767/0a82ae2c-37d7-4981-aa70-12a455645665" />
+  <img width=200 src="https://github.com/new-name/client/assets/113571767/b04fcfc2-c7cc-47ea-96f4-d9a25965fe51" />
 </p>
 
-이 목표에 적합한 아이디어를 고민하다 원하는 이미지를 생성하는 **모바일 이미지 에디터 툴**을 구현할 경우 공부할 요소가 많을 것이라 판단하였습니다.
+그렇다면 "터치를 이용해 이미지를 편집하는 것은 어떨까?" 라는 고민에서 시작해 범위를 핸드폰 화면으로 한정시켜 **명함 에디터**라는 컨텐츠로 결정짓게 되었습니다.
 
-이미지라는 범위를 핸드폰 화면 크기에 맞는 이미지로 한정 짓고자 하였고 **명함**이라는 컨텐츠가 생각났습니다.
+기존의 명함을 스캔해 핸드폰에 저장하는 상황을 유저가 사용하는 입장에서 생각을 해보았을 때, **"실물을 스캔하는 것이 아닌 처음부터 명함을 데이터로만 갖고 다닐 수 있게 하면 되겠다"** 라는 생각으로 이어졌습니다. 
 
-현대의 명함은 실물을 가지고 다님과 동시에 디지털로 보관을 하는 형태를 취하고 있습니다. 이를 유저가 사용하는 입장에서 생각을 해보며, **실물을 스캔하는 것이 아닌 처음부터 명함을 데이터 형태들로만 갖고 다닐 수도 있지 않을까?** 라는 가정을 해보았습니다.
+추가적으로 명함은 자신의 아이덴티티를 나타내는 요소 중 하나라 생각했습니다. 이에 **GIF 같은 동적 이미지**가 들어간다면 디지털 명함이 더 재밌어 질 거라 생각해 접목해보고자 하였습니다.
 
-그렇다면 명함이라는 요소는 자신의 아이덴티티를 나타내는 것이라고 생각하였는데, 이를 좀 더 **디지털 요소와 효과적으로 접목이 가능한 GIF 같은 동적 이미지**가 들어간다면 처음 받았을 때 더 재밌게 접근할 수 있을 것이라 생각해 시작하게 되었습니다.
+<p align="center">
+  <img src="https://github.com/new-name/client/assets/113571767/6f86f463-4baa-4e32-a165-dd7983de939d" width="300"/>
+  <img src="https://github.com/new-name/client/assets/113571767/eb9d26ae-c3dc-4fe0-abc5-b44b55ec58a3" width="200"/>
+</p>
+<p align="center">
+  GIF가 명함에 추가된다면 어떨까? 
+</p>
 
 <br>
 
 # **서비스 화면**
 
 <p align="center">
-  <img src="https://github.com/new-name/client/assets/113571767/ebda12bd-8a68-4873-9b31-acc224ead392" width="150"/>
-  <img src="https://github.com/new-name/client/assets/113571767/34729d7d-0194-4409-b4c8-0d8bd21bff3e" width="150"/>
-  <img src="https://github.com/new-name/client/assets/113571767/5b3cdbc1-b899-4129-bed6-f3f230e9acea" width="150"/>
+  <img src="https://github.com/new-name/client/assets/113571767/ebda12bd-8a68-4873-9b31-acc224ead392" width="200"/>
+  <img src="https://github.com/new-name/client/assets/113571767/34729d7d-0194-4409-b4c8-0d8bd21bff3e" width="200"/>
+  <img src="https://github.com/new-name/client/assets/113571767/5b3cdbc1-b899-4129-bed6-f3f230e9acea" width="200" height="380"/>
+  <img src="https://github.com/new-name/client/assets/113571767/50ffbe1b-02cc-4191-ae2a-33f918cd56a8" width="200" height="380"/>
+</p>
+<p align="center">
+  NEWNAME으로 만든 예시 명함들과 서비스 화면
 </p>
 
-[영상으로 확인하기!](https://vimeo.com/834884864?share=copy)
+[🎥 영상으로 확인하기!](https://vimeo.com/834884864?share=copy)
 
 # **고민한 부분**
 
@@ -79,7 +89,13 @@ New Name은 `Text`, `SVG`, `Image`, `GIF`를 이용해 쉽게 세로형 명함�
 
 이러한 제스처를 다루는 기능을 라이브러리로 해결하면 의존성이 높아질 것이라 판단하였습니다.
 
-이에 `RN`의 내장 `API`인 `PanResponder`를 이용해 멀티 터치를 하나의 액션으로 바꿀 수 있는 기능에 대해 근본적으로 알아가보고자 하였습니다.
+이에 `RN`의 내장 `API`인 `PanResponder`를 이용해 **멀티 터치를 하나의 액션으로 바꿀 수 있는 기능**에 대해 근본적으로 알아가보고자 하였습니다.
+
+<br>
+
+<p align="center">
+  <img src="https://github.com/new-name/client/assets/113571767/b1e5fdc4-c2ed-4769-8d08-229fa5771c3f" width="600"/>
+</p>
 
 <br>
 
@@ -89,7 +105,7 @@ New Name은 `Text`, `SVG`, `Image`, `GIF`를 이용해 쉽게 세로형 명함�
 
 `PanResponder`는 `RN`의 라이프 사이클을 관리하는 `Gesture Responder System`에 의해 터치의 예측을 가능하게 해줍니다.
 
-처음 `PanResponder` 인스턴스를 생성하기 위해서는 PanResponder 내부의 정적 메소드인 `PanResponder.create`를 통해 새로운 PanResponder 인스턴스를 생성합니다.
+1. `PanResponder` 인스턴스를 생성하기 위해서는 `PanResponder`의 정적 메소드인 `PanResponder.create`를 통해 PanResponder 인스턴스를 생성합니다.
 
 이를 `RN`상에서는 `useRef` 혹은 `useState`를 이용해 생성된 인스턴스의 상태를 관리할 수 있습니다.
 
