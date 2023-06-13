@@ -85,8 +85,7 @@ New Name은 `Text`, `SVG`, `Image`, `GIF`를 이용해 쉽게 세로형 명함�
 
 프로젝트 진행 중 제일 먼저 고려했던 부분은 터치요소를 어떻게 내가 원하는 방식으로 컨트롤 할 지 였습니다.
 
-모바일 어플리케이션이라는 특성상 손가락의 제스처를 이용해 요소를 원하는 대로 다루는 것이 가장 중요한 요소라고 생각이 되었습니다.
-
+모바일 어플리케이션이라는 특성상 손가락의 제스처를 이용해 요소를 원하는 대로 다루는 것이 가장 중요한 요소라고 생각하였고,
 이러한 제스처를 다루는 기능을 라이브러리로 해결하면 의존성이 높아질 것이라 판단하였습니다.
 
 이에 `RN`의 내장 `API`인 `PanResponder`를 이용해 **멀티 터치를 하나의 액션으로 바꿀 수 있는 기능**에 대해 근본적으로 알아가보고자 하였습니다.
@@ -103,39 +102,30 @@ New Name은 `Text`, `SVG`, `Image`, `GIF`를 이용해 쉽게 세로형 명함�
 
 <hr>
 
-`PanResponder`는 `RN`의 라이프 사이클을 관리하는 `Gesture Responder System`에 의해 터치의 예측을 가능하게 해줍니다.
+`PanResponder`는 `RN`의 라이프 사이클을 관리하는 `Gesture Responder System`에 의해 터치가 하는 일의 예측을 가능하게 해줍니다.
 
-1. `PanResponder` 인스턴스를 생성하기 위해서는 `PanResponder`의 정적 메소드인 `PanResponder.create`를 통해 PanResponder 인스턴스를 생성합니다.
-
-이를 `RN`상에서는 `useRef` 혹은 `useState`를 이용해 생성된 인스턴스의 상태를 관리할 수 있습니다.
+1. `PanResponder` 인스턴스를 생성하기 위해서는 `PanResponder`의 정적 메소드인 `PanResponder.create`를 통해 PanResponder의 인스턴스를 생성합니다.
+2. 이를 React의 함수형 컴포넌트 안에서 상태로 관리하기 위해서는 useRef 또는 useEffet와 useState를 결합한 상태로 관리할 수 있습니다.
 
 ```js
   const panResponder = useRef(
-    PanResponder.create({
-    }),
-  ).current;
+    PanResponder.create({}),
+  ).current; // useRef를 이용한 상태 관리
   
   useEffect(() => {
     setPanResponder(PanResponder.create({}));
-  }, [pan]);
+  }, [pan]); // useEffect와 useState를 이용한 상태 관리
 ```
 
-여기에서 저는 `useRef`를 이용하지 않고 `useEffect`와 `useState`를 이용하였습니다. 그 이유는 `useRef`를 이용할 경우 값이 변경되어도 리페인팅이 되지 않고 값을 참조할 수 있습니다.
+여기에서 저는 `useRef`를 이용하지 않고 `useEffect`와 `useState`를 이용하였습니다. 그 이유는 `useRef`를 이용할 경우 값이 변경되어도 리페인팅이 되지 않고 값을 참조할 수 있으나,
+이미지나 GIF 또는 다른 요소들의 크기혹은 위치가 변경되는 작업은 리페인팅이 다시 되어야 하기 때문에 후자를 이용하는 것이 나은 방법이라 판단하였습니다.
 
-하지만 이미지나 GIF 또는 다른 요소들의 크기를 변경하는 작업은 리페인팅이 다시 되어야 하기 때문에 후자를 이용하는 것이 나은 방법이라 판단하였습니다.
-
-`RN`의 경우 `UI`구축의 가장 기본적인 구성요소로써 사용되는 `View`라는 형태를 사용해 원하는 `UI`를 표시하는 기능을 지원합니다.
-
-이 `View`를 `PanResponder`를 이용해 요소를 부드럽게 조절하려면 `Animated`라는 `RN`의 내장 `API`를 같이 이용해 `Animated.View`로 이용해 주어야 했음을 알 수 있었습니다.
-
-또한 `Animated.View`의 경우 특정 `Animated.Value`를 이용합니다.
-
-추가적으로 `RN`상에서는 어떤 `View`를 터치할 경우 이벤트 버블링이 발생해 제스처에 대응하는 이벤트 핸들링이 가장 아래 `View`로 부터 시작합니다.
-
+추가적으로 `RN`상에서는 어떤 `View`를 터치할 경우 이벤트 버블링이 발생해 제스처에 대응하는 이벤트 핸들링이 가장 아래 `View`(RN UI의 기본 단위)로 부터 시작합니다.
 이를 제스처 컨트롤이 내부의 자식 `View`부터 이벤트를 컨트롤 하는 것을 원치 않는다면 `PanResponder`의 `onStartShouldSetPanResponder` 속성을 `true`로 만들어줘야 합니다.
+또한 `PanResponder`로 인스턴스를 부드럽게 관리하기 위해서는 `View`가 아닌 RN의 내장 API인 Animated.View와 Animated.Value를 이용해야 합니다.
 
 <p align="center">
-  <img width=300 src="https://github.com/new-name/client/assets/113571767/87875f4c-cb96-4b37-960d-6cd1c5da5256" />
+  <img width=750 src="https://github.com/new-name/frontend/assets/113571767/5373e262-5e7d-4060-8b30-a979c481c469" />
 </p>
 
 ```js
@@ -144,51 +134,35 @@ New Name은 `Text`, `SVG`, `Image`, `GIF`를 이용해 쉽게 세로형 명함�
 
 다음은 onPanResponder의 속성입니다.
 
-- `onPanResponderGrant` : `PanResponder`의 손가락이 닿고나서 처음 움직일 시의 이벤트를 액션으로 바꿀 수 있는 속성입니다. 이전의 `Animated.Value`를 초기화시켜주어야 그 전의 참조 값을 참조하지 않습니다. 처음 움직임 시 선택된 요소의 좌표와 값을 초기화 시켜준 뒤 첫번째 인자인 `event`와 `gestureState`객체를 이용해 손가락의 위치를 얻을 수 있습니다. 이 후 이를 이용해 손가락이 이동한 거리를 이용해 요소의 크기 혹은 좌표를 변경하였습니다.
-- `onPanResponderMove`: Grant는 첫 움직임 시 만의 값을 참조하기 때문에 그 후의 값은 onPanResponderMove를 이용해 값을 조절할 수 있습니다. 이는 손가락이 첫 움직임이 생긴 후 떼지기 전까지 일련의 연속적인 제스처를 액션으로 컨트롤 합니다.
-- `onPanResponderRelease`: 손가락이 떨어지는 순간 액션을 정의할 수 있습니다. 값을 반영 시켜준 후 `Animated.Value`를 다시 초기화 시켜주어야 합니다.
+- `onPanResponderGrant` : `PanResponder`의 **손가락이 닿고나서 처음 움직일 시**의 이벤트를 액션으로 바꿀 수 있는 속성입니다. 이전의 참조값을 지속해서 초기화 시켜주어야 합니다.
+- `onPanResponderMove`: **움직이는 도중** 이벤트를 액션으로 바꾸는 속성입니다. 이는 손가락이 첫 움직임이 생긴 후 떼지기 전까지 일련의 연속적인 제스처를 액션으로 컨트롤 합니다.
+- `onPanResponderRelease`: **손가락이 떨어지는 순간** 액션을 정의할 수 있습니다. 마지막으로 이전의 참조값을 다시 초기화 시켜주어야 합니다.
+
+위의 속성을 이용해 처음 생각은 **손가락이 이동한 만큼 누적시켜주면 되지 않을까?** 라는 생각을 했었습니다.
 
 아래는 예시 코드입니다.
 
 ```javascript
-useEffect(() => {
-  setMoveResponder(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true, // eventBubbling을 방지합니다.
       onPanResponderGrant: ({ nativeEvent }, gestureState) => {
-        position = {
-          x: gestureState.dx,
-          y: gestureState.dy,
-        };
-
-        movePan.setOffset(position);
-        movePan.setValue({ x: 0, y: 0 });
+        position = { x: gestureState.dx }; // dx는 손가락의 x좌표로의 움직임이 누적된 값입니다.
+        
+        movePan.setOffset(position); // Animated.View를 이동시키는 Animated.Value의 값을 증가시킵니다.
+        movePan.setValue({ x: 0, y: 0 }); // Animated.Value의 값을 초기화 시켜 다음 속성에서 누적되지 않게 합니다.
       },
       onPanResponderMove: Animated.event(
-        [null, { dx: movePan.x, dy: movePan.y }],
+        [null, { dx: movePan.x, dy: movePan.y }], // 내장 event로 이동 도중 값을 이용합니다.
         { useNativeDriver: false },
       ),
       onPanResponderRelease: ({ nativeEvent }, gestureState) => {
-        if (selectedIndexRef.current === null) return;
+        if (selectedIndexRef.current === null) return; // 선택된 요소가 없을 경우 시작하지 않습니다.
 
-        positionRef = {
-          x: positionRef.x + gestureState.dx,
-          y: positionRef.y + gestureState.dy,
-        };
+        dispatch(updateImagePosition(position.x));
 
-        dispatch(
-          updateImagePosition({
-            index: selectedIndexRef.current,
-            x: position.x,
-            y: position.y,
-          }),
-        );
-
-        movePan.setValue({ x: 0, y: 0 });
+        movePan.setValue({ x: 0, y: 0 }); // 마지막으로 값을 초기화 시킵니다.
       },
     }),
-  );
-}, [movePan]);
 ```
 
  <br>
@@ -197,7 +171,7 @@ useEffect(() => {
 
 <hr>
 
-위에서 터치를 할 경우 원하는 값 만큼 이동하지 않고 예상되는 값이 아닌 다른 값을 얻는 이슈가 발생하였습니다.
+처음 구현 당시 터치를 해서 이동할 경우, 원하는 값 만큼 이동하지 않고 예상되는 값이 아닌 다른 값을 얻는 이슈가 발생하였습니다.
 
 `PanResponder`를 이용할 경우 `useState`의 경우 `batch`라는 여러 상태 업데이트를 일괄 처리하는 속성을 이용해 실행이 됩니다.
 
