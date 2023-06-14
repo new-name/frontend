@@ -35,7 +35,7 @@ New Name은 `Text`, `SVG`, `Image`, `GIF`를 이용해 쉽게 세로형 명함�
     - [캡쳐한 데이터를 어떻게하면 GIF로 만들 수 있을까?](#캡쳐한-데이터를-어떻게하면-gif로-만들-수-있을까)
   - [UX](#ux)
     - [드래그 앤 드랍을 활용해 보자!](#드래그-앤-드랍을-활용해-보자)
-    - [사용자의 자유도를 위한 색상 모달 구현](#사용자의-자유도를-위한-색상-모달-구현)
+    - [이미지 에디터 툴의 유저 자유도를 위한 Color Picker 구현](#이미지-에디터-툴의-유저-자유도를-위한-color-picker-구현)
 
 - [작업 기록](#schedule)
 - [Repository Link](#repository-link)
@@ -234,17 +234,17 @@ New Name은 `Text`, `SVG`, `Image`, `GIF`를 이용해 쉽게 세로형 명함�
 3. 여기에서 두 손가락 사이의 거리를 구하는 피타고라스의 정리를 이용해 `getDistance`함수를 표현하여 값을 구하였습니다.
 
 <p>
-  <img width="300" alt="image" src="https://github.com/new-name/frontend/assets/113571767/b68098c1-137a-43fc-bc8d-afe60935f986">
+  <img width="400" alt="image" src="https://github.com/new-name/frontend/assets/113571767/b68098c1-137a-43fc-bc8d-afe60935f986">
 </p>
 
 <p>
-  <img width="350" alt="image" src="https://github.com/new-name/frontend/assets/113571767/aa06ea45-e5af-4346-9815-1aa684dbd2b9">
+  <img width="450" alt="image" src="https://github.com/new-name/frontend/assets/113571767/aa06ea45-e5af-4346-9815-1aa684dbd2b9">
 </p>
 
 4. `onPanResponderGrant`의 `distance`를 초기 값으로 잡아 준 뒤 `onPanResponderMove`를 이용해 이동 중일 때의 값과 초기 값을 비교하여 `scaleFactor`를 계산해주었습니다.
 
 <p>
-  <img width="400" alt="image" src="https://github.com/new-name/frontend/assets/113571767/abb0842c-d0af-47db-8ae6-f06afc3c1f24">
+  <img width="500" alt="image" src="https://github.com/new-name/frontend/assets/113571767/abb0842c-d0af-47db-8ae6-f06afc3c1f24">
 </p>
 
 5. 이를 이용해 `Animate.View`의 크기를 변화 시켜 주었습니다.
@@ -259,7 +259,7 @@ New Name은 `Text`, `SVG`, `Image`, `GIF`를 이용해 쉽게 세로형 명함�
 
 - 이번에는 피타고라스의 정리를 이용하는 것이 아닌 손가락의 X축 이동 범위와 Y축 이동 범위중 큰 부분이 중심이 되어 이동하면 되겠다 라고 생각하였습니다.
 <p>
-  <img width="700" alt="image" src="https://github.com/new-name/frontend/assets/113571767/07190253-27ea-48d3-aa5b-a594b07cbe46">
+  <img width="800" alt="image" src="https://github.com/new-name/frontend/assets/113571767/07190253-27ea-48d3-aa5b-a594b07cbe46">
 </p>
 
 - `sizeProportionMode`를 설정한 뒤 비례 모드가 아닐 때는 `X`와 `Y`의 `scaleFactor`를 거리의 차를 이용해 구해주었습니다.
@@ -336,7 +336,7 @@ Text요소 예시
   <img width="350" alt="Untitled" src="https://github.com/new-name/frontend/assets/113571767/dde93bde-1df8-493a-b770-6e0e4f66798c">
 </p>
 
-<img width="500" alt="image" src="https://github.com/new-name/frontend/assets/113571767/dde688f1-65d4-45d9-9bdf-33cf14fab2be">
+<img width="550" alt="image" src="https://github.com/new-name/frontend/assets/113571767/dde688f1-65d4-45d9-9bdf-33cf14fab2be">
 
 <br>
 
@@ -381,22 +381,22 @@ Text요소 예시
 5. `RN`에서는 `base64`를 다시 디코딩한 후 `GIF`로 저장하기.
 
 <p>
-  <img width="350" alt="Untitled" src="https://github.com/new-name/client/assets/113571767/bbf2a3da-5687-4158-8f69-61114463a3ac">
+  <img width="400" alt="Untitled" src="https://github.com/new-name/client/assets/113571767/bbf2a3da-5687-4158-8f69-61114463a3ac">
 </p>
 
 여기에서 `base64`란 이미지등을 쉽게 변환할 수 있는 아스키코드의 문자들로 이루어진 64진법으로 인코딩한 방식입니다.
 
-<img width="550" alt="image" src="https://github.com/new-name/frontend/assets/113571767/7a947876-d244-41b3-a6de-c56c1fa7a304">
+<img width="600" alt="image" src="https://github.com/new-name/frontend/assets/113571767/7a947876-d244-41b3-a6de-c56c1fa7a304">
 
 `frame`이 반복되는 수 만큼 `capture`를 해준 뒤
 
-<img width="750" alt="image" src="https://github.com/new-name/frontend/assets/113571767/42b88418-1a13-43c8-8002-bd4c8cc0cf14">
+<img width="800" alt="image" src="https://github.com/new-name/frontend/assets/113571767/42b88418-1a13-43c8-8002-bd4c8cc0cf14">
 
 `frames`에 `capture`가 된 것을 프로미스를 통해 체크 => 이것들을 `base64`로 변환해서 다시 배열에 담아 서버로 전송.
 
 **서버에서 받은 뒤**
 
-<img width="550" alt="image" src="https://github.com/new-name/frontend/assets/113571767/18e4e7d0-4e46-4100-8cbd-1a2ec03daf21">
+<img width="600" alt="image" src="https://github.com/new-name/frontend/assets/113571767/18e4e7d0-4e46-4100-8cbd-1a2ec03daf21">
 
 서버에서 GIF 라이브러리와 이미지 리사이징 라이브러리를 통해 GIF 구현
 
@@ -442,26 +442,32 @@ Text요소 예시
 <img width="350" alt="image" src="https://github.com/new-name/frontend/assets/113571767/126836cb-121d-4f07-a56d-23e2f25f4929">
 
 <p>
-  <img width="550" alt="image" src="https://github.com/new-name/frontend/assets/113571767/787b1d88-f483-4941-8f89-6b483dfe038a">
+  <img width="600" alt="image" src="https://github.com/new-name/frontend/assets/113571767/787b1d88-f483-4941-8f89-6b483dfe038a">
 </p>
 
 <p>
   <img width="150" alt="image" src="https://github.com/new-name/frontend/assets/113571767/77690f24-16da-4b2a-8ba1-2644db6869ab">
 </p>
 
-### **사용자의 자유도를 위한 색상 모달 구현**
+### **이미지 에디터 툴의 유저 자유도를 위한 Color Picker 구현**
 
 <hr>
 
-색상 라이브러리를 이용해 의존성을 높이기 보다, 자체적으로 `PanResponder`를 사용해 `Opacity`조절과 색상을 선택하고 싶었습니다.
+3rd Party 라이브러리를 이용해 의존성을 높이기 보다는, 자체적으로 Color Picker를 구현해 이미지 에디터 툴의 자유도를 높이고 싶었습니다. 
+Fill, Stroke, Opacity Slider를 구현하였고,
+
+`PanResponder`를 사용해 `Opacity` Slider를 컨트롤 하고 싶었습니다.
 이에 손가락의 위치를 `Opacity Handler`에 제한 시켜 그 안에서 x좌표로 이동한 값 만큼의 `Opacity`를 계산하였습니다.
 
 <p>
-  <img width="550" alt="image" src="https://github.com/new-name/frontend/assets/113571767/976d3806-878b-4e4f-b175-a0c7413a01f8">
+  <img width="650" alt="image" src="https://github.com/new-name/frontend/assets/113571767/976d3806-878b-4e4f-b175-a0c7413a01f8">
 </p>
 
 <p>
-  <img width="150" alt="image" src="https://github.com/new-name/frontend/assets/113571767/c1d65f61-6b2b-4380-9be5-9d38d040f9c5">
+  <img width="150" alt="image" src="https://github.com/new-name/frontend/assets/113571767/6d6372dd-3e25-4ec7-8fd7-751f025692d7">
+  <img width="150" alt="image" src="https://github.com/new-name/frontend/assets/113571767/c9c73fc6-8f54-499c-9c9e-462c136dd3a3">
+  <img width="150" alt="image" src="https://github.com/new-name/frontend/assets/113571767/ca3f6a24-ff16-4016-97ff-baf27a88e5c6">
+  <img width="150" alt="image" src="https://github.com/new-name/frontend/assets/113571767/44599cd8-b82f-4790-ab4d-9bad79325a7b">
 </p>
 
 <br>
